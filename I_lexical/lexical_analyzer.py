@@ -4,8 +4,10 @@ from I_lexical.token import Token
 
 class Lexical:
     @staticmethod
-    def statement_analyzer(statement):
+    def statement_analyzer(statement, row=1, col=0):
         """
+        :param row: row of the statement in source code
+        :param col: starting col of this statement (several statements could be written in one row separated by ';')
         :param statement: one statement to execute
         :return: a token list
         """
@@ -17,7 +19,8 @@ class Lexical:
                     text = match.group()
                     statement = statement[len(text):]
                     if TYPE != TokenType.WHITESPACE and TYPE != TokenType.ANNOTATION:
-                        result_token_list.append(Token(t_type=TYPE, t_text=text))
+                        result_token_list.append(Token(t_type=TYPE, t_text=text, row=row, col=col))
+                    col += len(text)
                     break
             if not match:
                 return None
@@ -30,15 +33,18 @@ class Lexical:
         :param program: full source code in a file
         :return: token lists
         """
-        statements = []
+        row = 0
+        result_token_lists = []
         for line in program.split('\n'):
-            # split multi ';' lines
+            row += 1
+            col = 0
             while line.count(';') > 1:
                 i = line.index(';')
-                statements.append(line[:i + 1])
+                col += i + 1
+                result_token_lists.append(Lexical.statement_analyzer(line[:i + 1], row, col))
                 line = line[i + 1:]
-            statements.append(line)
-        return [Lexical.statement_analyzer(s) for s in statements]
+            result_token_lists.append(Lexical.statement_analyzer(line, row, col))
+        return result_token_lists
 
 
 if __name__ == "__main__":
