@@ -113,12 +113,12 @@ class Parser:
                 return ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.ID)
             if self.tokens[0].get_type() == TokenType.INT_LIT:
                 return ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.INT_LIT)
-            if self.tokens[0].get_type() == TokenType.L_BRACKET:
-                self.tokens.pop(0)  # remove left bracket
+            if self.tokens[0].get_type() == TokenType.L_PAREN:
+                self.tokens.pop(0)  # remove left paren
                 node = self.parse_additive_expression()
-                if node and self.tokens and self.tokens[0].get_type() == TokenType.R_BRACKET:
-                    self.tokens.pop(0)  # remove right bracket
+                if node and self.tokens and self.tokens[0].get_type() == TokenType.R_PAREN:
+                    self.tokens.pop(0)  # remove right paren
                 else:
-                    # todo: raise invalid brackets exception
+                    # todo: raise invalid parens exception
                     pass
                 return node
