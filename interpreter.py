@@ -5,9 +5,9 @@ class Interpreter:
     def __init__(self):
         self.fun_map = {
             ASTNodeType.PROGRAM: self.interpret_program,
-            ASTNodeType.EXP_STMT: self.interpret_expression_statement,
-            ASTNodeType.ASS_STMT: self.interpret_assignment_statement,
             ASTNodeType.DCL_STMT: self.interpret_declaration_statement,
+            ASTNodeType.ASS_STMT: self.interpret_assignment_statement,
+            ASTNodeType.EXP_STMT: self.interpret_expression_statement,
             ASTNodeType.ADD_EXP: self.evaluate_additive_expression,
             ASTNodeType.MUL_EXP: self.evaluate_multiplicative_expression,
             ASTNodeType.PRI_EXP: self.evaluate_primary_expression,
@@ -30,8 +30,14 @@ class Interpreter:
         if not node.get_stmt():
             print(f"\n{result[0]} =\n\n     {result[1]}\n")
 
-    def interpret_expression_statement(self, node):
-        pass
+    def interpret_declaration_statement(self, node):
+        var_name = node.get_text()
+        child = node.get_children()[0]
+        if var_name in self.variables:
+            # todo: throw repeating declaration exception
+            pass
+        self.variables[var_name] = self.fun_map[child.get_type()](child)[1]
+        return var_name, self.variables[var_name]
 
     def interpret_assignment_statement(self, node):
         var_name = node.get_text()
@@ -46,14 +52,8 @@ class Interpreter:
 
         return var_name, self.variables[var_name]
 
-    def interpret_declaration_statement(self, node):
-        var_name = node.get_text()
-        child = node.get_children()[0]
-        if var_name in self.variables:
-            # todo: throw repeating declaration exception
-            pass
-        self.variables[var_name] = self.fun_map[child.get_type()](child)[1]
-        return var_name, self.variables[var_name]
+    def interpret_expression_statement(self, node):
+        pass
 
     def evaluate_additive_expression(self, node):
         children = node.get_children()
@@ -79,6 +79,10 @@ class Interpreter:
         # will not be used since in AST it is optimised to skip single-child node
         pass
 
+    @staticmethod
+    def evaluate_integer_literal(node):
+        return "ans", int(node.get_text())
+
     def evaluate_identifier(self, node):
         var_name = node.get_text()
         if var_name in self.variables:
@@ -86,10 +90,6 @@ class Interpreter:
         else:
             # todo: raise unknown exception variable exception
             pass
-
-    @staticmethod
-    def evaluate_integer_literal(node):
-        return "ans", int(node.get_text())
 
     def get_variables(self):
         return self.variables
