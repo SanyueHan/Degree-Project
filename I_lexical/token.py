@@ -1,12 +1,11 @@
 class Token:
-    def __init__(self, t_type=None, t_text=None, row=None, col=None):
+    def __init__(self, t_type=None, t_text=None):
         self.type = t_type
         self.text = t_text
-        self.row = row
-        self.col = col
+        # todo: row/col
 
     def __repr__(self):
-        return f"type: {self.type}, text: {self.text}, row={self.row}, col={self.col}"
+        return f"type: {self.type}, value: {self.text}"
 
     def get_type(self):
         return self.type
