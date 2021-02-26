@@ -5,8 +5,7 @@ This is a Python implemented interpreter,
 supporting a subset of the functionalities of MATLAB, 
 including: 
 - Four basic arithmetic calculations
-- Integer declaration
-- Integer assignment
+- Variable assignment
 
 ## Run
 ### Environment
@@ -30,23 +29,35 @@ a =
 
      3
 
->> b = 3*4
+>> b = 3-4
 
 b =
 
-     12
+     -1
 
->> a + b * 2 + 3 * (4 + 5) * 6
-
-ans =
-
-     189
-
->> c = ans - 89
+>> c = 5*6
 
 c =
 
-     100
+     30
+
+>> d = 7/8
+
+d =
+
+     0.8750
+
+>> (a+b)*(c+d)
+
+ans =
+
+     61.7500
+
+>> ans - 60
+
+ans =
+
+     1.7500
 
 >> 
 ```

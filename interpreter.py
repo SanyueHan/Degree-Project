@@ -13,7 +13,7 @@ class Interpreter:
             ASTNodeType.ADD_EXP: self.evaluate_additive_expression,
             ASTNodeType.MUL_EXP: self.evaluate_multiplicative_expression,
             ASTNodeType.PRI_EXP: self.evaluate_primary_expression,
-            ASTNodeType.INT_LIT: self.evaluate_integer_literal,
+            ASTNodeType.NUM_LIT: self.evaluate_number_literal,
             ASTNodeType.ID: self.evaluate_identifier,
         }
         self.variables = {}
@@ -30,7 +30,12 @@ class Interpreter:
         result = self.interpret[node.get_type()](node)
         # if statement does not ended with a semicolon, the result is printed
         if not node.get_stmt():
-            print(f"\n{result[0]} =\n\n     {result[1]}\n")
+            var = result[0]
+            value = result[1]
+            if int(value) == value:
+                print(f"\n{var} =\n\n     {int(value)}\n")
+            else:
+                print(f"\n{var} =\n\n     {value:.4f}\n")
 
     def interpret_declaration_statement(self, node):
         var_name = node.get_text()
@@ -47,7 +52,7 @@ class Interpreter:
         if var_name not in self.variables:
             # to adapt the dynamic type feature in interpreted language,
             # assignment could have the same form as declaration
-            # because the type specifiers like 'int'/'double' are omitted.
+            # because the type specifiers are omitted.
             # which means that assigning to an nonexistent variable is allowed since it is declaration
             pass
         self.variables[var_name] = self.evaluate[child.get_type()](child)
@@ -85,8 +90,11 @@ class Interpreter:
         pass
 
     @staticmethod
-    def evaluate_integer_literal(node):
-        return int(node.get_text())
+    def evaluate_number_literal(node):
+        """
+        By default, MATLAB® stores all numeric variables as double-precision floating-point values.
+        """
+        return float(node.get_text())
 
     def evaluate_identifier(self, node):
         var_name = node.get_text()

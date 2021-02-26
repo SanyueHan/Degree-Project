@@ -16,6 +16,6 @@ class ASTNodeType(Enum):
     PRI_EXP = "Primary Expression"
 
     # Literals
-    INT_LIT = "Integer Literal"
+    NUM_LIT = "Number Literal"
 
     ID = "Identifier"

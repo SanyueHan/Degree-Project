@@ -16,7 +16,7 @@ class Parser:
 
     add_exp -> mul_exp ((+|-)mul_exp)*
     mul_exp -> pri_exp ((*|/)pri_exp)*
-    pri_exp -> id | int_lit | (add_exp)
+    pri_exp -> id | num_lit | (add_exp)
     """
     def __init__(self, token_list):
         self.tokens = token_list
@@ -118,8 +118,8 @@ class Parser:
         if self.tokens:
             if self.tokens[0].get_type() == TokenType.ID:
                 return ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.ID)
-            if self.tokens[0].get_type() == TokenType.INT_LIT:
-                return ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.INT_LIT)
+            if self.tokens[0].get_type() == TokenType.NUM_LIT:
+                return ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.NUM_LIT)
             if self.tokens[0].get_type() == TokenType.L_PAREN:
                 self.tokens.pop(0)  # remove left paren
                 node = self.parse_additive_expression()

@@ -2,53 +2,50 @@ from enum import Enum
 import re
 
 
-token_regex = {
+class TokenType(Enum):
     # Keywords: if、else、int
-    'INT': "int",
+    INT = re.compile("int")
 
     # Literal: 123, "apple"
-    'INT_LIT': "[0-9]+",
-    'STR_LIT': r"\".*\"|\'.*\'",
+    NUM_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+")
+    STR_LIT = re.compile(r"\".*\"|\'.*\'")
 
     # Operators: +、-、=
-    'PLUS': "[+]",
-    'MINUS': "-",
-    'STAR': "[*]",
-    'SLASH': "/",
+    PLUS = re.compile("[+]")
+    MINUS = re.compile("-")
+    STAR = re.compile("[*]")
+    SLASH = re.compile("/")
 
-    'GE': ">=",
-    'GT': ">",
-    'EQ': "==",
-    'NE': "!=",
-    'LE': "<=",
-    'LT': "<",
+    GE = re.compile(">=")
+    GT = re.compile(">")
+    EQ = re.compile("==")
+    NE = re.compile("!=")
+    LE = re.compile("<=")
+    LT = re.compile("<")
 
-    'SEMICOLON': ";",
-    'L_PAREN': r"\(",
-    'R_PAREN': r"\)",
-    'L_BRACKET': r"\[",
-    'R_BRACKET': r"\]",
-    'L_BRACE': "{",
-    'R_BRACE': "}",
+    SEMICOLON = re.compile(";")
+    L_PAREN = re.compile(r"\(")
+    R_PAREN = re.compile(r"\)")
+    L_BRACKET = re.compile(r"\[")
+    R_BRACKET = re.compile(r"]")
+    L_BRACE = re.compile("{")
+    R_BRACE = re.compile("}")
 
-    'ASSIGNMENT': "=",
+    ASSIGNMENT = re.compile("=")
 
     # Identifier: age
-    'ID': "[a-zA-Z_]([a-zA-Z_]|[0-9])*",
+    ID = re.compile("[a-zA-Z_]([a-zA-Z_]|[0-9])*")
 
-    'WHITESPACE': r"\s+",
-    'ANNOTATION': "%.*",  # in '.', '\r' or '\n' is automatically excluded
-}
-
-TokenType = Enum('TokenType', [(key, re.compile(token_regex[key])) for key in token_regex])
+    WHITESPACE = re.compile(r"\s+")
+    ANNOTATION = re.compile("%.*")  # in '.', '\r' or '\n' is automatically excluded
 
 
 if __name__ == "__main__":
     # todo: lack 20 test cases
-    if int_literal := re.findall(TokenType.INT_LIT.value, "int a = 1234"):
-        print(int_literal)
-    if str_literal := re.findall(TokenType.STR_LIT.value, "\'apple\', \"banana\""):
-        print(str_literal)
+    if number_literal := re.findall(TokenType.NUM_LIT.value, "1234, 11.90"):
+        print(number_literal)
+    if string_literal := re.findall(TokenType.STR_LIT.value, "\'apple\', \"banana\""):
+        print(string_literal)
     if whitespace := re.findall(TokenType.WHITESPACE.value, "1 2\f3\n4\r5\t6\v"):
         print(whitespace)
     if annotation := re.findall(TokenType.ANNOTATION.value, "int a = 10; % this is annotation"):
