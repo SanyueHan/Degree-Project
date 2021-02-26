@@ -24,7 +24,6 @@ python repl_execuate.py
 ```
 #### Example
 ```shell
-/usr/local/bin/python3.8 /Users/hansanyue/Desktop/Degree-Project/repl_execute.py
 >> a = 1+2
 
 a =
@@ -37,15 +36,19 @@ b =
 
      12
 
->> c = a + b * 2 + 3 * (4 + 5) * 6
+>> a + b * 2 + 3 * (4 + 5) * 6
 
-c =
+ans =
 
      189
 
->> quit()
+>> c = ans - 89
 
-Process finished with exit code 0
+c =
+
+     100
+
+>> 
 ```
 
 ### Script Execute

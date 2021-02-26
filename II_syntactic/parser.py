@@ -10,13 +10,13 @@ class Parser:
     the rules supported include (in Extended Backus-Naur-Form):
     program -> exp_stmt | ass_stmt | dcl_stmt
 
+    dcl_stmt -> 'int' id ( = add_exp)? ;?
+    ass_stmt -> id = add_exp ;?
+    exp_stmt -> add_exp ;?
+
     add_exp -> mul_exp ((+|-)mul_exp)*
     mul_exp -> pri_exp ((*|/)pri_exp)*
-    pri_exp -> id | int_lit | \(add_exp\)
-
-    exp_stmt -> add_exp ';'
-    ass_stmt -> id = add_exp ';'
-    dcl_stmt -> 'int' id ( = add_exp)? ';'
+    pri_exp -> id | int_lit | (add_exp)
     """
     def __init__(self, token_list):
         self.tokens = token_list
@@ -59,7 +59,7 @@ class Parser:
                         if self.tokens[0].get_type() == TokenType.SEMICOLON:
                             node.stmt = True
                         else:
-                            # todo: throw raise invalid  ssignment statement exception
+                            # todo: throw raise invalid assignment statement exception
                             pass
                 else:
                     # todo: throw invalid assignment statement exception
@@ -70,14 +70,21 @@ class Parser:
         return node
 
     def parse_expression_statement(self):
-        node = self.parse_additive_expression()
-        if node:
-            if self.tokens:
-                if self.tokens[0].get_type() == TokenType.SEMICOLON:
-                    node.stmt = True
-                else:
-                    # todo: throw invalid assignment statement exception
-                    pass
+        node = None
+        if self.tokens:
+            node = ASTNode(n_type=ASTNodeType.EXP_STMT)
+            child = self.parse_additive_expression()
+            if child:
+                node.add_child(child)
+                if self.tokens:
+                    if self.tokens[0].get_type() == TokenType.SEMICOLON:
+                        node.stmt = True
+                    else:
+                        # todo: throw raise invalid expression statement exception
+                        pass
+            else:
+                # todo: throw raise invalid expression statement exception
+                pass
         return node
 
     def parse_additive_expression(self):
