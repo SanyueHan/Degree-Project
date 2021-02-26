@@ -18,11 +18,10 @@ def repl_execute(token=False, node=False, var=False):
             for t in token_list:
                 print(t)
         ast_root = Syntactic.statement_analyzer(token_list)
+        if ast_root is None:
+            continue
         if node:
-            if ast_root:
-                ast_root.dump()
-            else:
-                print("ast_root is None")
+            ast_root.dump()
         interpreter.interpret_statement(ast_root)
         if var:
             print(interpreter.get_variables())
