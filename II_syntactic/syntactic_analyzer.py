@@ -22,3 +22,6 @@ class Syntactic:
         ast_root = ASTNode(n_type=ASTNodeType.PROGRAM, children=children)
         return ast_root
 
+
+if __name__ == "__main__":
+    pass
