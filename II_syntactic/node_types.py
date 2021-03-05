@@ -11,6 +11,10 @@ class ASTNodeType(Enum):
     EXP_STMT = "Expression Statement"
 
     # Expressions
+    OR_EXP = "Logic OR Expression"
+    AND_EXP = "Logic AND Expression"
+    EQ_EXP = "Equal Expression"
+    REL_EXP = "Relation Expression"
     ADD_EXP = "Additive Expression"
     MUL_EXP = "Multiplicative Expression"
     PRI_EXP = "Primary Expression"
