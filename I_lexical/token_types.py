@@ -14,8 +14,8 @@ class TokenType(Enum):
     STR_LIT = re.compile(r"\".*\"|\'.*\'")
 
     # Logical Operators
-    AND = re.compile(r"&&")
-    OR = re.compile(r"\|\|")
+    LAND = re.compile(r"&&")
+    LOR = re.compile(r"\|\|")
 
     # Relational Operators
     EQ = re.compile("==")
@@ -51,9 +51,9 @@ if __name__ == "__main__":
         print(number_literal)
     if string_literal := re.findall(TokenType.STR_LIT.value, "\'apple\', \"banana\""):
         print(string_literal)
-    if and_operator := re.findall(TokenType.AND.value, "&&"):
+    if and_operator := re.findall(TokenType.LAND.value, "&&"):
         print(and_operator)
-    if or_operator := re.findall(TokenType.OR.value, "||"):
+    if or_operator := re.findall(TokenType.LOR.value, "||"):
         print(or_operator)
     if whitespace := re.findall(TokenType.WHITESPACE.value, "1 2\f3\n4\r5\t6\v"):
         print(whitespace)

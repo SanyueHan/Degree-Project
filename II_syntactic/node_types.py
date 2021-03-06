@@ -3,23 +3,23 @@ from enum import Enum
 
 # Abstract Syntax Tree Node Type
 class ASTNodeType(Enum):
-    PROGRAM = "Program"
+    PROGRAM = "PROGRAM"
 
     # Statements
-    DCL_STMT = "Declaration Statement"
-    ASS_STMT = "Assignment Statement"
-    EXP_STMT = "Expression Statement"
+    DCL_STMT = "DECLARATION STATEMENT"
+    ASS_STMT = "ASSIGNMENT STATEMENT"
+    EXP_STMT = "EXPRESSION STATEMENT"
 
     # Expressions
-    OR_EXP = "Logic OR Expression"
-    AND_EXP = "Logic AND Expression"
-    EQ_EXP = "Equal Expression"
-    REL_EXP = "Relation Expression"
-    ADD_EXP = "Additive Expression"
-    MUL_EXP = "Multiplicative Expression"
-    PRI_EXP = "Primary Expression"
+    LOR_EXP = "LOGIC OR EXPRESSION"
+    LAND_EXP = "LOGIC AND EXPRESSION"
+    EQ_EXP = "EQUAL EXPRESSION"
+    REL_EXP = "RELATION EXPRESSION"
+    ADD_EXP = "ADDITIVE EXPRESSION"
+    MUL_EXP = "MULTIPLICATIVE EXPRESSION"
+    PRI_EXP = "PRIMARY EXPRESSION"
 
     # Literals
-    NUM_LIT = "Number Literal"
+    NUM_LIT = "NUMBER LITERAL"
 
-    ID = "Identifier"
+    ID = "IDENTIFIER"
