@@ -4,12 +4,15 @@ from II_syntactic.node_types import ASTNodeType
 class Interpreter:
     def __init__(self):
         self.interpret = {
-            ASTNodeType.PROGRAM: self.interpret_program,
             ASTNodeType.DCL_STMT: self.interpret_declaration_statement,
             ASTNodeType.ASS_STMT: self.interpret_assignment_statement,
             ASTNodeType.EXP_STMT: self.interpret_expression_statement,
         }
         self.evaluate = {
+            ASTNodeType.LOR_EXP: self.evaluate_logic_or_expression,
+            ASTNodeType.LND_EXP: self.evaluate_logic_and_expression,
+            ASTNodeType.EQL_EXP: self.evaluate_equal_expression,
+            ASTNodeType.REL_EXP: self.evaluate_relational_expression,
             ASTNodeType.ADD_EXP: self.evaluate_additive_expression,
             ASTNodeType.MUL_EXP: self.evaluate_multiplicative_expression,
             ASTNodeType.PRI_EXP: self.evaluate_primary_expression,
@@ -23,10 +26,6 @@ class Interpreter:
             self.interpret_statement(child)
 
     def interpret_statement(self, node):
-        """
-        :param node: ASTNode
-        :return:
-        """
         result = self.interpret[node.get_type()](node)
         # if statement does not ended with a semicolon, the result is printed
         if not node.get_stmt():
@@ -66,6 +65,40 @@ class Interpreter:
         self.variables[var_name] = self.evaluate[child.get_type()](child)
 
         return var_name, self.variables[var_name]
+
+    def evaluate_logic_or_expression(self, node):
+        children = node.get_children()
+        child0 = children[0]
+        child1 = children[1]
+        return 1 if self.evaluate[child0.get_type()](child0) or self.evaluate[child1.get_type()](child1) else 0
+
+    def evaluate_logic_and_expression(self, node):
+        children = node.get_children()
+        child0 = children[0]
+        child1 = children[1]
+        return 1 if self.evaluate[child0.get_type()](child0) and self.evaluate[child1.get_type()](child1) else 0
+
+    def evaluate_equal_expression(self, node):
+        children = node.get_children()
+        child0 = children[0]
+        child1 = children[1]
+        if node.get_text() == "==":
+            return 1 if self.evaluate[child0.get_type()](child0) == self.evaluate[child1.get_type()](child1) else 0
+        else:
+            return 1 if self.evaluate[child0.get_type()](child0) != self.evaluate[child1.get_type()](child1) else 0
+
+    def evaluate_relational_expression(self, node):
+        children = node.get_children()
+        child0 = children[0]
+        child1 = children[1]
+        if node.get_text() == ">=":
+            return 1 if self.evaluate[child0.get_type()](child0) >= self.evaluate[child1.get_type()](child1) else 0
+        elif node.get_text() == ">":
+            return 1 if self.evaluate[child0.get_type()](child0) > self.evaluate[child1.get_type()](child1) else 0
+        elif node.get_text() == "<=":
+            return 1 if self.evaluate[child0.get_type()](child0) <= self.evaluate[child1.get_type()](child1) else 0
+        else:
+            return 1 if self.evaluate[child0.get_type()](child0) < self.evaluate[child1.get_type()](child1) else 0
 
     def evaluate_additive_expression(self, node):
         children = node.get_children()

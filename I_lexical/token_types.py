@@ -14,22 +14,16 @@ class TokenType(Enum):
     STR_LIT = re.compile(r"\".*\"|\'.*\'")
 
     # Logical Operators
-    LAND = re.compile(r"&&")
+    LND = re.compile(r"&&")
     LOR = re.compile(r"\|\|")
 
     # Relational Operators
-    EQ = re.compile("==")
-    NE = re.compile("!=")
-    GE = re.compile(">=")
-    GT = re.compile(">")
-    LE = re.compile("<=")
-    LT = re.compile("<")
+    EQL = re.compile("==|!=")
+    REL = re.compile(">=|>|<=|<")
 
     # Arithmetic Operators
-    PLUS = re.compile("[+]")
-    MINUS = re.compile("-")
-    STAR = re.compile("[*]")
-    SLASH = re.compile("/")
+    ADD = re.compile("[+]|-")
+    MUL = re.compile("[*]|/")
 
     # Other
     ASSIGNMENT = re.compile("=")
@@ -46,7 +40,7 @@ class TokenType(Enum):
 
 
 if __name__ == "__main__":
-    # todo: lack 20 test cases
+    # todo: lack 18 test cases
     if number_literal := re.findall(TokenType.NUM_LIT.value, "1234, 11.90"):
         print(number_literal)
     if string_literal := re.findall(TokenType.STR_LIT.value, "\'apple\', \"banana\""):

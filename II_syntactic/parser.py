@@ -11,11 +11,16 @@ class Parser:
     program -> exp_stmt | ass_stmt | dcl_stmt
 
     dcl_stmt -> 'int' id ( = add_exp)? ;?
-    ass_stmt -> id = add_exp ;?
-    exp_stmt -> add_exp ;?
+    ass_stmt -> id = exp ;?
+    exp_stmt -> exp ;?
 
-    add_exp -> mul_exp ((+|-)mul_exp)*
-    mul_exp -> pri_exp ((*|/)pri_exp)*
+    exp -> lor_exp
+    lor_exp -> lnd_exp (|| lnd_exp)*
+    lnd_exp -> eql_exp (&& eql_exp)*
+    eql_exp -> rel_exp ((!=|==) rel_exp)*
+    rel_exp -> add_exp ((<=|<|>=|>) add_exp)*
+    add_exp -> mul_exp ((+|-) mul_exp)*
+    mul_exp -> pri_exp ((*|/) pri_exp)*
     pri_exp -> id | num_lit | (add_exp)
     """
     def __init__(self, token_list):
@@ -52,7 +57,7 @@ class Parser:
             node = ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.ASS_STMT)
             if self.tokens and self.tokens[0].get_type() == TokenType.ASSIGNMENT:
                 self.tokens.pop(0)  # remove '='
-                child = self.parse_additive_expression()
+                child = self.parse_expression()
                 if child:
                     node.add_child(child)
                     if self.tokens:
@@ -73,7 +78,7 @@ class Parser:
         node = None
         if self.tokens:
             node = ASTNode(n_type=ASTNodeType.EXP_STMT)
-            child = self.parse_additive_expression()
+            child = self.parse_expression()
             if child:
                 node.add_child(child)
                 if self.tokens:
@@ -87,12 +92,66 @@ class Parser:
                 pass
         return node
 
+    def parse_expression(self):
+        return self.parse_logic_or_expression()
+
+    def parse_logic_or_expression(self):
+        root = self.parse_logic_and_expression()
+        if root:
+            while self.tokens and self.tokens[0].get_type() == TokenType.LOR:
+                token = self.tokens.pop(0)  # logic or symbol
+                child = self.parse_logic_and_expression()
+                if child:
+                    root = ASTNode(n_type=ASTNodeType.LOR_EXP, n_text=token.get_text(), children=[root, child])
+                else:
+                    # todo: raise invalid logic or expression exception
+                    pass
+        return root
+
+    def parse_logic_and_expression(self):
+        root = self.parse_equal_expression()
+        if root:
+            while self.tokens and self.tokens[0].get_type() == TokenType.LND:
+                token = self.tokens.pop(0)  # logic and symbol
+                child = self.parse_equal_expression()
+                if child:
+                    root = ASTNode(n_type=ASTNodeType.LND_EXP, n_text=token.get_text(), children=[root, child])
+                else:
+                    # todo: raise invalid logic and expression exception
+                    pass
+        return root
+
+    def parse_equal_expression(self):
+        root = self.parse_relational_expression()
+        if root:
+            while self.tokens and self.tokens[0].get_type() == TokenType.EQL:
+                token = self.tokens.pop(0)  # equal symbol
+                child = self.parse_relational_expression()
+                if child:
+                    root = ASTNode(n_type=ASTNodeType.EQL_EXP, n_text=token.get_text(), children=[root, child])
+                else:
+                    # todo: raise invalid equal expression exception
+                    pass
+        return root
+
+    def parse_relational_expression(self):
+        root = self.parse_additive_expression()
+        if root:
+            while self.tokens and self.tokens[0].get_type() == TokenType.REL:
+                token = self.tokens.pop(0)  # relational symbol
+                child = self.parse_additive_expression()
+                if child:
+                    root = ASTNode(n_type=ASTNodeType.REL_EXP, n_text=token.get_text(), children=[root, child])
+                else:
+                    # todo: raise invalid relational expression exception
+                    pass
+        return root
+
     def parse_additive_expression(self):
         root = self.parse_multiplicative_expression()
         if root:
-            # the cycle corresponds to the infinitely extending expression * in EBNF, which comes from left recursion
-            while self.tokens and (self.tokens[0].get_type() == TokenType.PLUS or self.tokens[0].get_type() == TokenType.MINUS):
-                token = self.tokens.pop(0)  # plus/minus symbol
+            while self.tokens and self.tokens[0].get_type() == TokenType.ADD:
+                token = self.tokens.pop(0)  # additive symbol
                 child = self.parse_multiplicative_expression()
                 if child:
                     root = ASTNode(n_type=ASTNodeType.ADD_EXP, n_text=token.get_text(), children=[root, child])
@@ -104,8 +163,8 @@ class Parser:
     def parse_multiplicative_expression(self):
         root = self.parse_primary_expression()
         if root:
-            while self.tokens and (self.tokens[0].get_type() == TokenType.STAR or self.tokens[0].get_type() == TokenType.SLASH):
-                token = self.tokens.pop(0)  # star/slash symbol
+            while self.tokens and self.tokens[0].get_type() == TokenType.MUL:
+                token = self.tokens.pop(0)  # multiplicative symbol
                 child = self.parse_primary_expression()
                 if child:
                     root = ASTNode(n_type=ASTNodeType.MUL_EXP, n_text=token.get_text(), children=[root, child])
