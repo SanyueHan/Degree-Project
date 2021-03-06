@@ -2,14 +2,19 @@
 
 ## Description
 This is a Python implemented interpreter, 
-supporting a subset of the functionalities of MATLAB, 
-including: 
-- Four basic arithmetic calculations
-- Variable assignment
+supporting a subset of the functionalities of MATLAB.
+1. Operator supported including:
+  - arithmetic operators: + - * /
+  - relational operators: >= > <= < == !=
+  - logical operators: && \|\|
+    
+2. Statements supported including:
+  - expression statement
+  - assignment statement
 
 ## Run
 ### Environment
-Only Python 3.8, no third-party package needed up to now
+Python 3.8.5, no third-party package needed up to now
 
 ### REPL Execute
 #### Commands
@@ -59,7 +64,15 @@ ans =
 
      1.7500
 
->> 
+>> 1 && 0 || 1==2 < 5+5
+
+ans =
+
+     1
+
+>> quit()
+
+Process finished with exit code 0
 ```
 
 ### Script Execute
