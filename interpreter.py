@@ -28,7 +28,7 @@ class Interpreter:
     def interpret_statement(self, node):
         result = self.interpret[node.get_type()](node)
         # if statement does not ended with a semicolon, the result is printed
-        if not node.get_stmt():
+        if result:
             var = result[0]
             value = result[1]
             if int(value) == value:
@@ -43,7 +43,7 @@ class Interpreter:
             # todo: throw repeating declaration exception
             pass
         self.variables[var_name] = self.evaluate[child.get_type()](child)
-        return var_name, self.variables[var_name]
+        return (var_name, self.variables[var_name]) if len(node.get_children()) == 1 else None
 
     def interpret_assignment_statement(self, node):
         var_name = node.get_text()
@@ -56,7 +56,7 @@ class Interpreter:
             pass
         self.variables[var_name] = self.evaluate[child.get_type()](child)
 
-        return var_name, self.variables[var_name]
+        return (var_name, self.variables[var_name]) if len(node.get_children()) == 1 else None
 
     def interpret_expression_statement(self, node):
         var_name = "ans"
@@ -64,7 +64,7 @@ class Interpreter:
         # ans stored as a temporary variable
         self.variables[var_name] = self.evaluate[child.get_type()](child)
 
-        return var_name, self.variables[var_name]
+        return (var_name, self.variables[var_name]) if len(node.get_children()) == 1 else None
 
     def evaluate_logic_or_expression(self, node):
         children = node.get_children()

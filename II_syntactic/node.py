@@ -1,9 +1,8 @@
 # Abstract Syntax Tree Node
 class ASTNode:
-    def __init__(self, n_type=None, n_text=None, n_stmt=False, children=None):
+    def __init__(self, n_type=None, n_text=None, children=None):
         self.type = n_type
         self.text = n_text
-        self.stmt = n_stmt  # the argument deciding whether this is a statement or an expression
         self.children = children if children else []
 
     def get_type(self):
@@ -11,9 +10,6 @@ class ASTNode:
 
     def get_text(self):
         return self.text
-
-    def get_stmt(self):
-        return self.stmt
 
     def get_children(self):
         return self.children
