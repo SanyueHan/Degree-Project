@@ -38,16 +38,16 @@ class Interpreter:
 
     def interpret_declaration_statement(self, node):
         var_name = node.get_text()
-        child = node.get_children()[0]
+        child = node.get_child(0)
         if var_name in self.variables:
             # todo: throw repeating declaration exception
             pass
         self.variables[var_name] = self.evaluate[child.get_type()](child)
-        return (var_name, self.variables[var_name]) if len(node.get_children()) == 1 else None
+        return (var_name, self.variables[var_name]) if node.num_children() == 1 else None
 
     def interpret_assignment_statement(self, node):
         var_name = node.get_text()
-        child = node.get_children()[0]
+        child = node.get_child(0)
         if var_name not in self.variables:
             # to adapt the dynamic type feature in interpreted language,
             # assignment could have the same form as declaration
@@ -56,41 +56,37 @@ class Interpreter:
             pass
         self.variables[var_name] = self.evaluate[child.get_type()](child)
 
-        return (var_name, self.variables[var_name]) if len(node.get_children()) == 1 else None
+        return (var_name, self.variables[var_name]) if node.num_children() == 1 else None
 
     def interpret_expression_statement(self, node):
         var_name = "ans"
-        child = node.get_children()[0]
+        child = node.get_child(0)
         # ans stored as a temporary variable
         self.variables[var_name] = self.evaluate[child.get_type()](child)
 
-        return (var_name, self.variables[var_name]) if len(node.get_children()) == 1 else None
+        return (var_name, self.variables[var_name]) if node.num_children() == 1 else None
 
     def evaluate_logic_or_expression(self, node):
-        children = node.get_children()
-        child0 = children[0]
-        child1 = children[1]
+        child0 = node.get_child(0)
+        child1 = node.get_child(1)
         return 1 if self.evaluate[child0.get_type()](child0) or self.evaluate[child1.get_type()](child1) else 0
 
     def evaluate_logic_and_expression(self, node):
-        children = node.get_children()
-        child0 = children[0]
-        child1 = children[1]
+        child0 = node.get_child(0)
+        child1 = node.get_child(1)
         return 1 if self.evaluate[child0.get_type()](child0) and self.evaluate[child1.get_type()](child1) else 0
 
     def evaluate_equal_expression(self, node):
-        children = node.get_children()
-        child0 = children[0]
-        child1 = children[1]
+        child0 = node.get_child(0)
+        child1 = node.get_child(1)
         if node.get_text() == "==":
             return 1 if self.evaluate[child0.get_type()](child0) == self.evaluate[child1.get_type()](child1) else 0
         else:
             return 1 if self.evaluate[child0.get_type()](child0) != self.evaluate[child1.get_type()](child1) else 0
 
     def evaluate_relational_expression(self, node):
-        children = node.get_children()
-        child0 = children[0]
-        child1 = children[1]
+        child0 = node.get_child(0)
+        child1 = node.get_child(1)
         if node.get_text() == ">=":
             return 1 if self.evaluate[child0.get_type()](child0) >= self.evaluate[child1.get_type()](child1) else 0
         elif node.get_text() == ">":
@@ -101,18 +97,16 @@ class Interpreter:
             return 1 if self.evaluate[child0.get_type()](child0) < self.evaluate[child1.get_type()](child1) else 0
 
     def evaluate_additive_expression(self, node):
-        children = node.get_children()
-        child0 = children[0]
-        child1 = children[1]
+        child0 = node.get_child(0)
+        child1 = node.get_child(1)
         if node.get_text() == "+":
             return self.evaluate[child0.get_type()](child0) + self.evaluate[child1.get_type()](child1)
         else:
             return self.evaluate[child0.get_type()](child0) - self.evaluate[child1.get_type()](child1)
 
     def evaluate_multiplicative_expression(self, node):
-        children = node.get_children()
-        child0 = children[0]
-        child1 = children[1]
+        child0 = node.get_child(0)
+        child1 = node.get_child(1)
         if node.get_text() == "*":
             return self.evaluate[child0.get_type()](child0) * self.evaluate[child1.get_type()](child1)
         else:

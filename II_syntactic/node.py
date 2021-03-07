@@ -14,8 +14,14 @@ class ASTNode:
     def get_children(self):
         return self.children
 
+    def num_children(self):
+        return len(self.children)
+
     def add_child(self, child):
         self.children.append(child)
+
+    def get_child(self, index):
+        return self.children[index]
 
     def dump(self, indent=0):
         print(f"{' '*indent}{self.get_type()} {self.get_text()}")
