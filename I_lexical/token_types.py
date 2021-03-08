@@ -3,13 +3,13 @@ import re
 
 
 class TokenType(Enum):
-    # Keywords: if、else、int
+    # Keywords
     INT = re.compile("int")
 
-    # Identifier: age
+    # Identifier
     ID = re.compile("[a-zA-Z_]([a-zA-Z_]|[0-9])*")
 
-    # Literal: 123, "apple"
+    # Literal
     NUM_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+")
     STR_LIT = re.compile(r"\".*\"|\'.*\'")
 
