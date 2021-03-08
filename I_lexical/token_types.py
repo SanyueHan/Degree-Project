@@ -40,15 +40,15 @@ class TokenType(Enum):
 
 
 if __name__ == "__main__":
-    # todo: lack 18 test cases
+    # todo: lack 14 test cases
     if number_literal := re.findall(TokenType.NUM_LIT.value, "1234, 11.90"):
         print(number_literal)
     if string_literal := re.findall(TokenType.STR_LIT.value, "\'apple\', \"banana\""):
         print(string_literal)
-    if and_operator := re.findall(TokenType.LAND.value, "&&"):
-        print(and_operator)
-    if or_operator := re.findall(TokenType.LOR.value, "||"):
-        print(or_operator)
+    if logic_and := re.findall(TokenType.LAND.value, "&&"):
+        print(logic_and)
+    if logic_or := re.findall(TokenType.LOR.value, "||"):
+        print(logic_or)
     if whitespace := re.findall(TokenType.WHITESPACE.value, "1 2\f3\n4\r5\t6\v"):
         print(whitespace)
     if annotation := re.findall(TokenType.ANNOTATION.value, "int a = 10; % this is annotation"):
