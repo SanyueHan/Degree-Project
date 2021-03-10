@@ -3,15 +3,14 @@ import re
 
 
 class TokenType(Enum):
+    WHITESPACE = re.compile(r"\s+")
+    ANNOTATION = re.compile("%.*")  # in '.', '\r' or '\n' is automatically excluded
+
     # Keywords
     INT = re.compile("int")
 
     # Identifier
     ID = re.compile("[a-zA-Z_]([a-zA-Z_]|[0-9])*")
-
-    # Literal
-    NUM_LIT = re.compile(r"-?([0-9]+\.[0-9]+|[0-9]+)")
-    STR_LIT = re.compile(r"\".*\"|\'.*\'")
 
     # Logical Operators
     LAN = re.compile(r"&&")
@@ -25,6 +24,10 @@ class TokenType(Enum):
     ADD = re.compile("[+]|-")
     MUL = re.compile("[*]|/")
 
+    # Literal
+    NUM_LIT = re.compile(r"-?([0-9]+\.[0-9]+|[0-9]+)")
+    STR_LIT = re.compile(r"\".*\"|\'.*\'")
+
     # Other
     ASSIGNMENT = re.compile("=")
     SEMICOLON = re.compile(";")
@@ -34,9 +37,6 @@ class TokenType(Enum):
     R_BRACKET = re.compile(r"]")
     L_BRACE = re.compile("{")
     R_BRACE = re.compile("}")
-
-    WHITESPACE = re.compile(r"\s+")
-    ANNOTATION = re.compile("%.*")  # in '.', '\r' or '\n' is automatically excluded
 
 
 if __name__ == "__main__":
