@@ -20,6 +20,9 @@ class TokenType(Enum):
     EQL = re.compile("==|!=")
     REL = re.compile(">=|>|<=|<")
 
+    # Assignment Operators
+    ASS = re.compile(r"=|\+=|-=|\*=|/=")
+
     # Arithmetic Operators
     ADD = re.compile("[+]|-")
     MUL = re.compile("[*]|/")
@@ -29,7 +32,6 @@ class TokenType(Enum):
     STR_LIT = re.compile(r"\".*\"|\'.*\'")
 
     # Other
-    ASSIGNMENT = re.compile("=")
     SEMICOLON = re.compile(";")
     L_PAREN = re.compile(r"\(")
     R_PAREN = re.compile(r"\)")
@@ -40,16 +42,18 @@ class TokenType(Enum):
 
 
 if __name__ == "__main__":
-    # todo: lack 14 test cases
-    if number_literal := re.findall(TokenType.NUM_LIT.value, "1234, 11.90"):
-        print(number_literal)
-    if string_literal := re.findall(TokenType.STR_LIT.value, "\'apple\', \"banana\""):
-        print(string_literal)
-    if logic_and := re.findall(TokenType.LAN.value, "&&"):
-        print(logic_and)
-    if logic_or := re.findall(TokenType.LOR.value, "||"):
-        print(logic_or)
+    # todo: lack 13 test cases
     if whitespace := re.findall(TokenType.WHITESPACE.value, "1 2\f3\n4\r5\t6\v"):
         print(whitespace)
     if annotation := re.findall(TokenType.ANNOTATION.value, "int a = 10; % this is annotation"):
         print(annotation)
+    if logic_and := re.findall(TokenType.LAN.value, "&&"):
+        print(logic_and)
+    if logic_or := re.findall(TokenType.LOR.value, "||"):
+        print(logic_or)
+    if assignments := re.findall(TokenType.ASS.value, "= += -= *= /="):
+        print(assignments)
+    if number_literal := re.findall(TokenType.NUM_LIT.value, "1234, 11.90"):
+        print(number_literal)
+    if string_literal := re.findall(TokenType.STR_LIT.value, "\'apple\', \"banana\""):
+        print(string_literal)

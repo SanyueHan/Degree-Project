@@ -9,7 +9,7 @@ class Parser:
     program ::= exp_stmt | ass_stmt | dcl_stmt
 
     dcl_stmt ::= 'int' id( '=' exp)? ';'?
-    ass_stmt ::= id '=' exp ';'?
+    ass_stmt ::= id ('='|'+='|'-='|'*='|'/=') exp ';'?
     exp_stmt ::= exp ';'?
 
     exp ::= lor_exp
@@ -34,7 +34,7 @@ class Parser:
             return None
         node = ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.DCL_STMT)
 
-        if self.tokens and self.tokens[0].get_type() == TokenType.ASSIGNMENT:  # in dcl stmt ass token is optional
+        if self.tokens and self.tokens[0].get_type() == TokenType.ASS:  # in dcl stmt ass token is optional
             self.tokens.pop(0)  # remove '='
             child = self.parse_additive_expression()
             if child:
@@ -56,7 +56,7 @@ class Parser:
             return None
         node = ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.ASS_STMT)
 
-        if not (self.tokens and self.tokens[0].get_type() == TokenType.ASSIGNMENT):
+        if not (self.tokens and self.tokens[0].get_type() == TokenType.ASS):
             # no error because the statement may be an expression statement started by an ID
             return None
         self.tokens.pop(0)  # remove '='
