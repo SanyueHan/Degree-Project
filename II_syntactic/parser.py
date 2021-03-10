@@ -5,23 +5,21 @@ from I_lexical.token_types import TokenType
 
 class Parser:
     r"""
-    A single-statement syntax parser
-    capable for expression, assignment, and declaration
-    the rules supported include (in Extended Backus-Naur-Form):
-    program -> exp_stmt | ass_stmt | dcl_stmt
+    grammar rules in EBNF (Extended Backus-Naur-Form):
+    program ::= exp_stmt | ass_stmt | dcl_stmt
 
-    dcl_stmt -> 'int' id ( = add_exp)? ;?
-    ass_stmt -> id = exp ;?
-    exp_stmt -> exp ;?
+    dcl_stmt ::= 'int' id( '=' exp)? ';'?
+    ass_stmt ::= id '=' exp ';'?
+    exp_stmt ::= exp ';'?
 
-    exp -> lor_exp
-    lor_exp -> lnd_exp (|| lnd_exp)*
-    lnd_exp -> eql_exp (&& eql_exp)*
-    eql_exp -> rel_exp ((!=|==) rel_exp)*
-    rel_exp -> add_exp ((<=|<|>=|>) add_exp)*
-    add_exp -> mul_exp ((+|-) mul_exp)*
-    mul_exp -> pri_exp ((*|/) pri_exp)*
-    pri_exp -> id | num_lit | (add_exp)
+    exp ::= lor_exp
+    lor_exp ::= lan_exp ('||' lan_exp)*
+    lan_exp ::= eql_exp ('&&' eql_exp)*
+    eql_exp ::= rel_exp (('!='|'==') rel_exp)*
+    rel_exp ::= add_exp (('<='|'<'|'>='|'>') add_exp)*
+    add_exp ::= mul_exp (('+'|'-') mul_exp)*
+    mul_exp ::= pri_exp (('*'|'/') pri_exp)*
+    pri_exp ::= id | num_lit | '('add_exp')'
     """
     def __init__(self, token_list):
         self.tokens = token_list
@@ -113,11 +111,11 @@ class Parser:
     def parse_logic_and_expression(self):
         root = self.parse_equal_expression()
         if root:
-            while self.tokens and self.tokens[0].get_type() == TokenType.LND:
+            while self.tokens and self.tokens[0].get_type() == TokenType.LAN:
                 token = self.tokens.pop(0)  # logic and symbol
                 child = self.parse_equal_expression()
                 if child:
-                    root = ASTNode(n_type=ASTNodeType.LND_EXP, n_text=token.get_text(), children=[root, child])
+                    root = ASTNode(n_type=ASTNodeType.LAN_EXP, n_text=token.get_text(), children=[root, child])
                 else:
                     # todo: raise invalid logic and expression exception
                     pass

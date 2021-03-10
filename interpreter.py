@@ -10,7 +10,7 @@ class Interpreter:
         }
         self.evaluate = {
             ASTNodeType.LOR_EXP: self.evaluate_logic_or_expression,
-            ASTNodeType.LND_EXP: self.evaluate_logic_and_expression,
+            ASTNodeType.LAN_EXP: self.evaluate_logic_and_expression,
             ASTNodeType.EQL_EXP: self.evaluate_equal_expression,
             ASTNodeType.REL_EXP: self.evaluate_relational_expression,
             ASTNodeType.ADD_EXP: self.evaluate_additive_expression,

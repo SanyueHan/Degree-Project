@@ -10,11 +10,11 @@ class TokenType(Enum):
     ID = re.compile("[a-zA-Z_]([a-zA-Z_]|[0-9])*")
 
     # Literal
-    NUM_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+")
+    NUM_LIT = re.compile(r"-?([0-9]+\.[0-9]+|[0-9]+)")
     STR_LIT = re.compile(r"\".*\"|\'.*\'")
 
     # Logical Operators
-    LND = re.compile(r"&&")
+    LAN = re.compile(r"&&")
     LOR = re.compile(r"\|\|")
 
     # Relational Operators
@@ -45,7 +45,7 @@ if __name__ == "__main__":
         print(number_literal)
     if string_literal := re.findall(TokenType.STR_LIT.value, "\'apple\', \"banana\""):
         print(string_literal)
-    if logic_and := re.findall(TokenType.LAND.value, "&&"):
+    if logic_and := re.findall(TokenType.LAN.value, "&&"):
         print(logic_and)
     if logic_or := re.findall(TokenType.LOR.value, "||"):
         print(logic_or)
