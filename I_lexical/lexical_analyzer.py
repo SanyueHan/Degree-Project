@@ -15,7 +15,8 @@ class Lexical:
         while statement:
             match = None
             for TYPE in TokenType:
-                if match := TYPE.value.match(statement):
+                match = TYPE.value.match(statement)
+                if match:
                     text = match.group()
                     statement = statement[len(text):]
                     if TYPE != TokenType.WHITESPACE and TYPE != TokenType.ANNOTATION:
