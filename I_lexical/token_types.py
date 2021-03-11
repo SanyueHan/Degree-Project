@@ -13,8 +13,9 @@ class TokenType(Enum):
     ID = re.compile("[a-zA-Z_]([a-zA-Z_]|[0-9])*")
 
     # Logical Operators
-    LAN = re.compile(r"&&")
-    LOR = re.compile(r"\|\|")
+    LAN = re.compile(r"&")
+    LOR = re.compile(r"\|")
+    LNT = re.compile(r"~")
 
     # Relational Operators
     EQL = re.compile("==|!=")
@@ -45,8 +46,9 @@ if __name__ == "__main__":
     # todo: lack 13 test cases
     print(re.findall(TokenType.WHITESPACE.value, "1 2\f3\n4\r5\t6\v"))
     print(re.findall(TokenType.ANNOTATION.value, "int a = 10; % this is annotation"))
-    print(re.findall(TokenType.LAN.value, "&&"))
-    print(re.findall(TokenType.LOR.value, "||"))
+    print(re.findall(TokenType.LAN.value, "a & b"))
+    print(re.findall(TokenType.LOR.value, "c | d"))
+    print(re.findall(TokenType.LNT.value, "~e"))
     print(re.findall(TokenType.ASS.value, "= += -= *= /="))
     print(re.findall(TokenType.NUM_LIT.value, "1234, 11.90"))
     print(re.findall(TokenType.STR_LIT.value, "\'apple\', \"banana\""))
