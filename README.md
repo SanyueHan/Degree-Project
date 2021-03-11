@@ -4,9 +4,25 @@
 This is a Python implemented interpreter, 
 supporting a subset of the functionalities of MATLAB.
 1. Operator supported including:
-  - arithmetic operators: + - * /
-  - relational operators: >= > <= < == !=
-  - logical operators: && \|\|
+  - arithmetic operators: (left-associative)
+    - '+'
+    - '-'
+    - '*'
+    - '/'
+  - relational operators: (left-associative)
+    - '>+' 
+    - '>'
+    - '<='
+    - '<'
+    - '=='
+    - '!='
+  - logical operators: (left-associative)
+    - '&' (logical and)
+    - '|' (logical or)
+  - unary operators: (right-associative)
+    - '+' (positive)
+    - '-' (negative)
+    - '~' (logical not)
     
 2. Statements supported including:
   - expression statement
@@ -71,7 +87,25 @@ ans =
 
      1
 
->> quit()
+>> -(7+8)-9
+
+ans =
+
+     -24
+
+>> ~6
+
+ans =
+
+     0
+
+>> --++--+-123*45
+
+ans =
+
+     -5535
+
+>> 
 
 Process finished with exit code 0
 ```

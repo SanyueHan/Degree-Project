@@ -18,7 +18,8 @@ class Parser:
     eql_exp ::= rel_exp (('!='|'==') rel_exp)*
     rel_exp ::= add_exp (('<='|'<'|'>='|'>') add_exp)*
     add_exp ::= mul_exp (('+'|'-') mul_exp)*
-    mul_exp ::= pri_exp (('*'|'/') pri_exp)*
+    mul_exp ::= uny_exp (('*'|'/') uny_exp)*
+    uny_exp ::= ('+'|'-'|'~')* pri_exp
     pri_exp ::= id | num_lit | '('add_exp')'
     """
     def __init__(self, token_list):
@@ -81,7 +82,7 @@ class Parser:
         child = self.parse_expression()
         if not child:
             # todo: throw invalid expression statement exception
-            pass
+            return None
         node.add_child(child)
 
         if self.tokens:  # semicolon is optional
@@ -89,7 +90,7 @@ class Parser:
                 node.add_child(ASTNode(n_text=";"))
             else:
                 # todo: throw invalid expression statement exception
-                pass
+                return None
         return node
 
     def parse_expression(self):
@@ -161,17 +162,29 @@ class Parser:
         return root
 
     def parse_multiplicative_expression(self):
-        root = self.parse_primary_expression()
+        root = self.parse_unary_expression()
         if root:
             while self.tokens and self.tokens[0].get_type() == TokenType.MUL:
                 token = self.tokens.pop(0)  # multiplicative symbol
-                child = self.parse_primary_expression()
+                child = self.parse_unary_expression()
                 if child:
                     root = ASTNode(n_type=ASTNodeType.MUL_EXP, n_text=token.get_text(), children=[root, child])
                 else:
                     # todo: raise invalid multiplicative expression exception
                     pass
         return root
+
+    def parse_unary_expression(self):
+        if self.tokens and self.tokens[0].get_type() in (TokenType.ADD, TokenType.LNT):
+            token = self.tokens.pop(0)  # unary symbol
+            child = self.parse_unary_expression()
+            if child:
+                return ASTNode(n_type=ASTNodeType.UNY_EXP, n_text=token.get_text(), children=[child])
+            else:
+                # todo: raise invalid unary expression exception
+                pass
+        else:
+            return self.parse_primary_expression()
 
     def parse_primary_expression(self):
         if not self.tokens:
@@ -181,7 +194,12 @@ class Parser:
             return ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.ID)
         if self.tokens[0].get_type() == TokenType.NUM_LIT:
             return ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.NUM_LIT)
-        if self.tokens[0].get_type() == TokenType.L_PAREN and self.tokens[-1].get_type() == TokenType.R_PAREN:
+        if self.tokens[0].get_type() == TokenType.L_PAREN:
             self.tokens.pop(0)  # remove left paren
-            self.tokens.pop()  # remove right paren
-            return self.parse_expression()
+            node = self.parse_additive_expression()
+            if node and self.tokens and self.tokens[0].get_type() == TokenType.R_PAREN:
+                self.tokens.pop(0)  # remove right paren
+            else:
+                # todo: raise invalid parens exception
+                pass
+            return node

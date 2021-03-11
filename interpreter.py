@@ -15,6 +15,7 @@ class Interpreter:
             ASTNodeType.REL_EXP: self.evaluate_relational_expression,
             ASTNodeType.ADD_EXP: self.evaluate_additive_expression,
             ASTNodeType.MUL_EXP: self.evaluate_multiplicative_expression,
+            ASTNodeType.UNY_EXP: self.evaluate_unary_expression,
             ASTNodeType.PRI_EXP: self.evaluate_primary_expression,
             ASTNodeType.NUM_LIT: self.evaluate_number_literal,
             ASTNodeType.ID: self.evaluate_identifier,
@@ -111,6 +112,15 @@ class Interpreter:
             return self.evaluate[child0.get_type()](child0) * self.evaluate[child1.get_type()](child1)
         else:
             return self.evaluate[child0.get_type()](child0) / self.evaluate[child1.get_type()](child1)
+
+    def evaluate_unary_expression(self, node):
+        child = node.get_child()
+        if node.get_text() == "+":
+            return self.evaluate[child.get_type()](child)
+        elif node.get_text() == "-":
+            return -self.evaluate[child.get_type()](child)
+        else:
+            return 0 if self.evaluate[child.get_type()](child) else 1
 
     def evaluate_primary_expression(self, node):
         # will not be used since in AST it is optimised to skip single-child node

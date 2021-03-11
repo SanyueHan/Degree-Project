@@ -20,7 +20,7 @@ class ASTNode:
     def add_child(self, child):
         self.children.append(child)
 
-    def get_child(self, index):
+    def get_child(self, index=0):
         return self.children[index]
 
     def dump(self, indent=0):
