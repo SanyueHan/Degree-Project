@@ -6,11 +6,14 @@ from II_syntactic.parser import Parser
 class Syntactic:
     @staticmethod
     def statement_analyzer(token_list):
-        if ast_node := Parser(token_list[:]).parse_declaration_statement():
+        ast_node = Parser(token_list[:]).parse_declaration_statement()
+        if ast_node:
             return ast_node
-        if ast_node := Parser(token_list[:]).parse_assignment_statement():
+        ast_node = Parser(token_list[:]).parse_assignment_statement()
+        if ast_node:
             return ast_node
-        if ast_node := Parser(token_list[:]).parse_expression_statement():
+        ast_node = Parser(token_list[:]).parse_expression_statement()
+        if ast_node:
             return ast_node
         # todo: throw unknown statement exception
 

@@ -14,7 +14,8 @@ supporting a subset of the functionalities of MATLAB.
 
 ## Run
 ### Environment
-Python 3.8.5, no third-party package needed up to now
+Python (with the version no lower than 3.7), 
+no third-party package needed up to now
 
 ### REPL Execute
 #### Commands
