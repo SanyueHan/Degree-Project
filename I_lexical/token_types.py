@@ -29,7 +29,7 @@ class TokenType(Enum):
     MUL = re.compile("[*]|/")
 
     # Literal
-    NUM_LIT = re.compile(r"-?([0-9]+\.[0-9]+|[0-9]+)")
+    NUM_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+")
     STR_LIT = re.compile(r"\".*\"|\'.*\'")
 
     # Other
