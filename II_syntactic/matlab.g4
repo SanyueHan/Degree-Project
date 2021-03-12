@@ -68,7 +68,7 @@ unary_expression
    | unary_operator postfix_expression
    ;
 
-unary_operator
+unary_operator // finished
    : '+'
    | '-'
    | '~'
@@ -86,13 +86,13 @@ multiplicative_expression
    | multiplicative_expression ARRAYPOW unary_expression
    ;
 
-additive_expression
+additive_expression // finished
    : multiplicative_expression
    | additive_expression '+' multiplicative_expression
    | additive_expression '-' multiplicative_expression
    ;
 
-relational_expression
+relational_expression // finished
    : additive_expression
    | relational_expression '<' additive_expression
    | relational_expression '>' additive_expression
@@ -100,18 +100,18 @@ relational_expression
    | relational_expression GE_OP additive_expression
    ;
 
-equality_expression
+equality_expression // finished
    : relational_expression
    | equality_expression EQ_OP relational_expression
    | equality_expression NE_OP relational_expression
    ;
 
-and_expression
+and_expression // finished
    : equality_expression
    | and_expression '&' equality_expression
    ;
 
-or_expression
+or_expression // finished
    : and_expression
    | or_expression '|' and_expression
    ;
