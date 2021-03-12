@@ -22,7 +22,7 @@ class TokenType(Enum):
     REL = re.compile(">=|>|<=|<")
 
     # Assignment Operators
-    ASS = re.compile(r"=|\+=|-=|\*=|/=")
+    ASS = re.compile(r"=")
 
     # Arithmetic Operators
     ADD = re.compile("[+]|-")
@@ -49,6 +49,6 @@ if __name__ == "__main__":
     print(re.findall(TokenType.LAN.value, "a & b"))
     print(re.findall(TokenType.LOR.value, "c | d"))
     print(re.findall(TokenType.LNT.value, "~e"))
-    print(re.findall(TokenType.ASS.value, "= += -= *= /="))
+    print(re.findall(TokenType.ASS.value, "int age = 5"))
     print(re.findall(TokenType.NUM_LIT.value, "1234, 11.90, .23, 12."))
     print(re.findall(TokenType.STR_LIT.value, "\'apple\', \"banana\""))
