@@ -18,6 +18,7 @@ class Interpreter:
             ASTNodeType.UNY_EXP: self.evaluate_unary_expression,
             ASTNodeType.PRI_EXP: self.evaluate_primary_expression,
             ASTNodeType.NUM_LIT: self.evaluate_number_literal,
+            ASTNodeType.STR_LIT: self.evaluate_string_literal,
             ASTNodeType.ID: self.evaluate_identifier,
         }
         self.variables = {}
@@ -32,10 +33,13 @@ class Interpreter:
         if result:
             var = result[0]
             value = result[1]
-            if int(value) == value:
-                print(f"\n{var} =\n\n     {int(value)}\n")
+            if isinstance(value, float):
+                if int(value) == value:
+                    print(f"\n{var} =\n\n     {int(value)}\n")
+                else:
+                    print(f"\n{var} =\n\n     {value:.4f}\n")
             else:
-                print(f"\n{var} =\n\n     {value:.4f}\n")
+                print(f"\n{var} =\n\n     {value}\n")
 
     def interpret_declaration_statement(self, node):
         var_name = node.get_text()
@@ -132,6 +136,10 @@ class Interpreter:
         By default, MATLAB® stores all numeric variables as double-precision floating-point values.
         """
         return float(node.get_text())
+
+    @staticmethod
+    def evaluate_string_literal(node):
+        return node.get_text()
 
     def evaluate_identifier(self, node):
         var_name = node.get_text()

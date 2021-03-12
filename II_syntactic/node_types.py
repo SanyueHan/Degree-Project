@@ -22,5 +22,6 @@ class ASTNodeType(Enum):
 
     # Literals
     NUM_LIT = "NUMBER LITERAL"
+    STR_LIT = "STRING LITERAL"
 
     ID = "IDENTIFIER"

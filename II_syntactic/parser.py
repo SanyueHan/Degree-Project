@@ -194,6 +194,8 @@ class Parser:
             return ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.ID)
         if self.tokens[0].get_type() == TokenType.NUM_LIT:
             return ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.NUM_LIT)
+        if self.tokens[0].get_type() == TokenType.STR_LIT:
+            return ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.STR_LIT)
         if self.tokens[0].get_type() == TokenType.L_PAREN:
             self.tokens.pop(0)  # remove left paren
             node = self.parse_additive_expression()
@@ -203,3 +205,4 @@ class Parser:
                 # todo: raise invalid parens exception
                 pass
             return node
+
