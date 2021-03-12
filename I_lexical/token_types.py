@@ -7,7 +7,7 @@ class TokenType(Enum):
     ANNOTATION = re.compile("%.*")  # in '.', '\r' or '\n' is automatically excluded
 
     # Keywords
-    INT = re.compile("int")
+    CLR = re.compile("clear")
 
     # Identifier
     ID = re.compile("[a-zA-Z_]([a-zA-Z_]|[0-9])*")

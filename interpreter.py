@@ -4,9 +4,9 @@ from II_syntactic.node_types import ASTNodeType
 class Interpreter:
     def __init__(self):
         self.interpret = {
-            ASTNodeType.DCL_STMT: self.interpret_declaration_statement,
             ASTNodeType.ASS_STMT: self.interpret_assignment_statement,
             ASTNodeType.EXP_STMT: self.interpret_expression_statement,
+            ASTNodeType.CLR_STMT: self.interpret_clear_statement,
         }
         self.evaluate = {
             ASTNodeType.LOR_EXP: self.evaluate_logic_or_expression,
@@ -41,15 +41,6 @@ class Interpreter:
             else:
                 print(f"\n{var} =\n\n     {value}\n")
 
-    def interpret_declaration_statement(self, node):
-        var_name = node.get_text()
-        child = node.get_child(0)
-        if var_name in self.variables:
-            # todo: throw repeating declaration exception
-            pass
-        self.variables[var_name] = self.evaluate[child.get_type()](child)
-        return (var_name, self.variables[var_name]) if node.num_children() == 1 else None
-
     def interpret_assignment_statement(self, node):
         var_name = node.get_text()
         child = node.get_child(0)
@@ -70,6 +61,10 @@ class Interpreter:
         self.variables[var_name] = self.evaluate[child.get_type()](child)
 
         return (var_name, self.variables[var_name]) if node.num_children() == 1 else None
+
+    def interpret_clear_statement(self, node):
+        variables = [child.get_text() for child in node.get_children()]
+        self.del_variables(var_list=variables if variables else None)
 
     def evaluate_logic_or_expression(self, node):
         child0 = node.get_child(0)
@@ -151,3 +146,11 @@ class Interpreter:
 
     def get_variables(self):
         return self.variables
+
+    def del_variables(self, var_list=None):
+        if var_list:
+            for var in var_list:
+                # todo: check exist and raise error
+                del self.variables[var]
+        else:
+            self.variables = {}

@@ -25,33 +25,6 @@ class Parser:
     def __init__(self, token_list):
         self.tokens = token_list
 
-    def parse_declaration_statement(self):
-        if not (self.tokens and self.tokens[0].get_type() == TokenType.INT):
-            return None
-        self.tokens.pop(0)  # remove int
-
-        if not (self.tokens and self.tokens[0].get_type() == TokenType.ID):
-            # todo: throw no variable name error
-            return None
-        node = ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.DCL_STMT)
-
-        if self.tokens and self.tokens[0].get_type() == TokenType.ASS:  # in dcl stmt ass token is optional
-            self.tokens.pop(0)  # remove '='
-            child = self.parse_additive_expression()
-            if child:
-                node.add_child(child)
-            else:
-                # todo: throw invalid declaration statement exception
-                pass
-
-        if self.tokens:  # semicolon is optional
-            if self.tokens[0].get_type() == TokenType.SEMICOLON:
-                node.add_child(ASTNode(n_text=";"))
-            else:
-                # todo: throw invalid declaration statement exception
-                pass
-        return node
-
     def parse_assignment_statement(self):
         if not (self.tokens and self.tokens[0].get_type() == TokenType.ID):
             return None
@@ -91,6 +64,21 @@ class Parser:
             else:
                 # todo: throw invalid expression statement exception
                 return None
+        return node
+
+    def parse_clear_statement(self):
+        if not (self.tokens and self.tokens[0].get_type() == TokenType.CLR):
+            return None
+        node = ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.CLR_STMT)
+
+        # todo: parse identifier list
+
+        if self.tokens:  # semicolon is optional
+            if self.tokens[0].get_type() == TokenType.SEMICOLON:
+                node.add_child(ASTNode(n_text=";"))
+            else:
+                # todo: throw invalid clear statement exception
+                pass
         return node
 
     def parse_expression(self):
