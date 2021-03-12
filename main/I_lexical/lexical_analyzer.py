@@ -1,5 +1,5 @@
-from I_lexical.token_types import TokenType
-from I_lexical.token import Token
+from main.I_lexical.token_types import TokenType
+from main.I_lexical.token import Token
 
 
 class Lexical:

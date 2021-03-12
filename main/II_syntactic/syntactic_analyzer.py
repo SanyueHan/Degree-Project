@@ -1,6 +1,6 @@
-from II_syntactic.node import ASTNode
-from II_syntactic.node_types import ASTNodeType
-from II_syntactic.parser import Parser
+from main.II_syntactic.node import ASTNode
+from main.II_syntactic.node_types import ASTNodeType
+from main.II_syntactic.parser import Parser
 
 
 class Syntactic:

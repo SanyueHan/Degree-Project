@@ -1,4 +1,4 @@
-from II_syntactic.node_types import ASTNodeType
+from main.II_syntactic.node_types import ASTNodeType
 
 
 class Interpreter:

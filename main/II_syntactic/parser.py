@@ -1,6 +1,6 @@
-from II_syntactic.node import ASTNode
-from II_syntactic.node_types import ASTNodeType
-from I_lexical.token_types import TokenType
+from main.II_syntactic.node import ASTNode
+from main.II_syntactic.node_types import ASTNodeType
+from main.I_lexical.token_types import TokenType
 
 
 class Parser:
@@ -10,7 +10,7 @@ class Parser:
 
     ass_stmt ::= id ('='|'+='|'-='|'*='|'/=') exp ';'?
     exp_stmt ::= exp ';'?
-    clr_stmt ::= 'clear' id_lst ';'?
+    clr_stmt ::= 'clear' id_list ';'?
 
     exp ::= lor_exp
     lor_exp ::= lan_exp ('||' lan_exp)*
