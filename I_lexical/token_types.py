@@ -29,7 +29,7 @@ class TokenType(Enum):
     MUL = re.compile("[*]|/")
 
     # Literal
-    NUM_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+")
+    NUM_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+|[0-9]+")
     STR_LIT = re.compile(r"\".*\"|\'.*\'")
 
     # Other
@@ -50,5 +50,5 @@ if __name__ == "__main__":
     print(re.findall(TokenType.LOR.value, "c | d"))
     print(re.findall(TokenType.LNT.value, "~e"))
     print(re.findall(TokenType.ASS.value, "= += -= *= /="))
-    print(re.findall(TokenType.NUM_LIT.value, "1234, 11.90"))
+    print(re.findall(TokenType.NUM_LIT.value, "1234, 11.90, .23, 12."))
     print(re.findall(TokenType.STR_LIT.value, "\'apple\', \"banana\""))
