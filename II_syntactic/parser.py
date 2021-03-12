@@ -6,11 +6,11 @@ from I_lexical.token_types import TokenType
 class Parser:
     r"""
     grammar rules in EBNF (Extended Backus-Naur-Form):
-    program ::= exp_stmt | ass_stmt | dcl_stmt
+    statement ::= ass_stmt | exp_stmt | clr_stmt
 
-    dcl_stmt ::= 'int' id( '=' exp)? ';'?
     ass_stmt ::= id ('='|'+='|'-='|'*='|'/=') exp ';'?
     exp_stmt ::= exp ';'?
+    clr_stmt ::= 'clear' id_lst ';'?
 
     exp ::= lor_exp
     lor_exp ::= lan_exp ('||' lan_exp)*
@@ -20,7 +20,10 @@ class Parser:
     add_exp ::= mul_exp (('+'|'-') mul_exp)*
     mul_exp ::= uny_exp (('*'|'/') uny_exp)*
     uny_exp ::= ('+'|'-'|'~')* pri_exp
-    pri_exp ::= id | num_lit | '('add_exp')'
+    pri_exp ::= id | num_lit | '('exp')'
+
+    id_list ::= id*
+    stmt_list ::= stmt*
     """
     def __init__(self, token_list):
         self.tokens = token_list
