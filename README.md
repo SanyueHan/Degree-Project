@@ -3,7 +3,7 @@
 ## Description
 This is a Python implemented interpreter, 
 supporting a subset of the functionalities of MATLAB.
-1. Operator supported including:
+1. Operators supported including:
   - arithmetic operators: (left-associative)
     - '+'
     - '-'
@@ -105,9 +105,7 @@ ans =
 
      -5535
 
->> 
-
-Process finished with exit code 0
+>>
 ```
 
 ### Script Execute
