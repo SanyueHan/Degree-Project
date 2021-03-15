@@ -125,7 +125,7 @@ assignment_expression
    : postfix_expression '=' expression
    ;
 
-eostmt
+eostmt // finished
    : ','
    | ';'
    | CR
@@ -141,12 +141,12 @@ statement
    | jump_statement
    ;
 
-statement_list
+statement_list // finished
    : statement
    | statement_list statement
    ;
 
-identifier_list
+identifier_list // finished
    : IDENTIFIER
    | identifier_list IDENTIFIER
    ;
@@ -155,16 +155,16 @@ global_statement
    : GLOBAL identifier_list eostmt
    ;
 
-clear_statement
+clear_statement // finished
    : CLEAR identifier_list eostmt
    ;
 
-expression_statement
+expression_statement // finished
    : eostmt
    | expression eostmt
    ;
 
-assignment_statement
+assignment_statement // finished
    : assignment_expression eostmt
    ;
 
