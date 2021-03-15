@@ -5,7 +5,7 @@ import sys
 
 
 def script_execute(filename):
-    with open(filename) as file:
+    with open(filename, "r") as file:
         program = file.read()
 
     interpreter = Interpreter()
