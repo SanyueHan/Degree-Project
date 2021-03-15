@@ -8,10 +8,11 @@ class Parser:
     grammar rules in EBNF (Extended Backus-Naur-Form):
     statement ::= ass_stmt | exp_stmt | clr_stmt
 
-    ass_stmt ::= id ('='|'+='|'-='|'*='|'/=') exp ';'?
-    exp_stmt ::= exp ';'?
-    clr_stmt ::= 'clear' id_list ';'?
+    ass_stmt ::= ass_exp eo_stmt
+    exp_stmt ::= exp eo_stmt
+    clr_stmt ::= 'clear' id_list eo_stmt
 
+    ass_exp ::= id '=' exp
     exp ::= lor_exp
     lor_exp ::= lan_exp ('||' lan_exp)*
     lan_exp ::= eql_exp ('&&' eql_exp)*
@@ -28,28 +29,50 @@ class Parser:
     def __init__(self, token_list):
         self.tokens = token_list
 
+    def get_token(self, index=0):
+        if len(self.tokens) > index:
+            return self.tokens[index]
+
+    def parse_program(self):
+        ast_root = ASTNode(n_type=ASTNodeType.PROGRAM)
+        while self.tokens:
+            if self.tokens[0].get_type() == TokenType.EO_STMT:
+                self.tokens.pop(0)
+                continue
+            ast_root.add_child(self.parse_statement())
+        return ast_root
+
+    def parse_statement(self):
+        ast_node = self.parse_assignment_statement()
+        if ast_node:
+            return ast_node
+
+        ast_node = self.parse_expression_statement()
+        if ast_node:
+            return ast_node
+
+        ast_node = self.parse_clear_statement()
+        if ast_node:
+            return ast_node
+
+        # todo: throw unknown statement exception
+
     def parse_assignment_statement(self):
-        if not (self.tokens and self.tokens[0].get_type() == TokenType.ID):
+        if not (self.get_token(0).get_type() == TokenType.ID and self.get_token(1).get_type() == TokenType.ASS):
             return None
-        node = ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.ASS_STMT)
+        node = ASTNode(n_type=ASTNodeType.ASS_STMT)
 
-        if not (self.tokens and self.tokens[0].get_type() == TokenType.ASS):
-            # no error because the statement may be an expression statement started by an ID
-            return None
-        self.tokens.pop(0)  # remove '='
-
-        child = self.parse_expression()
+        child = self.parse_assignment_expression()
         if not child:
-            # todo: throw invalid assignment statement exception
-            pass
+            # todo: throw invalid expression statement exception
+            return None
         node.add_child(child)
 
-        if self.tokens:  # semicolon is optional
-            if self.tokens[0].get_type() == TokenType.SEMICOLON:
-                node.add_child(ASTNode(n_text=";"))
-            else:
-                # todo: throw invalid assignment statement exception
-                pass
+        if not (self.get_token(0).get_type() == TokenType.EO_STMT):
+            # todo: throw invalid statement exception
+            pass
+        node.add_child(ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.EO_STMT))
+
         return node
 
     def parse_expression_statement(self):
@@ -61,12 +84,11 @@ class Parser:
             return None
         node.add_child(child)
 
-        if self.tokens:  # semicolon is optional
-            if self.tokens[0].get_type() == TokenType.SEMICOLON:
-                node.add_child(ASTNode(n_text=";"))
-            else:
-                # todo: throw invalid expression statement exception
-                return None
+        if not (self.get_token(0).get_type() == TokenType.EO_STMT):
+            # todo: throw invalid statement exception
+            pass
+        node.add_child(ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.EO_STMT))
+
         return node
 
     def parse_clear_statement(self):
@@ -76,12 +98,21 @@ class Parser:
 
         # todo: parse identifier list
 
-        if self.tokens:  # semicolon is optional
-            if self.tokens[0].get_type() == TokenType.SEMICOLON:
-                node.add_child(ASTNode(n_text=";"))
-            else:
-                # todo: throw invalid clear statement exception
-                pass
+        if not (self.get_token(0).get_type() == TokenType.EO_STMT):
+            # todo: throw invalid statement exception
+            pass
+        node.add_child(ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.EO_STMT))
+
+        return node
+
+    def parse_assignment_expression(self):
+        identifier = ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.ID)
+        node = ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.ASS_EXP, children=[identifier])
+        exp = self.parse_expression()
+        if not exp:
+            # todo: throw invalid assignment statement exception
+            pass
+        node.add_child(exp)
         return node
 
     def parse_expression(self):
@@ -196,4 +227,3 @@ class Parser:
                 # todo: raise invalid parens exception
                 pass
             return node
-

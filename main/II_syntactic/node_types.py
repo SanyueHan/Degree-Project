@@ -3,14 +3,12 @@ from enum import Enum
 
 # Abstract Syntax Tree Node Type
 class ASTNodeType(Enum):
+    ID = "IDENTIFIER"
     PROGRAM = "PROGRAM"
-
-    # Statements
-    CLR_STMT = "CLEAR STATEMENT"
-    ASS_STMT = "ASSIGNMENT STATEMENT"
-    EXP_STMT = "EXPRESSION STATEMENT"
+    EO_STMT = "END OF STATEMENT"
 
     # Expressions
+    ASS_EXP = "ASSIGNMENT EXPRESSION"
     LOR_EXP = "LOGIC OR EXPRESSION"
     LAN_EXP = "LOGIC AND EXPRESSION"
     EQL_EXP = "EQUAL EXPRESSION"
@@ -24,4 +22,7 @@ class ASTNodeType(Enum):
     NUM_LIT = "NUMBER LITERAL"
     STR_LIT = "STRING LITERAL"
 
-    ID = "IDENTIFIER"
+    # Statements
+    CLR_STMT = "CLEAR STATEMENT"
+    ASS_STMT = "ASSIGNMENT STATEMENT"
+    EXP_STMT = "EXPRESSION STATEMENT"

@@ -1,5 +1,5 @@
-from main.I_lexical.lexical_analyzer import Lexical
-from main.II_syntactic.syntactic_analyzer import Syntactic
+from main.I_lexical.lexer import lexer
+from main.II_syntactic.parser import Parser
 from main.interpreter import Interpreter
 import sys
 
@@ -10,8 +10,8 @@ def script_execute(filename):
 
     interpreter = Interpreter()
 
-    token_lists = Lexical.program_analyzer(program)
-    ast_root = Syntactic.program_analyzer(token_lists)
+    token_list = lexer(program)
+    ast_root = Parser(token_list).parse_program()
     interpreter.interpret_program(ast_root)
 
 
@@ -21,19 +21,19 @@ def repl_execute(token=False, node=False, var=False):
     """
     interpreter = Interpreter()
     while True:
-        statement = input(">> ")
-        if statement == "quit()" or statement == "exit()":
+        program = input(">> ")
+        if program == "quit()" or program == "exit()":
             break
-        token_list = Lexical.statement_analyzer(statement)
+        token_list = lexer(program)
         if token:
             for t in token_list:
                 print(t)
-        ast_root = Syntactic.statement_analyzer(token_list)
+        ast_root = Parser(token_list).parse_program()
         if ast_root is None:
             continue
         if node:
             ast_root.dump()
-        interpreter.interpret_statement(ast_root)
+        interpreter.interpret_program(ast_root)
         if var:
             print(interpreter.get_variables())
 
