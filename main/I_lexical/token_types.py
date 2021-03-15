@@ -6,10 +6,7 @@ class TokenType(Enum):
     WHITESPACE = re.compile(r"\s+")
     ANNOTATION = re.compile("%.*")  # in '.', '\r' or '\n' is automatically excluded
 
-    # Keywords
-    CLR = re.compile("clear")
-
-    # Identifier
+    KEYWORD = re.compile("break|clear|else|elseif|end|for|function|global|if|return|while")
     ID = re.compile("[a-zA-Z_]([a-zA-Z_]|[0-9])*")
 
     # Logical Operators
@@ -38,12 +35,10 @@ class TokenType(Enum):
     R_PAREN = re.compile(r"\)")
     L_BRACKET = re.compile(r"\[")
     R_BRACKET = re.compile(r"]")
-    L_BRACE = re.compile("{")
-    R_BRACE = re.compile("}")
 
 
 if __name__ == "__main__":
-    # todo: lack 13 test cases
+    # todo: lack 10 test cases
     print(re.findall(TokenType.WHITESPACE.value, "1 2\f3\n4\r5\t6\v"))
     print(re.findall(TokenType.ANNOTATION.value, "int a = 10; % this is annotation"))
     print(re.findall(TokenType.LAN.value, "a & b"))

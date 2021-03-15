@@ -70,7 +70,7 @@ class Parser:
         return node
 
     def parse_clear_statement(self):
-        if not (self.tokens and self.tokens[0].get_type() == TokenType.CLR):
+        if not (self.tokens and self.tokens[0].get_text() == "clear"):
             return None
         node = ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.CLR_STMT)
 
