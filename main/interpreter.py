@@ -56,7 +56,7 @@ class Interpreter:
         return (var_name, self.variables[var_name]) if node.get_child(1).get_text() != ';' else None
 
     def interpret_clear_statement(self, node):
-        variables = [child.get_text() for child in node.get_children()]
+        variables = [child.get_text() for child in node.get_child(0).get_children()]
         self.del_variables(var_list=variables if variables else None)
 
     def evaluate_assignment_expression(self, node):

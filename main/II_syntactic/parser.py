@@ -92,11 +92,10 @@ class Parser:
         return node
 
     def parse_clear_statement(self):
-        if not (self.tokens and self.tokens[0].get_text() == "clear"):
+        if not (self.get_token(0).get_text() == "clear"):
             return None
         node = ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.CLR_STMT)
-
-        # todo: parse identifier list
+        node.add_child(self.parse_identifier_list())
 
         if not (self.get_token(0).get_type() == TokenType.EO_STMT):
             # todo: throw invalid statement exception
@@ -121,7 +120,7 @@ class Parser:
     def parse_logic_or_expression(self):
         root = self.parse_logic_and_expression()
         if root:
-            while self.tokens and self.tokens[0].get_type() == TokenType.LOR:
+            while self.get_token(0).get_type() == TokenType.LOR:
                 token = self.tokens.pop(0)  # logic or symbol
                 child = self.parse_logic_and_expression()
                 if child:
@@ -134,7 +133,7 @@ class Parser:
     def parse_logic_and_expression(self):
         root = self.parse_equal_expression()
         if root:
-            while self.tokens and self.tokens[0].get_type() == TokenType.LAN:
+            while self.get_token(0).get_type() == TokenType.LAN:
                 token = self.tokens.pop(0)  # logic and symbol
                 child = self.parse_equal_expression()
                 if child:
@@ -147,7 +146,7 @@ class Parser:
     def parse_equal_expression(self):
         root = self.parse_relational_expression()
         if root:
-            while self.tokens and self.tokens[0].get_type() == TokenType.EQL:
+            while self.get_token(0).get_type() == TokenType.EQL:
                 token = self.tokens.pop(0)  # equal symbol
                 child = self.parse_relational_expression()
                 if child:
@@ -160,7 +159,7 @@ class Parser:
     def parse_relational_expression(self):
         root = self.parse_additive_expression()
         if root:
-            while self.tokens and self.tokens[0].get_type() == TokenType.REL:
+            while self.get_token(0).get_type() == TokenType.REL:
                 token = self.tokens.pop(0)  # relational symbol
                 child = self.parse_additive_expression()
                 if child:
@@ -173,7 +172,7 @@ class Parser:
     def parse_additive_expression(self):
         root = self.parse_multiplicative_expression()
         if root:
-            while self.tokens and self.tokens[0].get_type() == TokenType.ADD:
+            while self.get_token(0).get_type() == TokenType.ADD:
                 token = self.tokens.pop(0)  # additive symbol
                 child = self.parse_multiplicative_expression()
                 if child:
@@ -186,7 +185,7 @@ class Parser:
     def parse_multiplicative_expression(self):
         root = self.parse_unary_expression()
         if root:
-            while self.tokens and self.tokens[0].get_type() == TokenType.MUL:
+            while self.get_token(0).get_type() == TokenType.MUL:
                 token = self.tokens.pop(0)  # multiplicative symbol
                 child = self.parse_unary_expression()
                 if child:
@@ -197,7 +196,7 @@ class Parser:
         return root
 
     def parse_unary_expression(self):
-        if self.tokens and self.tokens[0].get_type() in (TokenType.ADD, TokenType.LNT):
+        if self.get_token(0).get_type() in (TokenType.ADD, TokenType.LNT):
             token = self.tokens.pop(0)  # unary symbol
             child = self.parse_unary_expression()
             if child:
@@ -227,3 +226,17 @@ class Parser:
                 # todo: raise invalid parens exception
                 pass
             return node
+
+    def parse_identifier_list(self):
+        children = []
+        while self.get_token().type == TokenType.ID:
+            children.append(ASTNode(n_text=self.tokens.pop(0).get_text(), n_type=ASTNodeType.ID))
+        return ASTNode(n_type=ASTNodeType.ID_LIST, children=children)
+
+    def parse_statement_list(self):
+        children = []
+        node = self.parse_statement()
+        while node:
+            children.append(node)
+            node = self.parse_statement()
+        return ASTNode(n_type=ASTNodeType.STMT_LIST, children=children)
