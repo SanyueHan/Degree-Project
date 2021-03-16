@@ -21,7 +21,7 @@ def lexer(program):
                     break
             else:
                 # todo: raise lexeme unrecognized error
-                pass
+                return None
     return result_token_list
 
 

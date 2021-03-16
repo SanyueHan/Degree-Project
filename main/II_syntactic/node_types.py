@@ -3,9 +3,21 @@ from enum import Enum
 
 # Abstract Syntax Tree Node Type
 class ASTNodeType(Enum):
-    ID = "IDENTIFIER"
-    PROGRAM = "PROGRAM"
+    # Program
+    STMT_LIST = "STATEMENT LIST"
+
+    # Statements
+    ASS_STMT = "ASSIGNMENT STATEMENT"
+    EXP_STMT = "EXPRESSION STATEMENT"
+    CLR_STMT = "CLEAR STATEMENT"
+    SEL_STMT = "SELECTION STATEMENT"
+    ITR_STMT = "ITERATION STATEMENT"
+    JMP_STMT = "JUMP STATEMENT"
+
+    # Statement Components
     EO_STMT = "END OF STATEMENT"
+    ID_LIST = "IDENTIFIER LIST"
+    ClS = "CLAUSE"
 
     # Expressions
     ASS_EXP = "ASSIGNMENT EXPRESSION"
@@ -22,11 +34,5 @@ class ASTNodeType(Enum):
     NUM_LIT = "NUMBER LITERAL"
     STR_LIT = "STRING LITERAL"
 
-    # Statements
-    CLR_STMT = "CLEAR STATEMENT"
-    ASS_STMT = "ASSIGNMENT STATEMENT"
-    EXP_STMT = "EXPRESSION STATEMENT"
+    ID = "IDENTIFIER"
 
-    # Lists
-    ID_LIST = "IDENTIFIER LIST"
-    STMT_LIST = "STATEMENT LIST"

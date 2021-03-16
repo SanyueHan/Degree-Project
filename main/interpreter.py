@@ -4,10 +4,13 @@ from main.II_syntactic.node_types import ASTNodeType
 class Interpreter:
     def __init__(self):
         self.interpret = {
-            ASTNodeType.PROGRAM: self.interpret_program,
+            ASTNodeType.STMT_LIST: self.interpret_statement_list,
             ASTNodeType.ASS_STMT: self.interpret_assignment_statement,
             ASTNodeType.EXP_STMT: self.interpret_expression_statement,
             ASTNodeType.CLR_STMT: self.interpret_clear_statement,
+            ASTNodeType.SEL_STMT: self.interpret_selection_statement,
+            ASTNodeType.ITR_STMT: self.interpret_iteration_statement,
+            ASTNodeType.JMP_STMT: self.interpret_jump_statement,
         }
         self.evaluate = {
             ASTNodeType.ASS_EXP: self.evaluate_assignment_expression,
@@ -25,7 +28,7 @@ class Interpreter:
         }
         self.variables = {}
 
-    def interpret_program(self, root):
+    def interpret_statement_list(self, root):
         for child in root.get_children():
             self.interpret_statement(child)
 
@@ -64,6 +67,28 @@ class Interpreter:
         value = self.evaluate[node.get_child(1).get_type()](node.get_child(1))
         self.variables[var_name] = value
         return var_name, value
+
+    def interpret_selection_statement(self, node):
+        for clause in node.get_children():
+            if self.interpret_clause(clause):
+                break
+
+    def interpret_clause(self, node):
+        if node.get_text() == 'else':
+            self.interpret_statement_list(node.get_child(0))
+        else:
+            expression = node.get_child(0)
+            if self.evaluate[expression.get_type()](expression):
+                self.interpret_statement_list(node.get_child(1))
+                return True
+            else:
+                return False
+
+    def interpret_iteration_statement(self, node):
+        pass
+
+    def interpret_jump_statement(self, node):
+        pass
 
     def evaluate_logic_or_expression(self, node):
         child0 = node.get_child(0)
@@ -140,7 +165,7 @@ class Interpreter:
         if var_name in self.variables:
             return self.variables[var_name]
         else:
-            # todo: raise unknown exception variable exception
+            # todo: raise unknown variable exception
             pass
 
     def get_variables(self):
