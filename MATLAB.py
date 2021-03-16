@@ -4,15 +4,21 @@ from main.interpreter import Interpreter
 import sys
 
 
-def script_execute(filename):
+def script_execute(filename, token=False, node=False, var=False):
     with open(filename, "r") as file:
         program = file.read()
 
-    interpreter = Interpreter()
-
     token_list = lexer(program)
-    ast_root = Parser(token_list).parse_program()
-    interpreter.interpret_program(ast_root)
+    if token:
+        for t in token_list:
+            print(t)
+    ast_root = Parser(token_list).parse_statement_list()
+    interpreter = Interpreter()
+    if node:
+        ast_root.dump()
+    interpreter.interpret_statement_list(ast_root)
+    if var:
+        print(interpreter.get_variables())
 
 
 def repl_execute(token=False, node=False, var=False):
@@ -28,12 +34,10 @@ def repl_execute(token=False, node=False, var=False):
         if token:
             for t in token_list:
                 print(t)
-        ast_root = Parser(token_list).parse_program()
-        if ast_root is None:
-            continue
+        ast_root = Parser(token_list).parse_statement_list()
         if node:
             ast_root.dump()
-        interpreter.interpret_program(ast_root)
+        interpreter.interpret_statement_list(ast_root)
         if var:
             print(interpreter.get_variables())
 
