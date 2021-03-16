@@ -70,10 +70,10 @@ class Interpreter:
 
     def interpret_selection_statement(self, node):
         for clause in node.get_children():
-            if self.interpret_clause(clause):
+            if self.interpret_selection_clause(clause):
                 break
 
-    def interpret_clause(self, node):
+    def interpret_selection_clause(self, node):
         if node.get_text() == 'else':
             self.interpret_statement_list(node.get_child(0))
         else:
@@ -85,6 +85,19 @@ class Interpreter:
                 return False
 
     def interpret_iteration_statement(self, node):
+        child = node.get_child()
+        if child.get_type() == ASTNodeType.WHL_CLS:
+            self.interpret_while_clause(child)
+        else:
+            self.interpret_for_clause(child)
+
+    def interpret_while_clause(self, node):
+        expression = node.get_child(0)
+        statement_list = node.get_child(1)
+        while self.evaluate[expression.get_type()](expression):
+            self.interpret_statement_list(statement_list)
+
+    def interpret_for_clause(self, node):
         pass
 
     def interpret_jump_statement(self, node):

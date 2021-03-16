@@ -125,14 +125,14 @@ class Parser:
             return None
         node = ASTNode(n_type=ASTNodeType.SEL_STMT)
 
-        node.add_child(self.parse_clause(self.tokens.pop(0).get_text()))
+        node.add_child(self.parse_selection_clause(self.tokens.pop(0).get_text()))
 
         while self.get_token().get_text() == 'elseif':
-            elseif_clause = self.parse_clause(self.tokens.pop(0).get_text())
+            elseif_clause = self.parse_selection_clause(self.tokens.pop(0).get_text())
             node.add_child(elseif_clause)
 
         if self.get_token().get_text() == 'else':
-            node.add_child(self.parse_clause(self.tokens.pop(0).get_text()))
+            node.add_child(self.parse_selection_clause(self.tokens.pop(0).get_text()))
 
         if self.get_token().get_text() != 'end':
             # todo: throw invalid statement exception
@@ -146,8 +146,8 @@ class Parser:
 
         return node
 
-    def parse_clause(self, clause):
-        node = ASTNode(n_type=ASTNodeType.ClS, n_text=clause)
+    def parse_selection_clause(self, clause):
+        node = ASTNode(n_type=ASTNodeType.SEL_ClS, n_text=clause)
 
         if clause != 'else':
             expression = self.parse_expression()
@@ -160,18 +160,44 @@ class Parser:
 
         return node
 
-    def parse_elseif_clause(self):
-        pass
-
-    def parse_else_clause(self):
-        pass
-
     def parse_iteration_statement(self):
-        """
-        only while statement currently
-        """
-        if self.get_token(0).get_text() != "while":
+        if self.get_token(0).get_text() not in ('while', 'for'):
             return None
+
+        node = ASTNode(n_type=ASTNodeType.ITR_STMT)
+
+        if self.get_token(0).get_text() == 'while':
+            node.add_child(self.parse_while_clause(self.tokens.pop(0).get_text()))
+        else:
+            node.add_child(self.parse_for_clause(self.tokens.pop(0).get_text()))
+
+        if self.get_token().get_text() != 'end':
+            # todo: throw invalid statement exception
+            return None
+        self.tokens.pop(0)  # remove 'end'
+
+        if self.get_token().get_type() != TokenType.EO_STMT:
+            # todo: throw invalid statement exception
+            return None
+        node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
+
+        return node
+
+    def parse_while_clause(self, clause):
+        node = ASTNode(n_type=ASTNodeType.WHL_CLS, n_text=clause)
+
+        expression = self.parse_expression()
+        if expression is None:
+            # todo: throw exception
+            return None
+        node.add_child(expression)
+
+        node.add_child(self.parse_statement_list())
+
+        return node
+
+    def parse_for_clause(self, clause):
+        pass
 
     def parse_jump_statement(self):
         pass

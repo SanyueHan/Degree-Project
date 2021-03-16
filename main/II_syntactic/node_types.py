@@ -17,7 +17,9 @@ class ASTNodeType(Enum):
     # Statement Components
     EO_STMT = "END OF STATEMENT"
     ID_LIST = "IDENTIFIER LIST"
-    ClS = "CLAUSE"
+    SEL_ClS = "SELECTION CLAUSE"
+    FOR_CLS = "FOR CLAUSE"
+    WHL_CLS = "WHILE CLAUSE"
 
     # Expressions
     ASS_EXP = "ASSIGNMENT EXPRESSION"
