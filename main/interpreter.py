@@ -13,7 +13,6 @@ class Interpreter:
             ASTNodeType.JMP_STMT: self.interpret_jump_statement,
         }
         self.evaluate = {
-            ASTNodeType.ASS_EXP: self.evaluate_assignment_expression,
             ASTNodeType.LOR_EXP: self.evaluate_logic_or_expression,
             ASTNodeType.LAN_EXP: self.evaluate_logic_and_expression,
             ASTNodeType.EQL_EXP: self.evaluate_equal_expression,
@@ -52,9 +51,13 @@ class Interpreter:
         return res if node.get_child(1).get_text() != ';' else None
 
     def interpret_expression_statement(self, node):
-        var_name = "ans"
         child = node.get_child(0)
-        self.variables[var_name] = self.evaluate[child.get_type()](child)
+
+        if child.get_type() == ASTNodeType.ID:
+            var_name = child.get_text()
+        else:
+            var_name = "ans"
+            self.variables["ans"] = self.evaluate[child.get_type()](child)
 
         return (var_name, self.variables[var_name]) if node.get_child(1).get_text() != ';' else None
 
