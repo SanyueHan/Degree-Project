@@ -7,14 +7,15 @@ class Parser:
     r"""
     grammar rules in EBNF (Extended Backus-Naur-Form):
     stmt_list ::= stmt*
-    stmt ::= ass_stmt | exp_stmt | clr_stmt | sel_stmt | itr_stmt | jmp_stmt
+    stmt ::= ass_stmt | exp_stmt | clr_stmt | sel_stmt | itr_stmt | jmp_stmt | mty_stmt
 
     ass_stmt ::= ass_exp eo_stmt
     exp_stmt ::= exp eo_stmt
     clr_stmt ::= 'clear' id_list eo_stmt
-    sel_stmt ::= 'if' exp stmt_list eo_stmt? ('elseif' exp stmt_list)* ('else' stmt_list)? 'end' eo_stmt
-    itr_stmt ::=
+    sel_stmt ::= 'if' exp stmt_list ('elseif' exp stmt_list)* ('else' stmt_list)? 'end' eo_stmt
+    itr_stmt ::= 'while' exp stmt_list
     jmp_stmt ::=
+    mty_stmt ::= eo_stmt
 
     id_list ::= id*
 
