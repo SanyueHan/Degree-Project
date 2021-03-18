@@ -37,9 +37,16 @@ class Parser:
         if len(self.tokens) > index:
             return self.tokens[index]
 
-    def parse_statement_list(self):
+    def parse_statement_list(self, terminators=(None, )):
+        """
+        when parse program, terminators use it default value, only if no token left will the parsing stop
+        when parse code blocks like selection, iteration, function, terminators will be some specified keywords
+        """
         ast_root = ASTNode(n_type=ASTNodeType.STMT_LIST)
-        while self.tokens and self.tokens[0].get_text() not in {'else', 'elseif', 'end'}:
+        while self.get_token() and self.get_token().get_text() not in terminators:
+            if self.get_token() is None:
+                # todo: raise invalid code block error
+                return None
             if self.tokens[0].get_type() == TokenType.EO_STMT:
                 self.tokens.pop(0)
                 continue
@@ -157,7 +164,13 @@ class Parser:
                 return None
             node.add_child(expression)
 
-        node.add_child(self.parse_statement_list())
+        terminators_map = {
+            'if': ('elseif', 'else', 'end'),
+            'elseif': ('elseif', 'else', 'end'),
+            'else': ('end', )
+        }
+
+        node.add_child(self.parse_statement_list(terminators=terminators_map[clause]))
 
         return node
 
@@ -193,7 +206,7 @@ class Parser:
             return None
         node.add_child(expression)
 
-        node.add_child(self.parse_statement_list())
+        node.add_child(self.parse_statement_list(terminators=('end', )))
 
         return node
 
