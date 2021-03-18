@@ -27,7 +27,12 @@ supporting a subset of the functionalities of MATLAB:
 2. Statements supported including:
   - assignment statement
   - expression statement
-  - clear statement
+  - selection statement
+    - if
+    - elseif
+    - else
+  - iteration statement
+    - while
 
 ## Run
 ### Environment
@@ -70,6 +75,28 @@ c =
 d =
 
      0.4286
+
+>> if a < 10 a, end
+
+a =
+
+     3
+
+>> while b < 10 b = b + 1, end
+
+b =
+
+     8
+
+
+b =
+
+     9
+
+
+b =
+
+     10
 
 >> 
 ```
