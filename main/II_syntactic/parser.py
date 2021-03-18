@@ -37,13 +37,13 @@ class Parser:
         if len(self.tokens) > index:
             return self.tokens[index]
 
-    def parse_statement_list(self, terminators=(None, )):
+    def parse_statement_list(self, terminators=('None', )):
         """
         when parse program, terminators use it default value, only if no token left will the parsing stop
         when parse code blocks like selection, iteration, function, terminators will be some specified keywords
         """
         ast_root = ASTNode(n_type=ASTNodeType.STMT_LIST)
-        while self.get_token() and self.get_token().get_text() not in terminators:
+        while str(self.get_token()) not in terminators:
             if self.get_token() is None:
                 # todo: raise invalid code block error
                 return None
