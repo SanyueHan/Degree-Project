@@ -12,7 +12,7 @@ class TokenType(Enum):
     LNT = re.compile(r"~")
 
     # Relational Operators
-    EQL = re.compile("==|!=")
+    EQL = re.compile("==|~=")
     REL = re.compile(">=|>|<=|<")
 
     # Assignment Operators
