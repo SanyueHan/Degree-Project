@@ -34,12 +34,12 @@ supporting a subset of the functionalities of MATLAB:
   - iteration statement
     - while
 
-## Run
-### Environment
+## Environment
 Python (with the version no lower than 3.7), 
 no third-party package needed up to now
 
-### REPL Execute
+## Run
+### REPL Execute (Interactive Execute)
 #### Commands
 ###### Mac OS
 ```shell
