@@ -6,21 +6,21 @@ class TokenType(Enum):
     KEYWORD = re.compile("break|clear|else|elseif|end|for|function|global|if|return|while")
     ID = re.compile("[a-zA-Z_]([a-zA-Z_]|[0-9])*")
 
-    # Logical Operators
-    LAN = re.compile(r"&")
-    LOR = re.compile(r"\|")
-    LNT = re.compile(r"~")
+    # Arithmetic Operators
+    ADD = re.compile("[+]|-")
+    MUL = re.compile(r"[*]|/|\\|\.\*|\./|\.\\")
 
     # Relational Operators
     EQL = re.compile("==|~=")
     REL = re.compile(">=|>|<=|<")
 
+    # Logical Operators
+    LAN = re.compile(r"&")
+    LOR = re.compile(r"\|")
+    LNT = re.compile(r"~")
+
     # Assignment Operators
     ASS = re.compile(r"=")
-
-    # Arithmetic Operators
-    ADD = re.compile("[+]|-")
-    MUL = re.compile(r"[*]|/|\\|\.\*|\./|\.\\")
 
     # Literal
     NUM_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+|[0-9]+")
