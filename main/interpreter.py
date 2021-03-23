@@ -109,33 +109,33 @@ class Interpreter:
         data1 = self.evaluate_expression(node.get_child(1))
         cls, fun = BSO_MAP[node.get_text()]
         if data0.Size == data1.Size:
-            return cls([fun(data0.Value[i], data1.Value[i]) for i in range(len(data0.Value))], size=data0.Size)
+            return cls([fun(*tup) for tup in zip(data0, data1)], size=data0.Size)
         # todo: auto expand feature and size not fix error.
 
     def evaluate_unary_scalar_calculation(self, node):
         data = self.evaluate_expression(node.get_child())
         cls, fun = USO_MAP[node.get_text()]
-        return cls([fun(v) for v in data.Value], size=data.Size)
+        return cls([fun(v) for v in data], size=data.Size)
 
     def evaluate_matrix_multiplication(self, node):
         data0 = self.evaluate_expression(node.get_child(0))
         data1 = self.evaluate_expression(node.get_child(1))
         if data0.Size == (1, 1) and data1.Size == (1, 1):
-            return Double([data0.Value[0] * data1.Value[0]])
+            return Double([data0[0] * data1[0]])
         # todo: matrix multiplication
 
     def evaluate_matrix_right_division(self, node):
         data0 = self.evaluate_expression(node.get_child(0))
         data1 = self.evaluate_expression(node.get_child(1))
         if data0.Size == (1, 1) and data1.Size == (1, 1):
-            return Double([data0.Value[0] / data1.Value[0]])
+            return Double([data0[0] / data1[0]])
         # todo: matrix multiplication
 
     def evaluate_matrix_left_division(self, node):
         data0 = self.evaluate_expression(node.get_child(0))
         data1 = self.evaluate_expression(node.get_child(1))
         if data0.Size == (1, 1) and data1.Size == (1, 1):
-            return Double([data1.Value[0] / data0.Value[0]])
+            return Double([data1[0] / data0[0]])
         # todo: matrix multiplication
 
     def evaluate_primary_expression(self, node):
