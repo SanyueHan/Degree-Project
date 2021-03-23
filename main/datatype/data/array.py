@@ -4,10 +4,13 @@ from main.datatype.classes import DataClass
 class Array:
     Class = DataClass.ARRAY
 
-    def __init__(self, value, size=(1, 1)):
-        if size[0] * size[1] != len(value):
-            # todo raise error
-            return
+    def __init__(self, value, size=None):
+        if size:
+            if size[0] * size[1] != len(value):
+                # todo raise error
+                return
+        else:
+            size = (1, len(value))
         self.Value = value
         self.Size = size
 

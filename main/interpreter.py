@@ -16,6 +16,7 @@ class Interpreter:
             ASTNodeType.JMP_STMT: self.interpret_jump_statement,
         }
         self.evaluate = {
+            ASTNodeType.CLN_EXP: self.evaluate_colon_expression,
             ASTNodeType.BSO_EXP: self.evaluate_binary_scalar_calculation,
             ASTNodeType.MML_EXP: self.evaluate_matrix_multiplication,
             ASTNodeType.MRD_EXP: self.evaluate_matrix_right_division,
@@ -103,6 +104,25 @@ class Interpreter:
         value = self.evaluate_expression(node.get_child(1))
         self.variables[var_name] = value
         return var_name, value
+
+    def evaluate_colon_expression(self, node):
+        if node.num_children() == 3:
+            start = self.evaluate_expression(node.get_child(0))[0]
+            step = self.evaluate_expression(node.get_child(1))[0]
+            end = self.evaluate_expression(node.get_child(2))[0]
+        else:
+            start = self.evaluate_expression(node.get_child(0))[0]
+            step = 1
+            end = self.evaluate_expression(node.get_child(1))[0]
+
+        if step == 0 or start < end and step < 0 or start > end and step > 0:
+            return Double([])
+
+        values = []
+        while start <= end:
+            values.append(start)
+            start += step
+        return Double(values)
 
     def evaluate_binary_scalar_calculation(self, node):
         data0 = self.evaluate_expression(node.get_child(0))

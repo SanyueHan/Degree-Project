@@ -5,6 +5,6 @@ from main.datatype.data.array import Array
 class String(Array):
     Class = DataClass.STRING
 
-    def __init__(self, value, size=(1, 1)):
+    def __init__(self, value, size=None):
         super().__init__(value, size)
         self.Value = [str(i) for i in self]

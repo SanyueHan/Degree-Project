@@ -1,7 +1,7 @@
 from main.I_lexical.token_types import TokenType
 from main.II_syntactic.node import ASTNode
 from main.II_syntactic.node_types import ASTNodeType
-from main.II_syntactic.mul_map import MUL_MAP
+from main.II_syntactic.maps import MUL_OPERATOR_MAP, SEL_TERMINATOR_MAP
 
 
 class Parser:
@@ -161,13 +161,7 @@ class Parser:
                 return None
             node.add_child(expression)
 
-        terminators_map = {
-            'if': ('elseif', 'else', 'end'),
-            'elseif': ('elseif', 'else', 'end'),
-            'else': ('end', )
-        }
-
-        node.add_child(self.parse_statement_list(terminators=terminators_map[clause]))
+        node.add_child(self.parse_statement_list(terminators=SEL_TERMINATOR_MAP[clause]))
 
         return node
 
@@ -230,97 +224,121 @@ class Parser:
         return node
 
     def parse_colon_expression(self):
-        return self.parse_logic_or_expression()
+        root = self.parse_logic_or_expression()
+        if root is None:
+            return None
+        while self.get_token(0).get_type() == TokenType.COLON:
+            token = self.tokens.pop(0)  # ':'
+            node1 = self.parse_logic_or_expression()
+            if node1 is None:
+                # todo: raise invalid colon expression exception
+                return None
+            if self.get_token(0).get_type() == TokenType.COLON:
+                # colon expression with three value
+                token = self.tokens.pop(0)  # ':'
+                node2 = self.parse_logic_or_expression()
+                if node2 is None:
+                    # todo: raise invalid colon expression exception
+                    return None
+                root = ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=token.get_text(), children=[root, node1, node2])
+            else:
+                # colon expression with two value
+                root = ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=token.get_text(), children=[root, node1])
+        return root
 
     def parse_logic_or_expression(self):
         root = self.parse_logic_and_expression()
-        if root:
-            while self.get_token(0).get_type() == TokenType.LOR:
-                token = self.tokens.pop(0)  # logic or symbol
-                child = self.parse_logic_and_expression()
-                if child:
-                    root = ASTNode(n_type=ASTNodeType.BSO_EXP, n_text=token.get_text(), children=[root, child])
-                else:
-                    # todo: raise invalid logic or expression exception
-                    return None
+        if root is None:
+            return None
+
+        while self.get_token(0).get_type() == TokenType.LOR:
+            token = self.tokens.pop(0)  # '|'
+            child = self.parse_logic_and_expression()
+            if child is None:
+                # todo: raise invalid logic or expression exception
+                return None
+            root = ASTNode(n_type=ASTNodeType.BSO_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
     def parse_logic_and_expression(self):
         root = self.parse_equal_expression()
-        if root:
-            while self.get_token(0).get_type() == TokenType.LAN:
-                token = self.tokens.pop(0)  # logic and symbol
-                child = self.parse_equal_expression()
-                if child:
-                    root = ASTNode(n_type=ASTNodeType.BSO_EXP, n_text=token.get_text(), children=[root, child])
-                else:
-                    # todo: raise invalid logic and expression exception
-                    return None
+        if root is None:
+            return None
+
+        while self.get_token(0).get_type() == TokenType.LAN:
+            token = self.tokens.pop(0)  # '&'
+            child = self.parse_equal_expression()
+            if child is None:
+                # todo: raise invalid logic and expression exception
+                return None
+            root = ASTNode(n_type=ASTNodeType.BSO_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
     def parse_equal_expression(self):
         root = self.parse_relational_expression()
-        if root:
-            while self.get_token(0).get_type() == TokenType.EQL:
-                token = self.tokens.pop(0)  # equal symbol
-                child = self.parse_relational_expression()
-                if child:
-                    root = ASTNode(n_type=ASTNodeType.BSO_EXP, n_text=token.get_text(), children=[root, child])
-                else:
-                    # todo: raise invalid equal expression exception
-                    return None
+        if root is None:
+            return None
+
+        while self.get_token(0).get_type() == TokenType.EQL:
+            token = self.tokens.pop(0)  # equal symbol
+            child = self.parse_relational_expression()
+            if child is None:
+                # todo: raise invalid equal expression exception
+                return None
+            root = ASTNode(n_type=ASTNodeType.BSO_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
     def parse_relational_expression(self):
         root = self.parse_additive_expression()
-        if root:
-            while self.get_token(0).get_type() == TokenType.REL:
-                token = self.tokens.pop(0)  # relational symbol
-                child = self.parse_additive_expression()
-                if child:
-                    root = ASTNode(n_type=ASTNodeType.BSO_EXP, n_text=token.get_text(), children=[root, child])
-                else:
-                    # todo: raise invalid relational expression exception
-                    return None
+        if root is None:
+            return None
+
+        while self.get_token(0).get_type() == TokenType.REL:
+            token = self.tokens.pop(0)  # relational symbol
+            child = self.parse_additive_expression()
+            if child is None:
+                # todo: raise invalid relational expression exception
+                return None
+            root = ASTNode(n_type=ASTNodeType.BSO_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
     def parse_additive_expression(self):
         root = self.parse_multiplicative_expression()
-        if root:
-            while self.get_token(0).get_type() == TokenType.ADD:
-                token = self.tokens.pop(0)  # additive symbol
-                child = self.parse_multiplicative_expression()
-                if child:
-                    root = ASTNode(n_type=ASTNodeType.BSO_EXP, n_text=token.get_text(), children=[root, child])
-                else:
-                    # todo: raise invalid additive expression exception
-                    return None
+        if root is None:
+            return None
+
+        while self.get_token(0).get_type() == TokenType.ADD:
+            token = self.tokens.pop(0)  # additive symbol
+            child = self.parse_multiplicative_expression()
+            if child is None:
+                # todo: raise invalid additive expression exception
+                return None
+            root = ASTNode(n_type=ASTNodeType.BSO_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
     def parse_multiplicative_expression(self):
         root = self.parse_unary_expression()
-        if root:
-            while self.get_token(0).get_type() == TokenType.MUL:
-                token = self.tokens.pop(0)  # multiplicative symbol
-                child = self.parse_unary_expression()
-                if child:
-                    root = ASTNode(n_type=MUL_MAP[token.get_text()], n_text=token.get_text(), children=[root, child])
-                else:
-                    # todo: raise invalid multiplicative expression exception
-                    return None
+        if root is None:
+            return None
+
+        while self.get_token(0).get_type() == TokenType.MUL:
+            token = self.tokens.pop(0)  # multiplicative symbol
+            child = self.parse_unary_expression()
+            if child is None:
+                # todo: raise invalid multiplicative expression exception
+                return None
+            root = ASTNode(n_type=MUL_OPERATOR_MAP[token.get_text()], n_text=token.get_text(), children=[root, child])
         return root
 
     def parse_unary_expression(self):
         if self.get_token(0).get_type() in (TokenType.ADD, TokenType.LNT):
             token = self.tokens.pop(0)  # unary operator symbol
             child = self.parse_unary_expression()
-            if child:
-                return ASTNode(n_type=ASTNodeType.USO_EXP, n_text=token.get_text(), children=[child])
-            else:
+            if child is None:
                 # todo: raise invalid unary expression exception
                 return None
-        else:
-            return self.parse_primary_expression()
+            return ASTNode(n_type=ASTNodeType.USO_EXP, n_text=token.get_text(), children=[child])
+        return self.parse_primary_expression()
 
     def parse_primary_expression(self):
         if not self.tokens:

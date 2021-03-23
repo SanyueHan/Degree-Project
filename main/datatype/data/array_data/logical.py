@@ -5,7 +5,7 @@ from main.datatype.data.array import Array
 class Logical(Array):
     Class = DataClass.LOGICAL
 
-    def __init__(self, value, size=(1, 1)):
+    def __init__(self, value, size=None):
         super().__init__(value, size)
         self.Value = [(1 if i else 0) for i in self]
 
