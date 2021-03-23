@@ -23,7 +23,7 @@ class Parser:
     cln_exp ::= lor_exp (':' lor_exp)*
     lor_exp ::= lan_exp ('||' lan_exp)*
     lan_exp ::= eql_exp ('&&' eql_exp)*
-    eql_exp ::= rel_exp (('!='|'==') rel_exp)*
+    eql_exp ::= rel_exp (('~='|'==') rel_exp)*
     rel_exp ::= add_exp (('<='|'<'|'>='|'>') add_exp)*
     add_exp ::= mul_exp (('+'|'-') mul_exp)*
     mul_exp ::= uny_exp (('*'|'/') uny_exp)*

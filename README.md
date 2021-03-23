@@ -15,7 +15,7 @@ supporting a subset of the functionalities of MATLAB:
     - '<='
     - '<'
     - '=='
-    - '!='
+    - '~='
   - logical operators: (left-associative)
     - '&' (logical and)
     - '|' (logical or)
