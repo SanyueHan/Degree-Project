@@ -27,6 +27,7 @@ class TokenType(Enum):
     STR_LIT = re.compile(r"\"[^\"]*\"|\'[^\']*\'")
 
     # Other
+    COLON = re.compile(":")
     EO_STMT = re.compile("[;,\n]")
     L_PAREN = re.compile(r"\(")
     R_PAREN = re.compile(r"\)")
@@ -45,6 +46,7 @@ if __name__ == "__main__":
     print(re.findall(TokenType.MUL.value, r" * / \ .* ./ .\ "))
     print(re.findall(TokenType.NUM_LIT.value, "1234, 11.90, .23, 12."))
     print(re.findall(TokenType.STR_LIT.value, "'apple', 'banana', \"candy\", \"dog\""))
+    print(re.findall(TokenType.COLON.value, "1234 : 1234"))
     print(re.findall(TokenType.EO_STMT.value, "1234\nabc;1234,efg"))
     print(re.findall(TokenType.WHITESPACE.value, "1 2\f3\n4\r5\t6\v"))
     print(re.findall(TokenType.ANNOTATION.value, "int a = 10; % this is annotation"))
