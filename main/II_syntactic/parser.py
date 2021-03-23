@@ -8,20 +8,19 @@ class Parser:
     r"""
     grammar rules in EBNF (Extended Backus-Naur-Form):
     stmt_list ::= stmt*
-    stmt ::= ass_stmt | exp_stmt | clr_stmt | sel_stmt | itr_stmt | jmp_stmt | mty_stmt
+    stmt ::= ass_stmt | exp_stmt | clr_stmt | sel_stmt | itr_stmt | jmp_stmt | eo_stmt
 
     ass_stmt ::= ass_exp eo_stmt
-    exp_stmt ::= exp eo_stmt
+    exp_stmt ::= cln_exp eo_stmt
     clr_stmt ::= 'clear' id_list eo_stmt
-    sel_stmt ::= 'if' exp stmt_list ('elseif' exp stmt_list)* ('else' stmt_list)? 'end' eo_stmt
-    itr_stmt ::= 'while' exp stmt_list
+    sel_stmt ::= 'if' cln_exp stmt_list ('elseif' cln_exp stmt_list)* ('else' stmt_list)? 'end' eo_stmt
+    itr_stmt ::= 'while' cln_exp stmt_list
     jmp_stmt ::=
-    mty_stmt ::= eo_stmt
 
     id_list ::= id*
 
-    ass_exp ::= id '=' exp
-    exp ::= lor_exp
+    ass_exp ::= id '=' cln_exp
+    cln_exp ::= lor_exp (':' lor_exp)*
     lor_exp ::= lan_exp ('||' lan_exp)*
     lan_exp ::= eql_exp ('&&' eql_exp)*
     eql_exp ::= rel_exp (('!='|'==') rel_exp)*
@@ -29,10 +28,25 @@ class Parser:
     add_exp ::= mul_exp (('+'|'-') mul_exp)*
     mul_exp ::= uny_exp (('*'|'/') uny_exp)*
     uny_exp ::= ('+'|'-'|'~')* pri_exp
-    pri_exp ::= id | num_lit | str_lit | '('exp')'
+    pri_exp ::= id | num_lit | str_lit | '('cln_exp')'
     """
     def __init__(self, token_list):
         self.tokens = token_list
+        self.statement_cases = [
+            self.parse_assignment_statement,
+            self.parse_expression_statement,
+            self.parse_clear_statement,
+            self.parse_selection_statement,
+            self.parse_iteration_statement,
+            self.parse_jump_statement,
+        ]
+        self.primary_cases = {
+            TokenType.ID: self.parse_identifier,
+            TokenType.NUM_LIT: self.parse_number_literal,
+            TokenType.STR_LIT: self.parse_string_literal,
+            TokenType.L_PAREN: self.parse_paren_expression,
+            TokenType.L_BRACKET: self.parse_bracket_expression,
+        }
 
     def get_token(self, index=0):
         if len(self.tokens) > index:
@@ -43,7 +57,7 @@ class Parser:
         when parse program, terminators use it default value, only if no token left will the parsing stop
         when parse code blocks like selection, iteration, function, terminators will be some specified keywords
         """
-        ast_root = ASTNode(n_type=ASTNodeType.STMT_LIST)
+        node = ASTNode(n_type=ASTNodeType.STMT_LIST)
         while str(self.get_token()) not in terminators:
             if self.get_token() is None:
                 # todo: raise invalid code block error
@@ -51,35 +65,17 @@ class Parser:
             if self.tokens[0].get_type() == TokenType.EO_STMT:
                 self.tokens.pop(0)
                 continue
-            ast_root.add_child(self.parse_statement())
-        return ast_root
+            node.add_child(self.parse_statement())
+        return node
 
     def parse_statement(self):
-        assignment_statement = self.parse_assignment_statement()
-        if assignment_statement:
-            return assignment_statement
-
-        expression_statement = self.parse_expression_statement()
-        if expression_statement:
-            return expression_statement
-
-        clear_statement = self.parse_clear_statement()
-        if clear_statement:
-            return clear_statement
-
-        selection_statement = self.parse_selection_statement()
-        if selection_statement:
-            return selection_statement
-
-        iteration_statement = self.parse_iteration_statement()
-        if iteration_statement:
-            return iteration_statement
-
-        jump_statement = self.parse_jump_statement()
-        if jump_statement:
-            return jump_statement
-
-        # todo: throw unknown statement exception
+        for stmt in self.statement_cases:
+            node = stmt()
+            if node:
+                return node
+        else:
+            # todo: throw unknown statement exception
+            return None
 
     def parse_assignment_statement(self):
         if self.get_token(0).get_type() != TokenType.ID or self.get_token(1).get_type() != TokenType.ASS:
@@ -102,7 +98,7 @@ class Parser:
     def parse_expression_statement(self):
         node = ASTNode(n_type=ASTNodeType.EXP_STMT)
 
-        expression = self.parse_expression()
+        expression = self.parse_colon_expression()
         if expression is None:
             # todo: throw invalid expression statement exception
             return None
@@ -159,7 +155,7 @@ class Parser:
         node = ASTNode(n_type=ASTNodeType.SEL_ClS, n_text=clause)
 
         if clause != 'else':
-            expression = self.parse_expression()
+            expression = self.parse_colon_expression()
             if expression is None:
                 # todo: throw exception
                 return None
@@ -201,7 +197,7 @@ class Parser:
     def parse_while_clause(self, clause):
         node = ASTNode(n_type=ASTNodeType.WHL_CLS, n_text=clause)
 
-        expression = self.parse_expression()
+        expression = self.parse_colon_expression()
         if expression is None:
             # todo: throw exception
             return None
@@ -226,14 +222,14 @@ class Parser:
     def parse_assignment_expression(self):
         identifier = ASTNode(n_type=ASTNodeType.ID, n_text=self.tokens.pop(0).get_text())
         node = ASTNode(n_type=ASTNodeType.ASS_EXP, n_text=self.tokens.pop(0).get_text(), children=[identifier])
-        expression = self.parse_expression()
+        expression = self.parse_colon_expression()
         if expression is None:
             # todo: throw invalid assignment statement exception
             return None
         node.add_child(expression)
         return node
 
-    def parse_expression(self):
+    def parse_colon_expression(self):
         return self.parse_logic_or_expression()
 
     def parse_logic_or_expression(self):
@@ -329,19 +325,26 @@ class Parser:
     def parse_primary_expression(self):
         if not self.tokens:
             return None
+        return self.primary_cases[self.tokens[0].get_type()]()
 
-        if self.tokens[0].get_type() == TokenType.ID:
-            return ASTNode(n_type=ASTNodeType.ID, n_text=self.tokens.pop(0).get_text())
-        if self.tokens[0].get_type() == TokenType.NUM_LIT:
-            return ASTNode(n_type=ASTNodeType.NUM_LIT, n_text=self.tokens.pop(0).get_text())
-        if self.tokens[0].get_type() == TokenType.STR_LIT:
-            return ASTNode(n_type=ASTNodeType.STR_LIT, n_text=self.tokens.pop(0).get_text())
-        if self.tokens[0].get_type() == TokenType.L_PAREN:
-            self.tokens.pop(0)  # remove left paren
-            node = self.parse_expression()
-            if node and self.tokens and self.tokens[0].get_type() == TokenType.R_PAREN:
-                self.tokens.pop(0)  # remove right paren
-            else:
-                # todo: raise invalid parens exception
-                return None
-            return node
+    def parse_identifier(self):
+        return ASTNode(n_type=ASTNodeType.ID, n_text=self.tokens.pop(0).get_text())
+
+    def parse_number_literal(self):
+        return ASTNode(n_type=ASTNodeType.NUM_LIT, n_text=self.tokens.pop(0).get_text())
+
+    def parse_string_literal(self):
+        return ASTNode(n_type=ASTNodeType.STR_LIT, n_text=self.tokens.pop(0).get_text())
+
+    def parse_paren_expression(self):
+        self.tokens.pop(0)  # remove left paren
+        node = self.parse_colon_expression()
+        if node and self.get_token().get_type() == TokenType.R_PAREN:
+            self.tokens.pop(0)  # remove right paren
+        else:
+            # todo: raise invalid parens exception
+            return None
+        return node
+
+    def parse_bracket_expression(self):
+        pass
