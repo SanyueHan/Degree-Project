@@ -10,7 +10,7 @@ supporting a subset of the functionalities of MATLAB:
     - '*'
     - '/'
   - relational operators: (left-associative)
-    - '>+' 
+    - '>=' 
     - '>'
     - '<='
     - '<'
