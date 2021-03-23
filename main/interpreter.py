@@ -78,20 +78,20 @@ class Interpreter:
                 return False
 
     def interpret_iteration_statement(self, node):
-        child = node.get_child()
-        if child.get_type() == ASTNodeType.WHL_CLS:
-            self.interpret_while_clause(child)
-        else:
-            self.interpret_for_clause(child)
+        self.interpret_iteration_clause(node.get_child())
 
-    def interpret_while_clause(self, node):
+    def interpret_iteration_clause(self, node):
         expression = node.get_child(0)
         statement_list = node.get_child(1)
-        while self.evaluate_expression(expression):
-            self.interpret_statement_list(statement_list)
-
-    def interpret_for_clause(self, node):
-        pass
+        if node.get_text() == 'while':
+            while self.evaluate_expression(expression):
+                self.interpret_statement_list(statement_list)
+        else:
+            var_name = expression.get_child(0).get_text()
+            value = self.evaluate_expression(expression.get_child(1))
+            for col in value.cols():
+                self.variables[var_name] = value.create_same(col, size=(len(col), 1))
+                self.interpret_statement_list(statement_list)
 
     def interpret_jump_statement(self, node):
         pass

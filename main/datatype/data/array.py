@@ -37,3 +37,6 @@ class Array:
 
     def to_string(self, fun, **args_dict):
         return '\n'.join([''.join([fun(v, **args_dict) for v in r]) for r in self.rows()])
+
+    def create_same(self, *args, **kwargs):
+        return self.__class__(*args, **kwargs)

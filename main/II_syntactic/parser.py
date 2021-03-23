@@ -171,10 +171,7 @@ class Parser:
 
         node = ASTNode(n_type=ASTNodeType.ITR_STMT)
 
-        if self.get_token(0).get_text() == 'while':
-            node.add_child(self.parse_while_clause(self.tokens.pop(0).get_text()))
-        else:
-            node.add_child(self.parse_for_clause(self.tokens.pop(0).get_text()))
+        node.add_child(self.parse_iteration_clause(self.tokens.pop(0).get_text()))
 
         if self.get_token().get_text() != 'end':
             # todo: throw invalid statement exception
@@ -188,10 +185,10 @@ class Parser:
 
         return node
 
-    def parse_while_clause(self, clause):
-        node = ASTNode(n_type=ASTNodeType.WHL_CLS, n_text=clause)
+    def parse_iteration_clause(self, clause):
+        node = ASTNode(n_type=ASTNodeType.ITR_CLS, n_text=clause)
 
-        expression = self.parse_colon_expression()
+        expression = self.parse_colon_expression() if clause == 'while' else self.parse_assignment_expression()
         if expression is None:
             # todo: throw exception
             return None
@@ -200,9 +197,6 @@ class Parser:
         node.add_child(self.parse_statement_list(terminators=('end', )))
 
         return node
-
-    def parse_for_clause(self, clause):
-        pass
 
     def parse_jump_statement(self):
         pass
@@ -342,6 +336,8 @@ class Parser:
 
     def parse_primary_expression(self):
         if not self.tokens:
+            return None
+        if self.get_token().get_type() not in self.primary_cases:
             return None
         return self.primary_cases[self.tokens[0].get_type()]()
 
