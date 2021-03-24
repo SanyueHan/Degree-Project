@@ -30,4 +30,4 @@ if __name__ == "__main__":
         code = file.read()
     token_list = lexer(code)
     for t in token_list:
-        print(t)
+        print(repr(t))
