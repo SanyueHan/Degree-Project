@@ -39,7 +39,6 @@ class TokenType(Enum):
 
 
 if __name__ == "__main__":
-    # todo: lack 10 test cases
     print(re.findall(TokenType.LAN.value, "a & b"))
     print(re.findall(TokenType.LOR.value, "c | d"))
     print(re.findall(TokenType.LNT.value, "~e"))

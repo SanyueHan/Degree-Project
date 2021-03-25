@@ -1,5 +1,5 @@
 a = 1:10;
 
-for i=a
+for i = a
     i
 end
