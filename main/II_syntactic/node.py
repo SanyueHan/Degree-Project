@@ -27,3 +27,38 @@ class ASTNode:
         print(f"{' '*indent}{self.get_type()} {self.get_text()}")
         for child in self.children:
             child.dump(indent+4)
+
+    def __str__(self):
+        return f"{str(self.type)[12:]}: {repr(self.text)}"
+
+
+class ASTTreePrinter:
+    def __init__(self):
+        self.vec_left = [0 for i in range(100)]
+
+    def print(self, node):
+        print()
+        self.display(node)
+        print()
+
+    def display(self, node, indent=0):
+        if indent > 0:
+            print("  ", end="")
+            for i in range(indent - 1):
+                print("│     " if self.vec_left[i] else "      ", end="")
+            print("├── " if self.vec_left[indent - 1] else "└── ", end="")
+
+        if not node:
+            print("(null)")
+            return None
+
+        print(node)
+        if node.num_children() == 0:
+            return None
+
+        children = node.get_children()
+        self.vec_left[indent] = 1
+        for child in children[:-1]:
+            self.display(child, indent + 1)
+        self.vec_left[indent] = 0
+        self.display(children[-1], indent + 1)

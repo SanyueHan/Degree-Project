@@ -1,27 +1,28 @@
 from main.I_lexical.lexer import lexer
 from main.II_syntactic.parser import Parser
+from main.II_syntactic.node import ASTTreePrinter
 from main.interpreter import Interpreter
 import sys
 
 
-def script_execute(filename, token=False, node=False, var=False):
+def script_execute(filename, print_tokens=False, print_ast=False, print_var=False):
     with open(filename, "r") as file:
         program = file.read()
 
     token_list = lexer(program)
-    if token:
+    if print_tokens:
         for t in token_list:
             print(t)
     ast_root = Parser(token_list).parse_statement_list()
     interpreter = Interpreter()
-    if node:
-        ast_root.dump()
+    if print_ast:
+        ASTTreePrinter().print(ast_root)
     interpreter.interpret_statement_list(ast_root)
-    if var:
+    if print_var:
         print(interpreter.get_variables())
 
 
-def repl_execute(token=False, node=False, var=False):
+def repl_execute(print_tokens=False, print_ast=False, print_var=False):
     """
     command line REPL（Read-Eval-Print Loop）
     """
@@ -31,14 +32,14 @@ def repl_execute(token=False, node=False, var=False):
         if program == "quit()" or program == "exit()":
             break
         token_list = lexer(program)
-        if token:
+        if print_tokens:
             for t in token_list:
                 print(t)
         ast_root = Parser(token_list).parse_statement_list()
-        if node:
-            ast_root.dump()
+        if print_ast:
+            ASTTreePrinter().print(ast_root)
         interpreter.interpret_statement_list(ast_root)
-        if var:
+        if print_var:
             print(interpreter.get_variables())
 
 
