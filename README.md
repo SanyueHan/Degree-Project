@@ -34,22 +34,36 @@ supporting a subset of the functionalities of MATLAB:
   - iteration statement
     - while
 
-## Environment
+## Run
+#### Environment
 Python (with the version no lower than 3.7), 
 no third-party package needed up to now
-
-## Run
-### REPL Execute (Interactive Execute)
-#### Commands
+#### Command
 ###### Mac OS
 ```shell
-python3 MATLAB.py
+python3 MATLAB.py [-h] [-t T] [-a A] [-v V] [file]
 ```
 ###### Windows
 ```shell
-python MATLAB.py
+python MATLAB.py [-h] [-t T] [-a A] [-v V] [file]
 ```
-#### Example
+
+## Examples
+#### Show Help Information
+```shell
+ % python3 MATLAB.py -h
+usage: MATLAB.py [-h] [-t T] [-a A] [-v V] [file]
+
+positional arguments:
+  file         program read from script file
+
+optional arguments:
+  -h, --help   show this help message and exit
+  -t T, --t T  print tokens
+  -a A, --a A  print abstract syntax tree
+  -v V, --v V  print variables
+```
+#### REPL Execute (Interactive Execute)
 ```
 % python3 MATLAB.py
 >> 1 & 0 | 1 == 2 < 5 + 5
@@ -135,53 +149,43 @@ a =
 >> 
 ```
 
-### Script Execute
-#### Commands
-###### Mac OS
-```shell
-python3 MATLAB.py <script_dir>
+#### Script Execute (Show Abstract Syntax Tree)
 ```
-###### Windows
-```shell
-python MATLAB.py <script_dir>
-```
-#### Example
-```
-% python3 MATLAB.py test_cases/test_exp_ass.m
+% python3 MATLAB.py test_cases/test_while.m -a=True
 
-ans =
+STMT_LIST: None
+  ├── ASS_STMT: None
+  │     ├── ASS_EXP: '='
+  │     │     ├── ID: 'a'
+  │     │     └── NUM_LIT: '0'
+  │     └── EO_STMT: ';'
+  └── ITR_STMT: None
+        ├── ITR_CLS: 'while'
+        │     ├── BSO_EXP: '<'
+        │     │     ├── ID: 'a'
+        │     │     └── NUM_LIT: '10'
+        │     └── STMT_LIST: None
+        │           ├── EXP_STMT: None
+        │           │     ├── ID: 'a'
+        │           │     └── EO_STMT: '\n'
+        │           └── ASS_STMT: None
+        │                 ├── ASS_EXP: '='
+        │                 │     ├── ID: 'a'
+        │                 │     └── BSO_EXP: '+'
+        │                 │           ├── ID: 'a'
+        │                 │           └── NUM_LIT: '1'
+        │                 └── EO_STMT: ';'
+        └── EO_STMT: '\n'
 
-   12.3400
+
+a =
+
+     0
 
 
-ans =
-
-    56
-
-
-ans =
-
-    0.7800
-
-
-ans =
-
-     2
-
-
-ans =
+a =
 
      1
-
-
-ans =
-
-    20
-
-
-ans =
-
-     2
 
 
 a =
@@ -189,9 +193,38 @@ a =
      2
 
 
-b =
+a =
+
+     3
+
+
+a =
+
+     4
+
+
+a =
+
+     5
+
+
+a =
 
      6
 
+
+a =
+
+     7
+
+
+a =
+
+     8
+
+
+a =
+
+     9
 
 ```

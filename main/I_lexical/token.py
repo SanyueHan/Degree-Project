@@ -9,7 +9,7 @@ class Token:
         return self.text
 
     def __repr__(self):
-        return f"row = {self.row:^3}   col = {self.col:^3}   type = {self.type:<20}   text = {repr(self.text)}"
+        return f"row = {self.row:^3}   col = {self.col:^3}   type = {str(self.type)[10:]:<9}   text = {repr(self.text)}"
 
     def get_type(self):
         return self.type

@@ -1,51 +1,17 @@
-from main.I_lexical.lexer import lexer
-from main.II_syntactic.parser import Parser
-from main.II_syntactic.node import ASTTreePrinter
-from main.interpreter import Interpreter
-import sys
+from main.script_execute import script_execute
+from main.repl_execute import repl_execute
+import argparse
 
 
-def script_execute(filename, print_tokens=False, print_ast=False, print_var=False):
-    with open(filename, "r") as file:
-        program = file.read()
+parser = argparse.ArgumentParser()
+parser.add_argument('file', type=str, nargs='?', help='program read from script file')
+parser.add_argument('-t', '--t', type=bool, default=False, help='print tokens')
+parser.add_argument('-a', '--a', type=bool, default=False, help='print abstract syntax tree')
+parser.add_argument('-v', '--v', type=bool, default=False, help='print variables')
 
-    token_list = lexer(program)
-    if print_tokens:
-        for t in token_list:
-            print(t)
-    ast_root = Parser(token_list).parse_statement_list()
-    interpreter = Interpreter()
-    if print_ast:
-        ASTTreePrinter().print(ast_root)
-    interpreter.interpret_statement_list(ast_root)
-    if print_var:
-        print(interpreter.get_variables())
+args = parser.parse_args()
 
-
-def repl_execute(print_tokens=False, print_ast=False, print_var=False):
-    """
-    command line REPL（Read-Eval-Print Loop）
-    """
-    interpreter = Interpreter()
-    while True:
-        program = input(">> ")
-        if program == "quit()" or program == "exit()":
-            break
-        token_list = lexer(program)
-        if print_tokens:
-            for t in token_list:
-                print(t)
-        ast_root = Parser(token_list).parse_statement_list()
-        if print_ast:
-            ASTTreePrinter().print(ast_root)
-        interpreter.interpret_statement_list(ast_root)
-        if print_var:
-            print(interpreter.get_variables())
-
-
-if __name__ == "__main__":
-    if len(sys.argv) >= 2:
-        for arg in sys.argv[1:]:
-            script_execute(arg)
-    else:
-        repl_execute()
+if args.file:
+    script_execute(args.file, print_tokens=args.t, print_ast=args.a, print_var=args.v)
+else:
+    repl_execute(print_tokens=args.t, print_ast=args.a, print_var=args.v)
