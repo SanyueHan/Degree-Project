@@ -36,14 +36,14 @@ class Parser:
 
     ass_exp ::= id '=' cln_exp
     cln_exp ::= lor_exp (':' lor_exp)*
-    lor_exp ::= lan_exp ('||' lan_exp)*
-    lan_exp ::= eql_exp ('&&' eql_exp)*
+    lor_exp ::= lan_exp (('||'|'|') lan_exp)*
+    lan_exp ::= eql_exp (('&&'|'&') eql_exp)*
     eql_exp ::= rel_exp (('~='|'==') rel_exp)*
     rel_exp ::= add_exp (('<='|'<'|'>='|'>') add_exp)*
     add_exp ::= mul_exp (('+'|'-') mul_exp)*
     mul_exp ::= uny_exp (('*'|'/') uny_exp)*
     uny_exp ::= ('+'|'-'|'~')* pri_exp
-    pri_exp ::= id | num_lit | str_lit | '('cln_exp')'
+    pri_exp ::= id | num_lit | str_lit | '('cln_exp')' | '[' array_list ']'
     """
     def __init__(self, token_list):
         self.tokens = token_list
@@ -103,7 +103,7 @@ class Parser:
             return None
         node.add_child(assignment_expression)
 
-        if self.get_token(0).get_type() != TokenType.EO_STMT:
+        if self.get_token().get_type() != TokenType.EO_STMT:
             # todo: throw invalid statement exception
             return None
         node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
@@ -119,7 +119,7 @@ class Parser:
             return None
         node.add_child(expression)
 
-        if self.get_token(0).get_type() != TokenType.EO_STMT:
+        if self.get_token().get_type() != TokenType.EO_STMT:
             # todo: throw invalid statement exception
             return None
         node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
@@ -127,13 +127,13 @@ class Parser:
         return node
 
     def parse_clear_statement(self):
-        if self.get_token(0).get_text() != "clear":
+        if self.get_token().get_text() != "clear":
             return None
         self.tokens.pop(0)  # remove 'clear'
         node = ASTNode(n_type=ASTNodeType.CLR_STMT)
         node.add_child(self.parse_identifier_list())
 
-        if self.get_token(0).get_type() != TokenType.EO_STMT:
+        if self.get_token().get_type() != TokenType.EO_STMT:
             # todo: throw invalid statement exception
             return None
         node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
@@ -141,7 +141,7 @@ class Parser:
         return node
 
     def parse_selection_statement(self):
-        if self.get_token(0).get_text() != "if":
+        if self.get_token().get_text() != "if":
             return None
         node = ASTNode(n_type=ASTNodeType.SEL_STMT)
 
@@ -236,13 +236,13 @@ class Parser:
         root = self.parse_logic_or_expression()
         if root is None:
             return None
-        while self.get_token(0).get_type() == TokenType.COLON:
+        while self.get_token().get_type() == TokenType.COLON:
             token = self.tokens.pop(0)  # ':'
             node1 = self.parse_logic_or_expression()
             if node1 is None:
                 # todo: raise invalid colon expression exception
                 return None
-            if self.get_token(0).get_type() == TokenType.COLON:
+            if self.get_token().get_type() == TokenType.COLON:
                 # colon expression with three value
                 token = self.tokens.pop(0)  # ':'
                 node2 = self.parse_logic_or_expression()
@@ -260,7 +260,7 @@ class Parser:
         if root is None:
             return None
 
-        while self.get_token(0).get_type() == TokenType.LOR:
+        while self.get_token().get_type() == TokenType.LOR:
             token = self.tokens.pop(0)  # '|'
             child = self.parse_logic_and_expression()
             if child is None:
@@ -274,7 +274,7 @@ class Parser:
         if root is None:
             return None
 
-        while self.get_token(0).get_type() == TokenType.LAN:
+        while self.get_token().get_type() == TokenType.LAN:
             token = self.tokens.pop(0)  # '&'
             child = self.parse_equal_expression()
             if child is None:
@@ -288,7 +288,7 @@ class Parser:
         if root is None:
             return None
 
-        while self.get_token(0).get_type() == TokenType.EQL:
+        while self.get_token().get_type() == TokenType.EQL:
             token = self.tokens.pop(0)  # equal symbol
             child = self.parse_relational_expression()
             if child is None:
@@ -302,7 +302,7 @@ class Parser:
         if root is None:
             return None
 
-        while self.get_token(0).get_type() == TokenType.REL:
+        while self.get_token().get_type() == TokenType.REL:
             token = self.tokens.pop(0)  # relational symbol
             child = self.parse_additive_expression()
             if child is None:
@@ -316,7 +316,7 @@ class Parser:
         if root is None:
             return None
 
-        while self.get_token(0).get_type() == TokenType.ADD:
+        while self.get_token().get_type() == TokenType.ADD:
             token = self.tokens.pop(0)  # additive symbol
             child = self.parse_multiplicative_expression()
             if child is None:
@@ -330,7 +330,7 @@ class Parser:
         if root is None:
             return None
 
-        while self.get_token(0).get_type() == TokenType.MUL:
+        while self.get_token().get_type() == TokenType.MUL:
             token = self.tokens.pop(0)  # multiplicative symbol
             child = self.parse_unary_expression()
             if child is None:
@@ -340,7 +340,7 @@ class Parser:
         return root
 
     def parse_unary_expression(self):
-        if self.get_token(0).get_type() in (TokenType.ADD, TokenType.LNT):
+        if self.get_token().get_type() in (TokenType.ADD, TokenType.LNT):
             token = self.tokens.pop(0)  # unary operator symbol
             child = self.parse_unary_expression()
             if child is None:

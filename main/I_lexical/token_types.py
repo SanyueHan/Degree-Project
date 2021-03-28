@@ -15,8 +15,8 @@ class TokenType(Enum):
     REL = re.compile(">=|>|<=|<")
 
     # Logical Operators
-    LAN = re.compile(r"&")
-    LOR = re.compile(r"\|")
+    LAN = re.compile(r"&&|&")
+    LOR = re.compile(r"\|\||\|")
     LNT = re.compile(r"~")
 
     # Assignment Operators
@@ -39,8 +39,8 @@ class TokenType(Enum):
 
 
 if __name__ == "__main__":
-    print(re.findall(TokenType.LAN.value, "a & b"))
-    print(re.findall(TokenType.LOR.value, "c | d"))
+    print(re.findall(TokenType.LAN.value, "a & b, a && b"))
+    print(re.findall(TokenType.LOR.value, "c | d; c || d"))
     print(re.findall(TokenType.LNT.value, "~e"))
     print(re.findall(TokenType.MUL.value, r" * / \ .* ./ .\ "))
     print(re.findall(TokenType.NUM_LIT.value, "1234, 11.90, .23, 12."))
