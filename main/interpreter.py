@@ -42,16 +42,17 @@ class Interpreter:
         }
         self.evaluate = {
             ASTNodeType.CLN_EXP: self.evaluate_colon_expression,
-            ASTNodeType.BSO_EXP: self.evaluate_binary_scalar_calculation,
-            ASTNodeType.MML_EXP: self.evaluate_matrix_multiplication,
-            ASTNodeType.MRD_EXP: self.evaluate_matrix_right_division,
-            ASTNodeType.MLD_EXP: self.evaluate_matrix_left_division,
-            ASTNodeType.USO_EXP: self.evaluate_unary_scalar_calculation,
+            ASTNodeType.BSO_EXP: self.evaluate_binary_scalar_operator_expression,
+            ASTNodeType.MML_EXP: self.evaluate_matrix_multiplication_expression,
+            ASTNodeType.MRD_EXP: self.evaluate_matrix_right_division_expression,
+            ASTNodeType.MLD_EXP: self.evaluate_matrix_left_division_expression,
+            ASTNodeType.PRE_EXP: self.evaluate_prefix_expression,
+            ASTNodeType.PST_EXP: self.evaluate_postfix_expression,
             ASTNodeType.PRI_EXP: self.evaluate_primary_expression,
-            ASTNodeType.NUM_LIT: self.evaluate_number_literal,
-            ASTNodeType.STR_LIT: self.evaluate_string_literal,
-            ASTNodeType.ID: self.evaluate_identifier,
-            ASTNodeType.ARR_LIST: self.evaluate_array_list,
+            ASTNodeType.IDENTIFIER: self.evaluate_identifier_expression,
+            ASTNodeType.NUMBER_LIT: self.evaluate_number_literal,
+            ASTNodeType.STRING_LIT: self.evaluate_string_literal,
+            ASTNodeType.ARRAY_LIST: self.evaluate_array_list,
         }
         self.variables = {}
 
@@ -75,7 +76,7 @@ class Interpreter:
     def interpret_expression_statement(self, node):
         child = node.get_child(0)
 
-        if child.get_type() == ASTNodeType.ID:
+        if child.get_type() == ASTNodeType.IDENTIFIER:
             var_name = child.get_text()
         else:
             var_name = "ans"
@@ -150,7 +151,7 @@ class Interpreter:
             start += step
         return Double(values)
 
-    def evaluate_binary_scalar_calculation(self, node):
+    def evaluate_binary_scalar_operator_expression(self, node):
         data0 = self.evaluate_expression(node.get_child(0))
         data1 = self.evaluate_expression(node.get_child(1))
         cls, fun = BSO_MAP[node.get_text()]
@@ -158,35 +159,47 @@ class Interpreter:
             return cls([fun(*tup) for tup in zip(data0, data1)], size=data0.Size)
         # todo: auto expand feature and size not fix error.
 
-    def evaluate_unary_scalar_calculation(self, node):
-        data = self.evaluate_expression(node.get_child())
-        cls, fun = USO_MAP[node.get_text()]
-        return cls([fun(v) for v in data], size=data.Size)
-
-    def evaluate_matrix_multiplication(self, node):
+    def evaluate_matrix_multiplication_expression(self, node):
         data0 = self.evaluate_expression(node.get_child(0))
         data1 = self.evaluate_expression(node.get_child(1))
         if data0.Size == (1, 1) and data1.Size == (1, 1):
             return Double([data0[0] * data1[0]])
         # todo: matrix multiplication
 
-    def evaluate_matrix_right_division(self, node):
+    def evaluate_matrix_right_division_expression(self, node):
         data0 = self.evaluate_expression(node.get_child(0))
         data1 = self.evaluate_expression(node.get_child(1))
         if data0.Size == (1, 1) and data1.Size == (1, 1):
             return Double([data0[0] / data1[0]])
         # todo: matrix multiplication
 
-    def evaluate_matrix_left_division(self, node):
+    def evaluate_matrix_left_division_expression(self, node):
         data0 = self.evaluate_expression(node.get_child(0))
         data1 = self.evaluate_expression(node.get_child(1))
         if data0.Size == (1, 1) and data1.Size == (1, 1):
             return Double([data1[0] / data0[0]])
         # todo: matrix multiplication
 
+    def evaluate_prefix_expression(self, node):
+        data = self.evaluate_expression(node.get_child())
+        cls, fun = USO_MAP[node.get_text()]
+        return cls([fun(v) for v in data], size=data.Size)
+
+    def evaluate_postfix_expression(self, node):
+        data = self.evaluate_expression(node.get_child())
+        return data.create_same(sum(data.cols(), []), size=tuple(reversed(data.Size)))
+
     def evaluate_primary_expression(self, node):
         # will not be used since in AST it is optimised to skip single-child node
         pass
+
+    def evaluate_identifier_expression(self, node):
+        var_name = node.get_text()
+        if var_name in self.variables:
+            return self.variables[var_name]
+        else:
+            # todo: raise unknown variable exception
+            pass
 
     @staticmethod
     def evaluate_number_literal(node):
@@ -198,14 +211,6 @@ class Interpreter:
     @staticmethod
     def evaluate_string_literal(node):
         return String([node.get_text()])
-
-    def evaluate_identifier(self, node):
-        var_name = node.get_text()
-        if var_name in self.variables:
-            return self.variables[var_name]
-        else:
-            # todo: raise unknown variable exception
-            pass
 
     def evaluate_array_list(self, node):
         array_list = []
