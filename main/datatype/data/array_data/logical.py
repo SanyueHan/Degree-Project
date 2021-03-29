@@ -13,5 +13,5 @@ class Logical(Array):
         if len(self) == 1:
             prefix = "  logical\n\n"
         else:
-            prefix = f"  {self.Size[0]}×{self.Size[1]} logical array\n\n"
+            prefix = f"  {self.m}×{self.n} logical array\n\n"
         return prefix + self.to_string(lambda logic_value: "   "+str(logic_value))
