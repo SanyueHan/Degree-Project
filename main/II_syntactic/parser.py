@@ -23,6 +23,7 @@ class Parser:
     r"""
     grammar rules in EBNF (Extended Backus-Naur-Form):
     stmt_list ::= stmt*
+
     stmt ::= ass_stmt | exp_stmt | clr_stmt | sel_stmt | itr_stmt | jmp_stmt | eo_stmt
 
     ass_stmt ::= ass_exp eo_stmt
@@ -43,7 +44,9 @@ class Parser:
     add_exp ::= mul_exp (('+'|'-') mul_exp)*
     mul_exp ::= uny_exp (('*'|'/') uny_exp)*
     uny_exp ::= ('+'|'-'|'~')* pri_exp
-    pri_exp ::= id | num_lit | str_lit | '('cln_exp')' | '[' array_list ']'
+    pri_exp ::= id | num_lit | str_lit | '('cln_exp')' | '[' arr_list ']'
+
+    arr_list ::= (cln_exp exp_stmt*)*
     """
     def __init__(self, token_list):
         self.tokens = token_list
@@ -218,7 +221,7 @@ class Parser:
 
     def parse_identifier_list(self):
         node = ASTNode(n_type=ASTNodeType.ID_LIST)
-        while self.get_token().type == TokenType.ID:
+        while self.get_token().get_type() == TokenType.ID:
             node.add_child(ASTNode(n_type=ASTNodeType.ID, n_text=self.tokens.pop(0).get_text()))
         return node
 
@@ -376,4 +379,19 @@ class Parser:
         return node
 
     def parse_bracket_expression(self):
-        pass
+        self.tokens.pop(0)  # remove left bracket
+        node = self.parse_array_list()
+        if node and self.get_token().get_type() == TokenType.R_BRACKET:
+            self.tokens.pop(0)  # remove right paren
+        else:
+            # todo: raise invalid brackets exception
+            return None
+        return node
+
+    def parse_array_list(self):
+        node = ASTNode(n_type=ASTNodeType.ARR_LIST)
+        while self.get_token().get_type() != TokenType.R_BRACKET:
+            node.add_child(self.parse_colon_expression())
+            while self.get_token().get_type() == TokenType.EO_STMT:
+                node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
+        return node

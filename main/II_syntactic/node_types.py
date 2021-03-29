@@ -35,3 +35,5 @@ class ASTNodeType(Enum):
     STR_LIT = "STRING LITERAL"
 
     ID = "IDENTIFIER"
+
+    ARR_LIST = "ARRAY LIST"

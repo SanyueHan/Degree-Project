@@ -2,6 +2,7 @@ from main.II_syntactic.node_types import ASTNodeType
 from main.datatype.data.array_data.string import String
 from main.datatype.data.array_data.logical import Logical
 from main.datatype.data.array_data.numeric_data.float_data.double import Double
+from functools import reduce
 
 BSO_MAP = {
     '|': (Logical, lambda x, y: x or y),
@@ -50,6 +51,7 @@ class Interpreter:
             ASTNodeType.NUM_LIT: self.evaluate_number_literal,
             ASTNodeType.STR_LIT: self.evaluate_string_literal,
             ASTNodeType.ID: self.evaluate_identifier,
+            ASTNodeType.ARR_LIST: self.evaluate_array_list,
         }
         self.variables = {}
 
@@ -204,6 +206,44 @@ class Interpreter:
         else:
             # todo: raise unknown variable exception
             pass
+
+    def evaluate_array_list(self, node):
+        array_list = []
+        array = []
+        for child in node.get_children():
+            if child.get_type() == ASTNodeType.EO_STMT:
+                if child.get_text() == ';' or child.get_text() == '\n':
+                    if array:
+                        array_list.append(array)
+                        array = []
+            else:
+                data = self.evaluate_expression(child)
+                if data.Value:
+                    array.append(data)
+        if array:
+            array_list.append(array)
+
+        if array_list:
+            return self.concatenate([self.concatenate(array, "horz") for array in array_list], "vert")
+        else:
+            return Double([], size=(0, 0))
+
+    @staticmethod
+    def concatenate(data_list, direction):
+        if direction == "horz":
+            if not reduce(lambda a, b: a == b, [data.m for data in data_list]):
+                # todo: "Error using vertcat\nDimensions of arrays being concatenated are not consistent."
+                return None
+            data = sum((sum(list(tup), []) for tup in zip(*[data.rows() for data in data_list])), [])
+            size = (data_list[0].m, sum(data.n for data in data_list))
+            return Double(data, size)
+        if direction == "vert":
+            if not reduce(lambda a, b: a == b, [data.n for data in data_list]):
+                # todo: "Error using horzcat\nDimensions of arrays being concatenated are not consistent."
+                return None
+            data = sum(sum((data.rows() for data in data_list), []), [])
+            size = (sum(data.m for data in data_list), data_list[0].n)
+            return Double(data, size)
 
     def get_variables(self):
         return self.variables
