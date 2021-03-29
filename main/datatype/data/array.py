@@ -27,16 +27,24 @@ class Array:
         return len(self.Value)
 
     def rows(self):
-        return [[self[i * self.Size[1] + j] for j in range(self.Size[1])] for i in range(self.Size[0])]
+        return [[self[i * self.n + j] for j in range(self.n)] for i in range(self.m)]
 
     def cols(self):
-        return [[self[i * self.Size[1] + j] for i in range(self.Size[0])] for j in range(self.Size[1])]
+        return [[self[i * self.n + j] for i in range(self.m)] for j in range(self.n)]
 
     def transposed(self):
-        return self.__class__(sum(self.cols(), []), (self.Size[1], self.Size[0]))
+        return self.__class__(sum(self.cols(), []), (self.n, self.m))
 
     def to_string(self, fun, **args_dict):
         return '\n'.join([''.join([fun(v, **args_dict) for v in r]) for r in self.rows()])
 
     def create_same(self, *args, **kwargs):
         return self.__class__(*args, **kwargs)
+
+    @property
+    def m(self):
+        return self.Size[0]
+
+    @property
+    def n(self):
+        return self.Size[1]
