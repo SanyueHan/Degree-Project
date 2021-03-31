@@ -381,7 +381,10 @@ class Parser:
         return self.primary_cases[self.tokens[0].get_type()]()
 
     def parse_identifier_expression(self):
-        return ASTNode(n_type=ASTNodeType.IDENTIFIER, n_text=self.tokens.pop(0).get_text())
+        if self.get_token(1).get_type() == TokenType.L_PAREN:
+            return self.parse_array_expression()
+        else:
+            return ASTNode(n_type=ASTNodeType.IDENTIFIER, n_text=self.tokens.pop(0).get_text())
 
     def parse_number_literal(self):
         return ASTNode(n_type=ASTNodeType.NUMBER_LIT, n_text=self.tokens.pop(0).get_text())
@@ -403,16 +406,51 @@ class Parser:
         self.tokens.pop(0)  # remove left bracket
         node = self.parse_array_list()
         if node and self.get_token().get_type() == TokenType.R_BRACKET:
-            self.tokens.pop(0)  # remove right paren
+            self.tokens.pop(0)  # remove right bracket
         else:
-            # todo: raise invalid brackets exception
+            # todo: raise invalid bracket expression exception
             return None
         return node
 
     def parse_array_list(self):
         node = ASTNode(n_type=ASTNodeType.ARRAY_LIST)
         while self.get_token().get_type() != TokenType.R_BRACKET:
-            node.add_child(self.parse_colon_expression())
+            child = self.parse_colon_expression()
+            if child is None:
+                # todo:
+                return None
+            node.add_child(child)
             while self.get_token().get_type() == TokenType.EO_STMT:
                 node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
         return node
+
+    def parse_array_expression(self):
+        root = ASTNode(n_type=ASTNodeType.ARR_EXP)
+        root.add_child(ASTNode(n_type=ASTNodeType.IDENTIFIER, n_text=self.tokens.pop(0).get_text()))
+        self.tokens.pop(0)  # remove left paren
+        node = self.parse_index_list()
+        if node and self.get_token().get_type() == TokenType.R_PAREN:
+            self.tokens.pop(0)  # remove right paren
+        else:
+            # todo: raise invalid array expression exception
+            return None
+        root.add_child(node)
+        return root
+
+    def parse_index_list(self):
+        root = ASTNode(n_type=ASTNodeType.INDEX_LIST)
+        while True:
+            if self.get_token().get_type() == TokenType.CLN:
+                root.add_child(ASTNode(n_type=ASTNodeType.CLN, n_text=self.tokens.pop(0).get_text()))
+            else:
+                child = self.parse_colon_expression()
+                if child is None:
+                    # todo:
+                    return None
+                root.add_child(ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=self.tokens.pop(0).get_text()))
+
+            if str(self.get_token()) == ",":
+                self.tokens.pop(0)  # remove ','
+            else:
+                break
+        return root

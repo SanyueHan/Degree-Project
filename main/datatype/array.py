@@ -1,9 +1,6 @@
-from main.datatype.classes import DataClass
 
 
 class Array:
-    Class = DataClass.ARRAY
-
     def __init__(self, value, size=None):
         if size:
             if size[0] * size[1] != len(value):
@@ -38,8 +35,22 @@ class Array:
     def to_string(self, fun, **args_dict):
         return '\n'.join([''.join([fun(v, **args_dict) for v in r]) for r in self.rows()])
 
-    def create_same(self, *args, **kwargs):
-        return self.__class__(*args, **kwargs)
+    def get_class(self):
+        return self.__class__
+
+    def get_super(self):
+        return self.__class__.__base__
+
+    def get_name(self):
+        return self.__class__.__qualname__
+
+    def visit(self, index_list):
+        if len(index_list) == 1:
+            pass
+        elif len(index_list) == 2:
+            pass
+        else:
+            pass
 
     @property
     def m(self):

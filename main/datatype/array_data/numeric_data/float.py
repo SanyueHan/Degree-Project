@@ -1,10 +1,7 @@
-from main.datatype.classes import DataClass
-from main.datatype.data.array_data.numeric import Numeric
+from main.datatype.array_data.numeric import Numeric
 
 
 class Float(Numeric):
-    Class = DataClass.FLOAT
-
     def __str__(self):
         if self.Size == (0, 0):
             return "     []"
@@ -22,3 +19,9 @@ class Float(Numeric):
     @staticmethod
     def __show(item, width=10, precision=4):
         return f"{item:>{width}.{precision}f}"
+
+
+if __name__ == "__main__":
+    print(Float([]).get_class())
+    print(Float([]).get_super())
+    print(Float([]).get_name())
