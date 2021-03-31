@@ -12,5 +12,5 @@
 6 / 3
 
 % testing assignments
-a = 1+1
-b = 2*3
+a12a = 1+1
+z123 = 2*3
