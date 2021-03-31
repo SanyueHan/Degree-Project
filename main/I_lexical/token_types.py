@@ -29,6 +29,7 @@ class TokenType(Enum):
 
     # Literal
     IDENTIFIER = re.compile("[a-zA-Z_]([a-zA-Z_]|[0-9])*")
+    #ID = re.compile(r"[a-zA-Z_]+[a-zA-Z0-9]*")
     NUMBER_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+|[0-9]+")
     STRING_LIT = re.compile(r"\"[^\"]*\"|\'[^\']*\'")
 
@@ -54,7 +55,8 @@ if __name__ == "__main__":
     print(re.findall(TokenType.EO_STMT.value, "1234\nabc;1234,efg"))
     print(re.findall(TokenType.WHITESPACE.value, "1 2\f3\n4\r5\t6\v"))
     print(re.findall(TokenType.ANNOTATION.value, "int a = 10; % this is annotation"))
-    print(re.findall(TokenType.IDENTIFIER.value, "Z123 78 ht"))
+    print(re.findall(TokenType.IDENTIFIER.value, "Z123 78 ht a12a _1 "))
+    #print(re.findall(TokenType.ID.value, "Z123 78 ht a12a _1 "))
     print(re.findall(TokenType.KEYWORD.value, "if a==b"))
     print(re.findall(TokenType.ADD.value, "a=3+4-1"))
     print(re.findall(TokenType.EQL.value, r" a=1 b=3  ~= "))
