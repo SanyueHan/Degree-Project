@@ -23,3 +23,7 @@ def repl_execute(print_tokens=False, print_ast=False, print_var=False):
         interpreter.interpret_statement_list(ast_root)
         if print_var:
             print(interpreter.get_variables())
+
+
+if __name__ == "__main__":
+    repl_execute()
