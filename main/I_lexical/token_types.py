@@ -5,26 +5,21 @@ import re
 class TokenType(Enum):
     KEYWORD = re.compile("break|clear|else|elseif|end|for|function|global|if|return|while")
 
-    # Assignment Operators
-    ASS = re.compile(r"=")
-
-    # Arithmetic Operators
+    # Operators
     ADD = re.compile("[+]|-")
     MUL = re.compile(r"[*]|/|\\|\.\*|\./|\.\\")
 
-    # Relational Operators
     EQL = re.compile("==|~=")
     REL = re.compile(">=|>|<=|<")
 
-    # Logical Operators
+    ASS = re.compile(r"=")
+
     LAN = re.compile(r"&&|&")
     LOR = re.compile(r"\|\||\|")
     LNT = re.compile(r"~")
 
-    # Colon Operator
     CLN = re.compile(":")
 
-    # Postfix Operators
     TRA = re.compile(r"\.'|'")
 
     # Literal
