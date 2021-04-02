@@ -1,27 +1,27 @@
 
 
 class Array:
-    def __init__(self, value, size=None):
+    def __init__(self, data, size=None):
         if size:
-            if size[0] * size[1] != len(value):
+            if size[0] * size[1] != len(data):
                 # todo raise error
                 return
         else:
-            size = (1, len(value))
-        self.Value = value
+            size = (1, len(data))
+        self.Data = data
         self.Size = size
 
     def __bool__(self):
-        return all(self.Value)
+        return all(self.Data)
 
     def __iter__(self):
-        return iter(self.Value)
+        return iter(self.Data)
 
     def __getitem__(self, i):
-        return self.Value[i]
+        return self.Data[i]
 
     def __len__(self):
-        return len(self.Value)
+        return len(self.Data)
 
     def rows(self):
         return [[self[i * self.n + j] for j in range(self.n)] for i in range(self.m)]

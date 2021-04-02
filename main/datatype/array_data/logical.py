@@ -1,10 +1,13 @@
 from main.datatype.array import Array
+from main.datatype.array_data.numeric_data.float_data.double import Double
 
 
 class Logical(Array):
-    def __init__(self, value, size=None):
-        super().__init__(value, size)
-        self.Value = [(1 if i else 0) for i in self]
+    parent = Double
+
+    def __init__(self, data, size=None):
+        super().__init__(data, size)
+        self.Data = [(1 if i else 0) for i in self]
 
     def __str__(self):
         if len(self) == 1:

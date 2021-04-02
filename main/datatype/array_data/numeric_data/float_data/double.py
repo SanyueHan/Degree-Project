@@ -1,10 +1,13 @@
 from main.datatype.array_data.numeric_data.float import Float
+from main.datatype.array_data.string import String
 
 
 class Double(Float):
-    def __init__(self, value, size=None):
-        super().__init__(value, size)
-        self.Value = [float(i) for i in self]
+    parent = String
+
+    def __init__(self, data, size=None):
+        super().__init__(data, size)
+        self.Data = [float(i) for i in self]
 
     def __str__(self):
         if self.Size == (0, 0):

@@ -234,7 +234,7 @@ class Interpreter:
                         array = []
             else:
                 data = self.evaluate_expression(child)
-                if data.Value:
+                if data.Data:
                     array.append(data)
         if array:
             array_list.append(array)

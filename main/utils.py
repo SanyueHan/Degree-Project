@@ -36,13 +36,13 @@ def find_nearest_mutual_ancestor(class_a, class_b):
     b_ancestors = {class_b}
     while True:
         if class_a is not Array:
-            class_a = class_a.get_super()
+            class_a = class_a.parent
             if class_a in b_ancestors:
                 return class_a
             else:
                 a_ancestors.add(class_a)
         if class_a is not Array:
-            class_b = class_b.get_super()
+            class_b = class_b.parent
             if class_b in a_ancestors:
                 return class_b
             else:
