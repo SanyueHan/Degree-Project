@@ -1,5 +1,5 @@
 from functools import reduce
-from main.datatype.array import Array
+from main.datatype.array_data.string import String
 
 
 def concatenate(data_list, direction):
@@ -35,13 +35,13 @@ def find_nearest_mutual_ancestor(class_a, class_b):
     a_ancestors = {class_a}
     b_ancestors = {class_b}
     while True:
-        if class_a is not Array:
+        if class_a is not String:
             class_a = class_a.parent
             if class_a in b_ancestors:
                 return class_a
             else:
                 a_ancestors.add(class_a)
-        if class_a is not Array:
+        if class_a is not String:
             class_b = class_b.parent
             if class_b in a_ancestors:
                 return class_b
