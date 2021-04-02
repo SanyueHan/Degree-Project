@@ -41,7 +41,7 @@ def find_nearest_mutual_ancestor(class_a, class_b):
                 return class_a
             else:
                 a_ancestors.add(class_a)
-        if class_a is not String:
+        if class_b is not String:
             class_b = class_b.parent
             if class_b in a_ancestors:
                 return class_b
