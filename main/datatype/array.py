@@ -32,8 +32,8 @@ class Array:
     def transposed(self):
         return self.__class__(sum(self.cols(), []), (self.n, self.m))
 
-    def to_string(self, fun, **args_dict):
-        return '\n'.join([''.join([fun(v, **args_dict) for v in r]) for r in self.rows()])
+    def to_string(self, fun):
+        return '\n'.join([''.join([fun(v) for v in r]) for r in self.rows()])
 
     def get_class(self):
         return self.__class__
