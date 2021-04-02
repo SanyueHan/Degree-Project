@@ -25,3 +25,11 @@ class Double(Float):
         def fun(item):
             return f"{item:>{width}.{precision}f}"
         return fun
+
+
+if __name__ == "__main__":
+    print(Double([]).get_class())
+    print(Double([]).get_super())
+    print(Double.get_super())
+    print(Float is not Double)
+    print(Float is (not Double))

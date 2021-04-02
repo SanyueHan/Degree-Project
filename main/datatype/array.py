@@ -38,10 +38,11 @@ class Array:
     def get_class(self):
         return self.__class__
 
-    def get_super(self):
-        return self.__class__.__base__
+    @classmethod
+    def get_super(cls):
+        return cls.__base__
 
-    def get_name(self):
+    def get_class_name(self):
         return self.__class__.__qualname__
 
     def visit(self, index_list):
