@@ -7,11 +7,15 @@ class Logical(Array):
 
     def __init__(self, data, size=None):
         super().__init__(data, size)
-        self.Data = [(1 if i else 0) for i in self]
+        self.Data = [bool(i) for i in self]
 
     def __str__(self):
         if len(self) == 1:
             prefix = "  logical\n\n"
         else:
             prefix = f"  {self.m}×{self.n} logical array\n\n"
-        return prefix + self.to_string(lambda logic_value: "   "+str(logic_value))
+        return prefix + self.to_string(self.format_setter())
+
+    @staticmethod
+    def format_setter(value):
+        return "    1" if value else "    0"

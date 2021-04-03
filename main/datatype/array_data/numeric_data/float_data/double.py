@@ -7,7 +7,7 @@ class Double(Float):
 
     def __init__(self, data, size=None):
         super().__init__(data, size)
-        self.Data = [float(i) for i in self]
+        self.Data = [self.convert(i) for i in self]
 
     def __str__(self):
         if self.Size == (0, 0):
@@ -28,6 +28,16 @@ class Double(Float):
         def fun(item):
             return f"{item:>{width}.{precision}f}"
         return fun
+
+    @staticmethod
+    def convert(obj):
+        if isinstance(obj, bool):
+            if obj:
+                res = 0
+            else:
+                res = 0
+            return float(res)
+        return float(obj)
 
 
 if __name__ == "__main__":

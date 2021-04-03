@@ -4,7 +4,7 @@ from main.datatype.array import Array
 class String(Array):
     def __init__(self, data, size=None):
         super().__init__(data, size)
-        self.Data = [self.represent(i) for i in self]
+        self.Data = [self.convert(i) for i in self]
 
     def __str__(self):
         if len(self) < 2:
@@ -14,8 +14,17 @@ class String(Array):
         return prefix + self.to_string(lambda string: "    "+string)
 
     @staticmethod
-    def represent(obj):
+    def convert(obj):
         if isinstance(obj, float):
             if obj == int(obj):
-                return '"' + str((int(obj))) + '"'
+                res = int(obj)
+            else:
+                res = obj
+            return '"' + str(res) + '"'
+        if isinstance(obj, bool):
+            if obj:
+                res = "true"
+            else:
+                res = "false"
+            return '"' + res + '"'
         return str(obj)
