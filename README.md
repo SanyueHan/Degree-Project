@@ -66,7 +66,21 @@ optional arguments:
 #### REPL Execute (Interactive Execute)
 ```
 % python3 MATLAB.py
->> a = 1+2; b = 3+4;
+>> 1 & 0 | 1 == 2 < 5 + 5
+
+ans =
+
+  logical
+
+    1
+
+>> --++--+-123*45++--++-+-ans
+
+ans =
+
+       -5534
+
+>> >> a = 1+2; b = 3+4;
 >> c = a*b, d = a/b
 
 c =

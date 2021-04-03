@@ -14,7 +14,7 @@ class Logical(Array):
             prefix = "  logical\n\n"
         else:
             prefix = f"  {self.m}×{self.n} logical array\n\n"
-        return prefix + self.to_string(self.format_setter())
+        return prefix + self.to_string(self.format_setter)
 
     @staticmethod
     def format_setter(value):
