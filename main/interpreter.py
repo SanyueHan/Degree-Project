@@ -120,7 +120,7 @@ class Interpreter:
             name = expression.get_child(0).get_text()
             data = self.evaluate_expression(expression.get_child(1))
             for col in data.cols():
-                self.variables[name] = data.get_class(col, size=(len(col), 1))
+                self.variables[name] = data.get_class()(col, size=(len(col), 1))
                 self.interpret_statement_list(statement_list)
 
     def interpret_jump_statement(self, node):
@@ -190,19 +190,11 @@ class Interpreter:
 
     def evaluate_postfix_expression(self, node):
         data = self.evaluate_expression(node.get_child())
-        return data.get_class(sum(data.cols(), []), size=tuple(reversed(data.Size)))
+        return data.get_class()(sum(data.cols(), []), size=tuple(reversed(data.Size)))
 
     def evaluate_primary_expression(self, node):
         # will not be used since in AST it is optimised to skip single-child node
         pass
-
-    def evaluate_array_expression(self, node):
-        name = node.get_child(0).get_text()
-        if name not in self.variables:
-            # todo:
-            return None
-        data = self.variables[name]
-        return data.visit(self.evaluate_index_list(node.get_child(1)))
 
     def evaluate_identifier_expression(self, node):
         var_name = node.get_text()
@@ -243,6 +235,14 @@ class Interpreter:
             return concatenate([concatenate(array, "horz") for array in array_list], "vert")
         else:
             return Double([], size=(0, 0))
+
+    def evaluate_array_expression(self, node):
+        name = node.get_child(0).get_text()
+        if name not in self.variables:
+            # todo:
+            return None
+        data = self.variables[name]
+        return data.visit(self.evaluate_index_list(node.get_child(1)))
 
     def evaluate_index_list(self, node):
         return [self.evaluate_expression(child) if child.get_type() != ASTNodeType.CLN else child
