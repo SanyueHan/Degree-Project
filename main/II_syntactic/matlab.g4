@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 grammar matlab;
 
-primary_expression
+primary_expression // finished
    : IDENTIFIER
    | CONSTANT
    | STRING_LITERAL
@@ -42,28 +42,28 @@ primary_expression
    | '[' array_list ']'
    ;
 
-postfix_expression
+postfix_expression // finished
    : primary_expression
    | array_expression
    | postfix_expression TRANSPOSE
    | postfix_expression NCTRANSPOSE
    ;
 
-index_expression
+index_expression // finished
    : ':'
    | expression
    ;
 
-index_expression_list
+index_expression_list // finished
    : index_expression
    | index_expression_list ',' index_expression
    ;
 
-array_expression
+array_expression // finished
    : IDENTIFIER '(' index_expression_list ')'
    ;
 
-unary_expression
+unary_expression // finished
    : postfix_expression
    | unary_operator postfix_expression
    ;
@@ -74,7 +74,7 @@ unary_operator // finished
    | '~'
    ;
 
-multiplicative_expression
+multiplicative_expression // finished
    : unary_expression
    | multiplicative_expression '*' unary_expression
    | multiplicative_expression '/' unary_expression
@@ -116,12 +116,12 @@ or_expression // finished
    | or_expression '|' and_expression
    ;
 
-expression
+expression // finished
    : or_expression
    | expression ':' or_expression
    ;
 
-assignment_expression
+assignment_expression // finished
    : postfix_expression '=' expression
    ;
 
@@ -131,7 +131,7 @@ eostmt // finished
    | CR
    ;
 
-statement
+statement // finished
    : global_statement
    | clear_statement
    | assignment_statement
@@ -168,29 +168,29 @@ assignment_statement // finished
    : assignment_expression eostmt
    ;
 
-array_element
+array_element // finished
    : expression
    | expression_statement
    ;
 
-array_list
+array_list // finished
    : array_element
    | array_list array_element
    ;
 
-selection_statement
+selection_statement // finished
    : IF expression statement_list END eostmt
    | IF expression statement_list ELSE statement_list END eostmt
    | IF expression statement_list elseif_clause END eostmt
    | IF expression statement_list elseif_clause ELSE statement_list END eostmt
    ;
 
-elseif_clause
+elseif_clause // finished
    : ELSEIF expression statement_list
    | elseif_clause ELSEIF expression statement_list
    ;
 
-iteration_statement
+iteration_statement // finished
    : WHILE expression statement_list END eostmt
    | FOR IDENTIFIER '=' expression statement_list END eostmt
    | FOR '(' IDENTIFIER '=' expression ')' statement_list END eostmt
@@ -228,17 +228,17 @@ function_declare
    ;
 
 
-ARRAYMUL
+ARRAYMUL // finished
    : '.*'
    ;
 
 
-ARRAYDIV
+ARRAYDIV // finished
    : '.\\'
    ;
 
 
-ARRAYRDIV
+ARRAYRDIV // finished
    : './'
    ;
 
@@ -263,17 +263,17 @@ FUNCTION
    ;
 
 
-FOR
+FOR // finished
    : 'for'
    ;
 
 
-WHILE
+WHILE // finished
    : 'while'
    ;
 
 
-END
+END // finished
    : 'end'
    ;
 
@@ -283,52 +283,52 @@ GLOBAL
    ;
 
 
-IF
+IF // finished
    : 'if'
    ;
 
 
-CLEAR
+CLEAR // finished
    : 'clear'
    ;
 
 
-ELSE
+ELSE // finished
    : 'else'
    ;
 
 
-ELSEIF
+ELSEIF // finished
    : 'elseif'
    ;
 
 
-LE_OP
+LE_OP // finished
    : '<='
    ;
 
 
-GE_OP
+GE_OP // finished
    : '>='
    ;
 
 
-EQ_OP
+EQ_OP // finished
    : '=='
    ;
 
 
-NE_OP
+NE_OP // finished
    : '~='
    ;
 
 
-TRANSPOSE
+TRANSPOSE // finished
    : 'transpose'
    ;
 
 
-NCTRANSPOSE
+NCTRANSPOSE // finished
    : '.\''
    ;
 
@@ -338,7 +338,7 @@ STRING_LITERAL
    ;
 
 
-IDENTIFIER
+IDENTIFIER // finished
    : [a-zA-Z] [a-zA-Z0-9_]*
    ;
 
@@ -348,7 +348,7 @@ CONSTANT
    ;
 
 
-fragment NUMBER
+fragment NUMBER // finished
    : ('0' .. '9') + ('.' ('0' .. '9') +)?
    ;
 
@@ -358,7 +358,7 @@ fragment E
    ;
 
 
-fragment SIGN
+fragment SIGN // finished
    : ('+' | '-')
    ;
 
