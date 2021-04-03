@@ -22,4 +22,4 @@ def script_execute(filename, print_tokens=False, print_ast=False, print_var=Fals
 
 
 if __name__ == "__main__":
-    script_execute("../test_cases/test_logical.m")
+    script_execute("../test_cases/test_array_indexing.m")

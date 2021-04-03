@@ -441,13 +441,13 @@ class Parser:
         root = ASTNode(n_type=ASTNodeType.INDEX_LIST)
         while True:
             if self.get_token().get_type() == TokenType.CLN:
-                root.add_child(ASTNode(n_type=ASTNodeType.CLN, n_text=self.tokens.pop(0).get_text()))
+                root.add_child(ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=self.tokens.pop(0).get_text()))
             else:
                 child = self.parse_colon_expression()
                 if child is None:
                     # todo:
                     return None
-                root.add_child(ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=self.tokens.pop(0).get_text()))
+                root.add_child(child)
 
             if str(self.get_token()) == ",":
                 self.tokens.pop(0)  # remove ','

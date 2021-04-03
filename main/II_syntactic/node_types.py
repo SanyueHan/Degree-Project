@@ -38,4 +38,3 @@ class ASTNodeType(Enum):
     STRING_LIT = "STRING LITERAL"
     ARRAY_LIST = "ARRAY LIST"
     INDEX_LIST = "INDEX LIST"
-    CLN = "COLON"

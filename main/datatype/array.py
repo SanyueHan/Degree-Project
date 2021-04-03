@@ -29,8 +29,8 @@ class Array:
     def cols(self):
         return [[self[i * self.n + j] for i in range(self.m)] for j in range(self.n)]
 
-    def transposed(self):
-        return self.__class__(sum(self.cols(), []), (self.n, self.m))
+    def refactor(self):
+        return sum(self.cols(), [])
 
     def pile(self, fun):
         return '\n'.join([''.join([fun(v) for v in r]) for r in self.rows()])
@@ -51,9 +51,26 @@ class Array:
 
     def visit(self, index_list):
         if len(index_list) == 1:
-            pass
+            index = index_list[0]
+            if index == ':':
+                return self.__class__(self.Data, size=(len(self), 1))
+            data = self.refactor()
+            return self.__class__([data[to_int(element)-1] for element in index], size=index.Size)
         elif len(index_list) == 2:
-            pass
+            index_m = index_list[0]
+            if index_m == ":":
+                index_m = [i for i in range(0, self.m)]
+            else:
+                index_m = [to_int(i)-1 for i in index_m.refactor()]
+
+            index_n = index_list[1]
+            if index_n == ":":
+                index_n = [i for i in range(0, self.n)]
+            else:
+                index_n = [to_int(i)-1 for i in index_n.refactor()]
+
+            return self.__class__([self[i * self.n + j] for i in index_m for j in index_n],
+                                  size=(len(index_m), len(index_n)))
         else:
             pass
 
@@ -64,3 +81,11 @@ class Array:
     @property
     def n(self):
         return self.Size[1]
+
+
+def to_int(number):
+    if int(number) == number:
+        return int(number)
+    else:
+        # todo: Array indices must be positive integers or logical values.
+        return None

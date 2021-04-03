@@ -136,14 +136,17 @@ class Interpreter:
         return name, data
 
     def evaluate_colon_expression(self, node):
-        if node.num_children() == 3:
-            start = self.evaluate_expression(node.get_child(0))[0]
-            step = self.evaluate_expression(node.get_child(1))[0]
-            end = self.evaluate_expression(node.get_child(2))[0]
-        else:
+        if node.num_children() == 0:
+            return ":"
+
+        if node.num_children() == 2:
             start = self.evaluate_expression(node.get_child(0))[0]
             step = 1
             end = self.evaluate_expression(node.get_child(1))[0]
+        else:
+            start = self.evaluate_expression(node.get_child(0))[0]
+            step = self.evaluate_expression(node.get_child(1))[0]
+            end = self.evaluate_expression(node.get_child(2))[0]
 
         if step == 0 or start < end and step < 0 or start > end and step > 0:
             return Double([])
@@ -190,7 +193,7 @@ class Interpreter:
 
     def evaluate_postfix_expression(self, node):
         data = self.evaluate_expression(node.get_child())
-        return data.get_class()(sum(data.cols(), []), size=tuple(reversed(data.Size)))
+        return data.get_class()(data.refactor(), size=tuple(reversed(data.Size)))
 
     def evaluate_primary_expression(self, node):
         # will not be used since in AST it is optimised to skip single-child node
@@ -245,8 +248,7 @@ class Interpreter:
         return data.visit(self.evaluate_index_list(node.get_child(1)))
 
     def evaluate_index_list(self, node):
-        return [self.evaluate_expression(child) if child.get_type() != ASTNodeType.CLN else child
-                for child in node.get_children()]
+        return [self.evaluate_expression(child) for child in node.get_children()]
 
     def get_variables(self):
         return self.variables
