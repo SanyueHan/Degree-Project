@@ -1,10 +1,9 @@
-from functools import reduce
 from main.datatype.array_data.string import String
 
 
 def concatenate(data_list, direction):
     if direction == "horz":
-        if not reduce(lambda a, b: a == b, [data.m for data in data_list]):
+        if len(set([data.m for data in data_list])) > 1:
             # todo: "Error using vertcat\nDimensions of arrays being concatenated are not consistent."
             return None
         data = sum((sum(list(tup), []) for tup in zip(*[data.rows() for data in data_list])), [])
@@ -12,7 +11,7 @@ def concatenate(data_list, direction):
         cls = find_nearest_common_ancestor(set(data.get_class() for data in data_list))
         return cls(data, size)
     if direction == "vert":
-        if not reduce(lambda a, b: a == b, [data.n for data in data_list]):
+        if len(set([data.n for data in data_list])) > 1:
             # todo: "Error using horzcat\nDimensions of arrays being concatenated are not consistent."
             return None
         data = sum(sum((data.rows() for data in data_list), []), [])
