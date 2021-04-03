@@ -7,7 +7,6 @@ class Double(Float):
 
     def __init__(self, data, size=None):
         super().__init__(data, size)
-        self.Data = [self.convert(i) for i in self]
 
     def __str__(self):
         if self.Size == (0, 0):
@@ -17,10 +16,10 @@ class Double(Float):
         if all((int(i) == i) for i in self):
             max_len = max(len(str(int(i))) for i in self)
             if max_len <= 3:
-                return self.to_string(self.format_setter(width=6, precision=0))
+                return self.pile(self.format_setter(width=6, precision=0))
             elif max_len <= 8:
-                return self.to_string(self.format_setter(width=12, precision=0))
-        return self.to_string(self.format_setter())
+                return self.pile(self.format_setter(width=12, precision=0))
+        return self.pile(self.format_setter())
         # todo: scientific notation for too big or too small
 
     @staticmethod

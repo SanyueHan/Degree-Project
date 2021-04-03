@@ -8,7 +8,7 @@ class Array:
                 return
         else:
             size = (1, len(data))
-        self.Data = data
+        self.Data = [self.convert(element) for element in data]
         self.Size = size
 
     def __bool__(self):
@@ -32,7 +32,7 @@ class Array:
     def transposed(self):
         return self.__class__(sum(self.cols(), []), (self.n, self.m))
 
-    def to_string(self, fun):
+    def pile(self, fun):
         return '\n'.join([''.join([fun(v) for v in r]) for r in self.rows()])
 
     def get_class(self):
@@ -44,6 +44,10 @@ class Array:
 
     def get_class_name(self):
         return self.__class__.__qualname__
+
+    @staticmethod
+    def convert(obj):
+        return obj
 
     def visit(self, index_list):
         if len(index_list) == 1:
