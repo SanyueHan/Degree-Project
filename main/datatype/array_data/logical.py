@@ -17,7 +17,7 @@ class Logical(Array):
 
     @staticmethod
     def format_setter(value):
-        return "    1" if value else "    0"
+        return "   1" if value else "   0"
 
     @staticmethod
     def convert(obj):
