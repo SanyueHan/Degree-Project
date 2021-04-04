@@ -1,0 +1,50 @@
+
+a =
+
+    10
+
+
+b =
+
+    22
+
+
+c =
+
+    17
+
+
+x =
+
+  logical
+
+   1
+
+
+y =
+
+  logical
+
+   1
+
+
+z =
+
+  logical
+
+   1
+
+
+m =
+
+  logical
+
+   1
+
+
+n =
+
+  logical
+
+   0
+

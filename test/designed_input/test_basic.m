@@ -7,7 +7,7 @@ a=1
 e=b
 %Try
 
-U==c
+U=c
 Z=a+b*c %z=21
 N=Z+1
 
