@@ -193,7 +193,7 @@ class Interpreter:
 
     def evaluate_postfix_expression(self, node):
         data = self.evaluate_expression(node.get_child())
-        return data.get_class()(data.refactor(), size=tuple(reversed(data.Size)))
+        return data.get_class()(data.refactored, size=tuple(reversed(data.Size)))
 
     def evaluate_primary_expression(self, node):
         # will not be used since in AST it is optimised to skip single-child node
