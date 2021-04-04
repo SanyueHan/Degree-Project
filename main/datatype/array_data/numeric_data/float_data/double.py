@@ -31,11 +31,7 @@ class Double(Float):
     @staticmethod
     def convert(obj):
         if isinstance(obj, bool):
-            if obj:
-                res = 0
-            else:
-                res = 0
-            return float(res)
+            return 1.0 if obj else 0.0
         return float(obj)
 
 
