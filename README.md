@@ -3,36 +3,50 @@
 ## Description
 This is a Python implemented interpreter, 
 supporting a subset of the functionalities of MATLAB:
-1. Operators supported including:
-  - arithmetic operators: (left-associative)
-    - '+'
-    - '-'
-    - '*'
-    - '/'
-  - relational operators: (left-associative)
-    - '>=' 
-    - '>'
-    - '<='
-    - '<'
-    - '=='
-    - '~='
-  - logical operators: (left-associative)
-    - '&' (logical and)
-    - '|' (logical or)
-  - unary operators: (right-associative)
-    - '+' (positive)
-    - '-' (negative)
-    - '~' (logical not)
+1. Operators supported including
+- binary operators: (left-associative)
+    - arithmetic operators: 
+        - '+'
+        - '-'
+        - '*'
+        - '/'
+        - '\'
+        - '.*'
+        - './'
+        - '.\'
+    - relational operators: 
+        - '>='
+        - '>'
+        - '<='
+        - '<'
+        - '=='
+        - '~='
+    - logical operators:
+        - '&' (LOGICAL AND)
+        - '|' (LOGICAL OR)
+- unary operators:
+    - logical operator: (right-associative)
+        - '~' (LOGICAL NOT)
+    - sign operators: (right-associative)
+        - '+' (POSITIVE)
+        - '-' (NEGATIVE)
+    - transpose operators:
+        - ''' (TRANSPOSE)
+        - '.'' (NC TRANSPOSE)
+- multi-element operators:
+    - ':' (ARRAY CONSTRUCTOR)
+    - '[]' (MATRIX CONSTRUCTOR)
     
 2. Statements supported including:
-  - assignment statement
-  - expression statement
-  - selection statement
+- assignment statement
+- expression statement
+- selection statement
     - if
     - elseif
     - else
-  - iteration statement
+- iteration statement
     - while
+    - for
 
 ## Run
 #### Environment
