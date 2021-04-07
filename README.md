@@ -78,6 +78,8 @@ optional arguments:
   -v V, --v V  print variables
 ```
 #### REPL Execute (Interactive Execute)
+If the filename after MATLAB.py is not specified, the interpreter will read commands from standard input, just like most 
+most interpreted programming language. 
 ```
 % python3 MATLAB.py
 >> 1 & 0 | 1 == 2 < 5 + 5
@@ -193,31 +195,53 @@ c =
 >> 
 ```
 
-#### Script Execute (Show Abstract Syntax Tree)
+#### Script Execute
+In this example the tokens and abstract syntax tree are printed
 ```
-% python3 MATLAB.py test_cases/test_while.m -a=True
+% python3 MATLAB.py test/designed_input/test_while.m -a=True -t=True
+row =  1    col =  0    type = IDENTIFIER   text = 'a'
+row =  1    col =  2    type = ASS          text = '='
+row =  1    col =  4    type = NUMBER_LIT   text = '0'
+row =  1    col =  5    type = EO_STMT      text = ';'
+row =  1    col =  6    type = EO_STMT      text = '\n'
+row =  2    col =  0    type = KEYWORD      text = 'while'
+row =  2    col =  6    type = IDENTIFIER   text = 'a'
+row =  2    col =  8    type = REL          text = '<'
+row =  2    col = 10    type = NUMBER_LIT   text = '10'
+row =  2    col = 12    type = EO_STMT      text = '\n'
+row =  3    col =  4    type = IDENTIFIER   text = 'a'
+row =  3    col =  5    type = EO_STMT      text = '\n'
+row =  4    col =  4    type = IDENTIFIER   text = 'a'
+row =  4    col =  6    type = ASS          text = '='
+row =  4    col =  8    type = IDENTIFIER   text = 'a'
+row =  4    col = 10    type = ADD          text = '+'
+row =  4    col = 12    type = NUMBER_LIT   text = '1'
+row =  4    col = 13    type = EO_STMT      text = ';'
+row =  4    col = 14    type = EO_STMT      text = '\n'
+row =  5    col =  0    type = KEYWORD      text = 'end'
+row =  5    col =  3    type = EO_STMT      text = '\n'
 
 STMT_LIST: None
   ├── ASS_STMT: None
   │     ├── ASS_EXP: '='
-  │     │     ├── ID: 'a'
-  │     │     └── NUM_LIT: '0'
+  │     │     ├── IDENTIFIER: 'a'
+  │     │     └── NUMBER_LIT: '0'
   │     └── EO_STMT: ';'
   └── ITR_STMT: None
         ├── ITR_CLS: 'while'
         │     ├── BSO_EXP: '<'
-        │     │     ├── ID: 'a'
-        │     │     └── NUM_LIT: '10'
+        │     │     ├── IDENTIFIER: 'a'
+        │     │     └── NUMBER_LIT: '10'
         │     └── STMT_LIST: None
         │           ├── EXP_STMT: None
-        │           │     ├── ID: 'a'
+        │           │     ├── IDENTIFIER: 'a'
         │           │     └── EO_STMT: '\n'
         │           └── ASS_STMT: None
         │                 ├── ASS_EXP: '='
-        │                 │     ├── ID: 'a'
+        │                 │     ├── IDENTIFIER: 'a'
         │                 │     └── BSO_EXP: '+'
-        │                 │           ├── ID: 'a'
-        │                 │           └── NUM_LIT: '1'
+        │                 │           ├── IDENTIFIER: 'a'
+        │                 │           └── NUMBER_LIT: '1'
         │                 └── EO_STMT: ';'
         └── EO_STMT: '\n'
 
@@ -270,5 +294,6 @@ a =
 a =
 
      9
+
 
 ```
