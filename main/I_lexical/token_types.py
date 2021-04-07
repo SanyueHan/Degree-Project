@@ -49,7 +49,7 @@ if __name__ == "__main__":
     print(re.findall(TokenType.EO_STMT.value, "1234\nabc;1234,efg"))
     print(re.findall(TokenType.WHITESPACE.value, "1 2\f3\n4\r5\t6\v"))
     print(re.findall(TokenType.ANNOTATION.value, "int a = 10; % this is annotation"))
-    print(re.findall(TokenType.IDENTIFIER.value, "Z123 78 ht a12a _1 "))
+    print(re.findall(TokenType.IDENTIFIER.value, "Z123 78 ht a12a _1  "))
     print(re.findall(TokenType.KEYWORD.value, "if a==b"))
     print(re.findall(TokenType.ADD.value, "a=3+4-1"))
     print(re.findall(TokenType.EQL.value, r" a=1 b=3  ~= "))
