@@ -12,7 +12,7 @@ class Logical(Array):
         if len(self) == 1:
             prefix = "  logical\n\n"
         else:
-            prefix = f"  {self.m}×{self.n} logical array\n\n"
+            prefix = f"  {self.m}x{self.n} logical array\n\n"
         return prefix + self.pile(self.format_setter)
 
     @staticmethod

@@ -69,7 +69,8 @@ class Interpreter:
         if result:
             var = result[0]
             obj = result[1]
-            print(f"\n{var} =\n\n{str(obj)}\n")
+            ass_str = " = " if obj.get_class() == String else " ="
+            print(f"\n{var}{ass_str}\n\n{str(obj)}\n")
 
     def interpret_assignment_statement(self, node):
         res = self.evaluate_assignment_expression(node.get_child(0))

@@ -9,7 +9,7 @@ class String(Array):
         if len(self) < 2:
             prefix = ""
         else:
-            prefix = f"  {self.m}×{self.n} string array\n\n"
+            prefix = f"  {self.m}x{self.n} string array\n\n"
         return prefix + self.pile(lambda string: "    " + string)
 
     @staticmethod

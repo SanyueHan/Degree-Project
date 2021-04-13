@@ -12,7 +12,7 @@ class Double(Float):
         if self.Size == (0, 0):
             return "     []"
         if self.n == 0:
-            return "  1×0 empty double row vector"
+            return "  1x0 empty double row vector"
         if all((int(i) == i) for i in self):
             max_len = max(len(str(int(i))) for i in self)
             if max_len <= 3:
