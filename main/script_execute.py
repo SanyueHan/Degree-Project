@@ -22,4 +22,4 @@ def script_execute(filename, print_tokens=False, print_ast=False, print_var=Fals
 
 
 if __name__ == "__main__":
-    script_execute("../test/designed_input/test_unary_operators.m")
+    script_execute("../test/test_cases/regular_usage_cases/test_unary_operators.m")

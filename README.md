@@ -50,8 +50,13 @@ supporting a subset of the functionalities of MATLAB:
 
 ## Run
 #### Environment
-Python (with the version no lower than 3.7), 
-no third-party package needed up to now
+- Python
+  - with version no lower than 3.7
+  - no third party packages depends on
+- MATLAB (only for comparing outputs in unittest module)
+  - make sure that root directory added to system PATH
+    - like "/Applications/MATLAB_R2021a.app/bin" in macOS
+    - type "matlabroot" to print installation directory from MATLAB software
 #### Command
 ###### Mac OS
 ```shell
@@ -78,8 +83,8 @@ optional arguments:
   -v V, --v V  print variables
 ```
 #### REPL Execute (Interactive Execute)
-If the filename after MATLAB.py is not specified, the interpreter will read commands from standard input, just like most 
-most interpreted programming language. 
+If the filename after MATLAB.py is not specified, the interpreter will read commands from standard input, 
+just like most interpreted programming language. 
 ```
 % python3 MATLAB.py
 >> 1 & 0 | 1 == 2 < 5 + 5
