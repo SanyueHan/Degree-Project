@@ -53,8 +53,8 @@ supporting a subset of the functionalities of MATLAB:
 - Python
   - with version no lower than 3.7
   - no third party packages depends on
-- MATLAB (only for comparing outputs in unittest module)
-  - make sure that root directory added to system PATH
+- MATLAB (only for comparing outputs in the unittest module)
+  - make sure that the root directory of MATLAB is added to system PATH
     - like "/Applications/MATLAB_R2021a.app/bin" in macOS
     - type "matlabroot" to print installation directory from MATLAB software
 #### Command

@@ -18,6 +18,7 @@ BSO_MAP = {
     '<':  (Logical, lambda x, y: x < y),
     '+': (Double, lambda x, y: x + y),
     '-': (Double, lambda x, y: x - y),
+    '*': (Double, lambda x, y: x * y),
     '.*': (Double, lambda x, y: x * y),
     './': (Double, lambda x, y: x / y),
     '.\\': (Double, lambda x, y: y / x),
@@ -164,13 +165,19 @@ class Interpreter:
         cls, fun = BSO_MAP[node.get_text()]
         if data0.Size == data1.Size:
             return cls([fun(*tup) for tup in zip(data0, data1)], size=data0.Size)
-        # todo: auto expand feature and size not fix error.
+        if data0.Size == (1, 1):
+            number = data0[0]
+            return cls([fun(i, number) for i in data1], size=data1.Size)
+        if data1.Size == (1, 1):
+            number = data1[0]
+            return cls([fun(i, number) for i in data0], size=data0.Size)
+        # todo: Arrays have incompatible sizes for this operation.
 
     def evaluate_matrix_multiplication_expression(self, node):
         data0 = self.evaluate_expression(node.get_child(0))
         data1 = self.evaluate_expression(node.get_child(1))
-        if data0.Size == (1, 1) and data1.Size == (1, 1):
-            return Double([data0[0] * data1[0]])
+        if data0.Size == (1, 1) or data1.Size == (1, 1):
+            return self.evaluate_binary_scalar_operator_expression(node)
         # todo: matrix multiplication
 
     def evaluate_matrix_right_division_expression(self, node):
