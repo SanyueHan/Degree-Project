@@ -1,8 +1,15 @@
-from main.datatype.array import Array
-from main.datatype.array_data.numeric_data.float_data.double import Double
+from main.data_types.array import Array
+from main.data_types.array_data.numeric_data.decimal_data.double import Double
 
 
 class Logical(Array):
+    """
+    The logical data type represents true or false states using the numbers 1 and 0, respectively.
+    Certain MATLAB® functions and operators return logical values to indicate fulfillment of a condition.
+    You can use those logical values to index into an array or execute conditional code.
+
+    (https://ww2.mathworks.cn/help/matlab/logical-operations.html)
+    """
     parent = Double
 
     def __init__(self, data, size=None):

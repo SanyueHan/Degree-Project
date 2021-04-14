@@ -1,4 +1,4 @@
-from main.datatype.array import Array
+from main.data_types.array import Array
 
 
 class String(Array):

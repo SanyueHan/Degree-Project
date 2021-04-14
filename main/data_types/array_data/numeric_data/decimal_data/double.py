@@ -1,8 +1,8 @@
-from main.datatype.array_data.numeric_data.float import Float
-from main.datatype.array_data.string import String
+from main.data_types.array_data.numeric_data.decimal import Decimal
+from main.data_types.array_data.string import String
 
 
-class Double(Float):
+class Double(Decimal):
     parent = String
 
     def __init__(self, data, size=None):
@@ -49,5 +49,5 @@ if __name__ == "__main__":
     print(Double([]).get_class())
     print(Double([]).get_super())
     print(Double.get_super())
-    print(Float is not Double)
-    print(Float is (not Double))
+    print(Decimal is not Double)
+    print(Decimal is (not Double))

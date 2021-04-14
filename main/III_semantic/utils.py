@@ -1,4 +1,4 @@
-from main.datatype.array_data.string import String
+from main.data_types.array_data.string import String
 
 
 def concatenate(data_list, direction):
