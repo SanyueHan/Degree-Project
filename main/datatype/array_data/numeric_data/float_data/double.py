@@ -13,8 +13,8 @@ class Double(Float):
             return "     []"
         if self.n == 0:
             return "  1x0 empty double row vector"
-        if all((int(i) == i) for i in self):
-            max_len = max(len(str(int(i))) for i in self)
+        if all((int(n) == n) for n in self):
+            max_len = max(self.excluding_sign_integer_length(n) for n in self)
             if max_len <= 3:
                 return self.pile(self.format_setter(width=6, precision=0))
             elif max_len <= 8:
@@ -23,10 +23,20 @@ class Double(Float):
         # todo: scientific notation for too big or too small
 
     @staticmethod
+    def excluding_sign_integer_length(number):
+        string = str(int(number)).lstrip('-')
+        return len(string)
+
+    @staticmethod
     def format_setter(width=10, precision=4):
-        def fun(item):
-            return f"{item:>{width}.{precision}f}"
-        return fun
+        if precision == 0:
+            def fun(item):
+                return f"{int(item):>{width}d}"
+            return fun
+        else:
+            def fun(item):
+                return f"{item:>{width}.{precision}f}"
+            return fun
 
     @staticmethod
     def convert(obj):
