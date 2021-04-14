@@ -18,7 +18,8 @@ class Token:
         return self.text
 
 
-if __name__ == "__main__":
-    token = Token(t_text="test")
-    print(str(token))
-    print(token)
+class TokenListPrinter:
+    @staticmethod
+    def print(token_list):
+        for t in token_list:
+            print(repr(t))

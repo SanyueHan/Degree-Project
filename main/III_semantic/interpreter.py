@@ -2,7 +2,7 @@ from main.II_syntactic.node_types import ASTNodeType
 from main.datatype.array_data.string import String
 from main.datatype.array_data.logical import Logical
 from main.datatype.array_data.numeric_data.float_data.double import Double
-from main.utils import concatenate
+from main.III_semantic.utils import concatenate
 
 
 BSO_MAP = {
