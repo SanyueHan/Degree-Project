@@ -34,7 +34,7 @@ class ASTNode:
 
 class ASTTreePrinter:
     def __init__(self):
-        self.vec_left = [0 for i in range(100)]
+        self.vec_left = [0 for _ in range(100)]
 
     def print(self, node):
         print()
