@@ -1,7 +1,7 @@
 import unittest
 import os
 
-REGULAR_USAGE_CASES = "test_cases/regular_usage_cases/"
+REGULAR_USAGE_CASES = "test_cases/regular_usage/"
 
 
 def python_execute_output(path):

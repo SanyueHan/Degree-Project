@@ -3,8 +3,7 @@ from test_interpreter.utils.IV_operators_and_elementary_operations import binary
 from test_interpreter.utils.V_loops_and_conditional_statements import if_else_samples, switch_case_samples, \
     for_samples, while_samples
 
-
-DIRECTORY = "test_cases/regular_usage_cases/"
+DIRECTORY = "test_cases/regular_usage/"
 
 
 def entering_commands(path):
@@ -54,8 +53,8 @@ def loops_and_conditional_statements(path):
 
 
 if __name__ == "__main__":
-    #entering_commands(DIRECTORY + "I_entering_commands.m")
-    #matrices_and_arrays(DIRECTORY + "II_matrices_and_arrays.m")
-    #data_types(DIRECTORY + "III_data_types.m")
+    # entering_commands(DIRECTORY + "I_entering_commands.m")
+    # matrices_and_arrays(DIRECTORY + "II_matrices_and_arrays.m")
+    # data_types(DIRECTORY + "III_data_types.m")
     operators_and_elementary_operations(DIRECTORY + "IV_operators_and_elementary_operations.m")
-    #loops_and_conditional_statements(DIRECTORY + "V_loops_and_conditional_statements.m")
+    # loops_and_conditional_statements(DIRECTORY + "V_loops_and_conditional_statements.m")
