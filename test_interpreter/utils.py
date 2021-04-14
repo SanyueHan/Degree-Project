@@ -15,10 +15,10 @@ def python_execute_output(path):
     return result
 
 
-def test_method_builder(path, matlab_execute_output, python_execute_output):
-    target_output = matlab_execute_output(path)
-    actual_output = python_execute_output(path)
+def test_method_builder(path, matlab, python):
+    actual_output = python(path)
+    target_output = matlab(path)
 
     def method(self):
-        self.assertEqual(target_output, actual_output)
+        self.assertEqual(actual_output, target_output)
     return method

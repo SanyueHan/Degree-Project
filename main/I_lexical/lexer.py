@@ -1,5 +1,6 @@
 from main.I_lexical.token_types import TokenType
 from main.I_lexical.token import Token
+from main.exceptions.lexical_exception import InvalidCharacterError
 
 
 def lexer(program):
@@ -20,6 +21,5 @@ def lexer(program):
                     col += len(text)
                     break
             else:
-                # todo: raise lexeme unrecognized error
-                return None
+                raise InvalidCharacterError(row, col+1)
     return result_token_list
