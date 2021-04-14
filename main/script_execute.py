@@ -19,7 +19,3 @@ def script_execute(filename, print_tokens=False, print_ast=False, print_var=Fals
     interpreter.interpret_statement_list(ast_root)
     if print_var:
         print(interpreter.get_variables())
-
-
-if __name__ == "__main__":
-    script_execute("../test/test_cases/regular_usage_cases/test_unary_operators.m")

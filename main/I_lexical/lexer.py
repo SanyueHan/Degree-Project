@@ -23,11 +23,3 @@ def lexer(program):
                 # todo: raise lexeme unrecognized error
                 return None
     return result_token_list
-
-
-if __name__ == "__main__":
-    with open("../../test/test_cases/regular_usage_cases/test_exp_ass.m", "r") as file:
-        code = file.read()
-    token_list = lexer(code)
-    for t in token_list:
-        print(repr(t))
