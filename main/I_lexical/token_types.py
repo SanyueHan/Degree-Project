@@ -23,7 +23,7 @@ class TokenType(Enum):
     TRA = re.compile(r"\.'|'")
 
     # Literal
-    IDENTIFIER = re.compile(r"[a-zA-Z_]+[a-zA-Z0-9_]*")
+    IDENTIFIER = re.compile(r"[a-zA-Z]+[a-zA-Z0-9_]*")
     NUMBER_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+|[0-9]+")
     STRING_LIT = re.compile(r"\"[^\"]*\"|\'[^\']*\'")
 
