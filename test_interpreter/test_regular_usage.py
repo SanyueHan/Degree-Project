@@ -7,11 +7,11 @@ REGULAR_USAGE = "test_cases/language_fundamentals/"
 
 
 def matlab_execute_output(path):
-    command = f"matlab -nodisplay -nosplash -nodesktop -r \"run('{path}'); exit;\" -logfile temp.txt"
+    command = f"matlab -nodisplay -nosplash -nodesktop -r \"run('{path}'); exit;\" -logfile matlab.txt"
     print(command)
     os.system(command)
-    result = read_from("temp.txt")
-    os.system("rm temp.txt")
+    result = read_from("matlab.txt")
+    # os.system("rm matlab.txt")
 
     # remove licenses information
     return "\n".join(result.split("\n")[10:])
