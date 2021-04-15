@@ -3,7 +3,7 @@ import os
 from utils import read_from, test_method_builder, python_execute_output
 
 
-REGULAR_USAGE = "test_cases/regular_usage/"
+REGULAR_USAGE = "test_cases/language_fundamentals/"
 
 
 def matlab_execute_output(path):

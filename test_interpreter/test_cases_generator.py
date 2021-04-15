@@ -1,9 +1,9 @@
-from test_interpreter.utils.IV_operators_and_elementary_operations import binary_operator_samples, \
+from test_interpreter.generator_utils.IV_operators_and_elementary_operations import binary_operator_samples, \
     prefix_operator_samples, postfix_operator_samples
-from test_interpreter.utils.V_loops_and_conditional_statements import if_else_samples, switch_case_samples, \
+from test_interpreter.generator_utils.V_loops_and_conditional_statements import if_else_samples, switch_case_samples, \
     for_samples, while_samples
 
-DIRECTORY = "test_cases/regular_usage/"
+DIRECTORY = "test_cases/language_fundamentals/"
 
 
 def entering_commands(path):
