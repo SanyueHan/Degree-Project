@@ -9,9 +9,11 @@ def read_from(path):
 
 def python_execute_output(path):
     # working directory is Degree-Project/test_interpreter, so relative path is ../MATLAB.py
-    os.system(f"python3 ../MATLAB.py {path} > python.txt")
-    result = read_from("python.txt")
-    # os.system("rm python.txt")
+    command = f"python3 ../MATLAB.py {path} > {path[-3]}_python.txt"
+    print(command)
+    os.system(command)
+    result = read_from(f"{path[-3]}_python.txt")
+    os.system(f"rm {path[-3]}_python.txt")
     return result
 
 

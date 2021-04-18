@@ -11,13 +11,13 @@ PATTERN = re.compile(".\b|\b")
 
 def matlab_execute_output(path):
     # adding a & at the end of the command to cancel blocking the unittest process
-    command = f"matlab -nodisplay -nosplash -nodesktop -r \"run('{path}'); exit;\" -logfile matlab.txt &"
+    command = f"matlab -nodisplay -nosplash -nodesktop -r \"run('{path}'); exit;\" -logfile {path[-3]}_matlab.txt &"
     print(command)
     os.system(command)
     # wait for the matlab software process finish its running and error reporting
     time.sleep(10)
-    result = read_from("matlab.txt")
-    # os.system("rm matlab.txt")
+    result = read_from(f"{path[-3]}_matlab.txt")
+    os.system(f"rm {path[-3]}_matlab.txt")
     # cancel the backspace character along with the character behind it (if exist)
     result = re.sub(PATTERN, '', result)
     # remove licenses information and matlab program stack information

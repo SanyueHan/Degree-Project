@@ -368,7 +368,7 @@ class Parser:
         if root is None:
             return None
 
-        while self.get_token().get_type() == TokenType.TRA:
+        while self.get_token().get_type() in (TokenType.TRA, TokenType.NCT):
             token = self.tokens.pop(0)  # transpose symbol
             root = ASTNode(n_type=ASTNodeType.PST_EXP, n_text=token.get_text(), children=[root])
         return root

@@ -1,2 +1,9 @@
 class InterpretException(Exception):
-    pass
+    message = ""
+
+    def __init__(self, line, column):
+        self.line = line
+        self.column = column
+
+    def __str__(self):
+        return f"Line: {self.line} Column: {self.column}\n" + self.message

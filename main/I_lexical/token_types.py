@@ -20,12 +20,13 @@ class TokenType(Enum):
 
     CLN = re.compile(":")
 
-    TRA = re.compile(r"\.'|'")
+    TRA = re.compile(r"'")
+    NCT = re.compile(r"\.'")
 
     # Literal
     IDENTIFIER = re.compile(r"[a-zA-Z]+[a-zA-Z0-9_]*")
     NUMBER_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+|[0-9]+")
-    STRING_LIT = re.compile(r"\"[^\"]*\"|\'[^\']*\'")
+    STRING_LIT = re.compile(r"\"[^\"]*\"")
 
     # Other
     EO_STMT = re.compile("[;,\n]")
