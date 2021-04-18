@@ -36,3 +36,19 @@ def for_samples():
 
 def while_samples():
     pass
+
+
+def loops_and_conditional_statements(path):
+    with open(path, "w") as file:
+        file.write("%% Selection Statements\n")
+        file.write("% if-else\n")
+        file.write(if_else_samples())
+        file.write("% switch case\n")
+        file.write(switch_case_samples())
+        file.write("\n")
+
+        file.write("%% Iteration Statements\n")
+        file.write("% for\n")
+        file.write(for_samples())
+        file.write("% while")
+        file.write(while_samples())

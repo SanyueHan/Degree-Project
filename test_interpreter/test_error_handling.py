@@ -5,7 +5,7 @@ import re
 from utils import read_from, test_method_builder, python_execute_output
 
 
-LEXICAL_ERROR = "test_cases/error_handling/lexical_error/"
+LEXICAL_ERROR = "test_cases/error_handling/i_lexical_error/"
 PATTERN = re.compile(".\b|\b")
 
 
