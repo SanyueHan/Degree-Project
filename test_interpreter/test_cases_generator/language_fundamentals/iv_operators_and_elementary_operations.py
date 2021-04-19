@@ -1,45 +1,68 @@
 import random
 
 NUMBER_RANGE = 100
-REPETITION_4 = 10
+REPETITION = 10
+DIRECTORY = '../../test_cases/language_fundamentals/iv_operators_and_elementary_operations/'
 
 
 def random_double():
+    # todo: upgrade to array type, after realized matrix operations in interpreter
+    # todo: enlarge number range after finished scientific notation in double
     return random.randint(-NUMBER_RANGE, NUMBER_RANGE)
 
 
-def binary_operator_samples(ls):
-    return ''.join(
-        [f"{random_double()} {operator} {random_double()}\n" for operator in ls for _ in range(REPETITION_4)]
-    )
+def create_binary_operator_cases(operator):
+    return ''.join([f"{random_double()} {operator} {random_double()}\n" for _ in range(REPETITION)])
 
 
-def prefix_operator_samples(ls):
-    return ''.join([f"{operator}{random_double()}\n" for operator in ls for _ in range(REPETITION_4)])
+def create_prefix_operator_cases(operator):
+    return ''.join([f"{operator}{random_double()}\n" for _ in range(REPETITION)])
 
 
-def postfix_operator_samples(ls):
-    return ''.join([f"{random_double()}{operator}\n" for operator in ls for _ in range(REPETITION_4)])
-
-
-def operators_and_elementary_operations(path):
-    with open(path, "w") as file:
-        file.write("%% Binary\n")
-        file.write(binary_operator_samples(['+', '-', '*', '/', '\\', '.*', './', '.\\',
-                                            '>=', '>', '<=', '<', '==', '~=',
-                                            '&', '&&', '|', '||']))
-        file.write("\n\n")
-
-        file.write("%% Unary\n")
-        file.write("% Prefix\n")
-        file.write(prefix_operator_samples(['+', '-', '~']))
-        file.write("\n")
-
-        file.write("% PostFix\n")
-        file.write(postfix_operator_samples([]))
-        file.write("\n")
+def create_postfix_operator_cases(operator):
+    return ''.join([f"{random_double()}{operator}\n" for _ in range(REPETITION)])
 
 
 if __name__ == "__main__":
-    PATH = '../../test_cases/language_fundamentals/test_iv_operators_and_elementary_operations.m'
-    operators_and_elementary_operations(PATH)
+    with open(DIRECTORY+"test_1_arithmetic_operations.m", 'w') as file_1:
+        # Basic Arithmetics
+        file_1.write("\n% Addition\n")
+        file_1.write(create_binary_operator_cases('+'))
+        file_1.write("\n% Subtraction\n")
+        file_1.write(create_binary_operator_cases('-'))
+        file_1.write("\n% Multiplication\n")
+        file_1.write(create_binary_operator_cases('.*'))
+        file_1.write(create_binary_operator_cases('*'))
+        file_1.write("\n% Division\n")
+        file_1.write(create_binary_operator_cases('./'))
+        file_1.write(create_binary_operator_cases('.\\'))
+        file_1.write(create_binary_operator_cases('/'))
+        file_1.write(create_binary_operator_cases('\\'))
+        file_1.write("\n% Powers\n")
+        file_1.write("\n% Transpose\n")
+        file_1.write(create_postfix_operator_cases('.\''))
+        file_1.write(create_postfix_operator_cases('\''))
+        file_1.write("\n% Array Sign\n")
+        file_1.write(create_prefix_operator_cases('-'))
+        file_1.write(create_prefix_operator_cases('+'))
+        # todo: modulo division and rounding
+        # todo: custom binary functions
+    with open(DIRECTORY+"test_2_relational_operations.m", 'w') as file_2:
+        file_2.write(create_binary_operator_cases('=='))
+        file_2.write(create_binary_operator_cases('>='))
+        file_2.write(create_binary_operator_cases('>'))
+        file_2.write(create_binary_operator_cases('<='))
+        file_2.write(create_binary_operator_cases('<'))
+        file_2.write(create_binary_operator_cases('~='))
+    with open(DIRECTORY+"test_3_logical_operations.m", 'w') as file_3:
+        file_3.write(create_binary_operator_cases('&&'))
+        file_3.write(create_binary_operator_cases('||'))
+        file_3.write(create_binary_operator_cases('&'))
+        file_3.write(create_prefix_operator_cases('~'))
+        file_3.write(create_binary_operator_cases('|'))
+    with open(DIRECTORY+"test_4_set_operations.m", 'w') as file_4:
+        # todo: set_operations
+        pass
+    with open(DIRECTORY+"test_5_bitwise_operations.m", 'w') as file_5:
+        # todo: bitwise operations
+        pass
