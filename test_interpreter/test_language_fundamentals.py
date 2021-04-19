@@ -3,7 +3,7 @@ import os
 from utils import read_from, test_method_builder, python_execute_output
 
 
-REGULAR_USAGE = "test_cases/language_fundamentals/"
+LANGUAGE_FUNDAMENTALS = "test_cases/language_fundamentals/"
 
 
 def matlab_execute_output(path):
@@ -21,8 +21,8 @@ class TestRegularUsage(unittest.TestCase):
     pass
 
 
-for test_case in os.listdir(REGULAR_USAGE):
-    test_method = test_method_builder(REGULAR_USAGE + test_case, python_execute_output, matlab_execute_output)
+for test_case in os.listdir(LANGUAGE_FUNDAMENTALS):
+    test_method = test_method_builder(LANGUAGE_FUNDAMENTALS + test_case, python_execute_output, matlab_execute_output)
     setattr(TestRegularUsage, test_case, test_method)
 
 

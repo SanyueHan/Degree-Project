@@ -65,6 +65,7 @@ class Parser:
             TokenType.IDENTIFIER: self.parse_identifier_expression,
             TokenType.NUMBER_LIT: self.parse_number_literal,
             TokenType.STRING_LIT: self.parse_string_literal,
+            TokenType.VECTOR_LIT: self.parse_vector_literal,
             TokenType.L_PAREN: self.parse_paren_expression,
             TokenType.L_BRACKET: self.parse_bracket_expression,
         }
@@ -390,7 +391,10 @@ class Parser:
         return ASTNode(n_type=ASTNodeType.NUMBER_LIT, n_text=self.tokens.pop(0).get_text())
 
     def parse_string_literal(self):
-        return ASTNode(n_type=ASTNodeType.STRING_LIT, n_text=self.tokens.pop(0).get_text())
+        return ASTNode(n_type=ASTNodeType.STRING_LIT, n_text=self.tokens.pop(0).get_text().strip('\"'))
+
+    def parse_vector_literal(self):
+        return ASTNode(n_type=ASTNodeType.VECTOR_LIT, n_text=self.tokens.pop(0).get_text().strip('\''))
 
     def parse_paren_expression(self):
         self.tokens.pop(0)  # remove left paren

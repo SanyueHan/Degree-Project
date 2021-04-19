@@ -3,10 +3,10 @@ from main.data_types.array_data.string import String
 
 
 class Double(Decimal):
+    """
+    https://ww2.mathworks.cn/help/matlab/ref/double.html
+    """
     parent = String
-
-    def __init__(self, data, size=None):
-        super().__init__(data, size)
 
     def __str__(self):
         if self.Size == (0, 0):

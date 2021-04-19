@@ -1,4 +1,5 @@
 from main.II_syntactic.node_types import ASTNodeType
+from main.data_types.array_data.char import Char
 from main.data_types.array_data.string import String
 from main.data_types.array_data.logical import Logical
 from main.data_types.array_data.numeric_data.decimal_data.double import Double
@@ -55,6 +56,7 @@ class Interpreter:
             ASTNodeType.IDENTIFIER: self.evaluate_identifier_expression,
             ASTNodeType.NUMBER_LIT: self.evaluate_number_literal,
             ASTNodeType.STRING_LIT: self.evaluate_string_literal,
+            ASTNodeType.VECTOR_LIT: self.evaluate_vector_literal,
             ASTNodeType.ARRAY_LIST: self.evaluate_array_list,
             ASTNodeType.INDEX_LIST: self.evaluate_index_list
         }
@@ -225,6 +227,10 @@ class Interpreter:
     @staticmethod
     def evaluate_string_literal(node):
         return String([node.get_text()])
+
+    @staticmethod
+    def evaluate_vector_literal(node):
+        return Char([c for c in node.get_text()])
 
     def evaluate_array_list(self, node):
         array_list = []

@@ -2,28 +2,27 @@ from main.data_types.array import Array
 
 
 class String(Array):
-    def __init__(self, data, size=None):
-        super().__init__(data, size)
+    """
+    https://ww2.mathworks.cn/help/matlab/ref/string.html
+    """
 
     def __str__(self):
         if len(self) < 2:
             prefix = ""
         else:
             prefix = f"  {self.m}x{self.n} string array\n\n"
-        return prefix + self.pile(lambda string: "    " + string)
+        return prefix + self.pile(lambda string: "    " + '\"' + string + '\"')
 
     @staticmethod
     def convert(obj):
         if isinstance(obj, float):
             if obj == int(obj):
-                res = int(obj)
+                return str(int(obj))
             else:
-                res = obj
-            return '"' + str(res) + '"'
+                return str(obj)
         if isinstance(obj, bool):
             if obj:
-                res = "true"
+                return "true"
             else:
-                res = "false"
-            return '"' + res + '"'
+                return "false"
         return str(obj)

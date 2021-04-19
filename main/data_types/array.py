@@ -1,6 +1,7 @@
+from main.data_types.data import Data
 
 
-class Array:
+class Array(Data):
     def __init__(self, data, size=None):
         if size:
             if size[0] * size[1] != len(data):

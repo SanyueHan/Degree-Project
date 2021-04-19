@@ -4,6 +4,10 @@ import re
 
 class TokenType(Enum):
     KEYWORD = re.compile("break|clear|else|elseif|end|for|function|global|if|return|while")
+    IDENTIFIER = re.compile(r"[a-zA-Z]+[a-zA-Z0-9_]*")
+    NUMBER_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+|[0-9]+")
+    STRING_LIT = re.compile(r"\"[^\"]*\"")
+    VECTOR_LIT = re.compile(r"\'[^\']*\'")
 
     # Operators
     ADD = re.compile("[+]|-")
@@ -23,12 +27,6 @@ class TokenType(Enum):
     TRA = re.compile(r"'")
     NCT = re.compile(r"\.'")
 
-    # Literal
-    IDENTIFIER = re.compile(r"[a-zA-Z]+[a-zA-Z0-9_]*")
-    NUMBER_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+|[0-9]+")
-    STRING_LIT = re.compile(r"\"[^\"]*\"")
-
-    # Other
     EO_STMT = re.compile("[;,\n]")
     L_PAREN = re.compile(r"\(")
     R_PAREN = re.compile(r"\)")
