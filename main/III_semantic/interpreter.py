@@ -36,7 +36,6 @@ class Interpreter:
     def __init__(self):
         self.interpret = {
             ASTNodeType.STMT_LIST: self.interpret_statement_list,
-            ASTNodeType.ASS_STMT: self.interpret_assignment_statement,
             ASTNodeType.EXP_STMT: self.interpret_expression_statement,
             ASTNodeType.CLR_STMT: self.interpret_clear_statement,
             ASTNodeType.SEL_STMT: self.interpret_selection_statement,
@@ -75,21 +74,21 @@ class Interpreter:
             ass_str = " = " if obj.get_class() == String else " ="
             print(f"\n{var}{ass_str}\n\n{str(obj)}\n")
 
-    def interpret_assignment_statement(self, node):
-        res = self.evaluate_assignment_expression(node.get_child(0))
-
-        return res if node.get_child(1).get_text() != ';' else None
-
     def interpret_expression_statement(self, node):
-        child = node.get_child(0)
-
-        if child.get_type() == ASTNodeType.IDENTIFIER:
-            name = child.get_text()
-        else:
-            name = "ans"
-            self.variables["ans"] = self.evaluate_expression(child)
-
-        return (name, self.variables[name]) if node.get_child(1).get_text() != ';' else None
+        expression = node.get_child(0)
+        if expression.get_type() == ASTNodeType.ASS_EXP:
+            var = expression.get_child(0).get_text()
+            val = self.evaluate_expression(expression.get_child(1))
+            self.variables[var] = val
+        else:  # normal expression
+            if expression.get_type() == ASTNodeType.IDENTIFIER:
+                var = expression.get_text()
+                val = self.variables[var]
+            else:
+                var = "ans"
+                val = self.evaluate_expression(expression)
+                self.variables["ans"] = val
+        return (var, val) if node.get_child(1).get_text() != ';' else None
 
     def interpret_clear_statement(self, node):
         variables = [child.get_text() for child in node.get_child(0).get_children()]
@@ -132,12 +131,6 @@ class Interpreter:
 
     def evaluate_expression(self, node):
         return self.evaluate[node.get_type()](node)
-
-    def evaluate_assignment_expression(self, node):
-        name = node.get_child(0).get_text()
-        data = self.evaluate_expression(node.get_child(1))
-        self.variables[name] = data
-        return name, data
 
     def evaluate_colon_expression(self, node):
         if node.num_children() == 0:

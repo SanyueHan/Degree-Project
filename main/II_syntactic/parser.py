@@ -55,7 +55,6 @@ class Parser:
     def __init__(self, token_list):
         self.tokens = token_list
         self.statement_cases = [
-            self.parse_assignment_statement,
             self.parse_expression_statement,
             self.parse_clear_statement,
             self.parse_selection_statement,
@@ -100,32 +99,11 @@ class Parser:
             # todo: throw unknown statement exception
             return None
 
-    def parse_assignment_statement(self):
-        if self.get_token(0).get_type() != TokenType.IDENTIFIER or self.get_token(1).get_type() != TokenType.ASS:
-            return None
-        node = ASTNode(n_type=ASTNodeType.ASS_STMT)
-
-        assignment_expression = self.parse_assignment_expression()
-        if assignment_expression is None:
-            # todo: throw invalid expression statement exception
-            return None
-        node.add_child(assignment_expression)
-
-        if self.get_token().get_type() != TokenType.EO_STMT:
-            # todo: throw invalid statement exception
-            return None
-        node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
-
-        return node
-
     def parse_expression_statement(self):
-        node = ASTNode(n_type=ASTNodeType.EXP_STMT)
-
-        expression = self.parse_colon_expression()
+        expression = self.parse_expression()
         if expression is None:
-            # todo: throw invalid expression statement exception
             return None
-        node.add_child(expression)
+        node = ASTNode(n_type=ASTNodeType.EXP_STMT, children=[expression])
 
         if self.get_token().get_type() != TokenType.EO_STMT:
             # todo: throw invalid statement exception
@@ -211,7 +189,7 @@ class Parser:
         clause = self.parse_iteration_clause(start_token.get_text())
         if clause is None:
             raise IncompleteStatementError(start_token.row, start_token.col)
-        node.add_child()
+        node.add_child(clause)
 
         self.tokens.pop(0)  # remove 'end'
 
@@ -248,7 +226,17 @@ class Parser:
             node.add_child(ASTNode(n_type=ASTNodeType.IDENTIFIER, n_text=self.tokens.pop(0).get_text()))
         return node
 
+    def parse_expression(self):
+        node = self.parse_assignment_expression()
+        if node:
+            return node
+        node = self.parse_colon_expression()
+        if node:
+            return node
+
     def parse_assignment_expression(self):
+        if self.get_token(0).get_type() != TokenType.IDENTIFIER or self.get_token(1).get_type() != TokenType.ASS:
+            return None
         identifier = ASTNode(n_type=ASTNodeType.IDENTIFIER, n_text=self.tokens.pop(0).get_text())
         node = ASTNode(n_type=ASTNodeType.ASS_EXP, n_text=self.tokens.pop(0).get_text(), children=[identifier])
         expression = self.parse_colon_expression()
