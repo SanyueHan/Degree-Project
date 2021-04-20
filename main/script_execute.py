@@ -34,6 +34,6 @@ def script_execute(path, print_tokens=False, print_ast=False, print_var=False):
         if print_var:
             print(interpreter.get_variables())
     except InterpretException as e:
-        print("Error: File:")
+        print("File:")
         print(os.getcwd() + '/' + path)
         print(e, end='')

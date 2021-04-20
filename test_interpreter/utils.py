@@ -3,7 +3,7 @@ import re
 import time
 
 
-PATTERN = re.compile(".\b|\b")
+REMOVE = re.compile(".\b|\b|Error: ")
 
 
 def read_from(path):
@@ -37,7 +37,7 @@ def matlab_execute(path, error=False):
 
     if error:
         # cancel the backspace character along with the character behind it (if exist)
-        result = re.sub(PATTERN, '', result)
+        result = re.sub(REMOVE, '', result)
 
     if error:
         # remove licenses information and matlab program stack information

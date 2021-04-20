@@ -106,8 +106,8 @@ class Parser:
         node = ASTNode(n_type=ASTNodeType.EXP_STMT, children=[expression])
 
         if self.get_token().get_type() != TokenType.EO_STMT:
-            # todo: throw invalid statement exception
-            return None
+            token = self.get_token()
+            raise InvalidExpressionError(token.row, token.col)
         node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
 
         return node
@@ -120,8 +120,8 @@ class Parser:
         node.add_child(self.parse_identifier_list())
 
         if self.get_token().get_type() != TokenType.EO_STMT:
-            # todo: throw invalid statement exception
-            return None
+            token = self.get_token()
+            raise InvalidExpressionError(token.row, token.col)
         node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
 
         return node
@@ -156,8 +156,8 @@ class Parser:
         self.tokens.pop(0)  # remove 'end'
 
         if self.get_token().get_type() != TokenType.EO_STMT:
-            # todo: throw invalid statement exception
-            return None
+            token = self.get_token()
+            raise InvalidExpressionError(token.row, token.col)
         node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
 
         return node
@@ -194,8 +194,8 @@ class Parser:
         self.tokens.pop(0)  # remove 'end'
 
         if self.get_token().get_type() != TokenType.EO_STMT:
-            # todo: throw invalid statement exception
-            return None
+            token = self.get_token()
+            raise InvalidExpressionError(token.row, token.col)
         node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
 
         return node
