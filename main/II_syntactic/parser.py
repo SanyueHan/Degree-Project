@@ -1,6 +1,7 @@
 from main.I_lexical.token_types import TokenType
 from main.II_syntactic.node import ASTNode
 from main.II_syntactic.node_types import ASTNodeType
+from main.exceptions.syntactic_exceptions import *
 
 
 MUL_OPERATOR_MAP = {
@@ -82,7 +83,7 @@ class Parser:
         node = ASTNode(n_type=ASTNodeType.STMT_LIST)
         while str(self.get_token()) not in terminators:
             if self.get_token() is None:
-                # todo: raise invalid code block error
+                # indicates a invalid code block error, but raise outside the block
                 return None
             if self.tokens[0].get_type() == TokenType.EO_STMT:
                 self.tokens.pop(0)
@@ -152,18 +153,28 @@ class Parser:
             return None
         node = ASTNode(n_type=ASTNodeType.SEL_STMT)
 
-        node.add_child(self.parse_selection_clause(self.tokens.pop(0).get_text()))
+        start_token = self.tokens.pop(0)
 
+        # firstly a if
+        clause = self.parse_selection_clause(start_token.get_text())
+        if clause is None:
+            raise IncompleteStatementError(start_token.row, start_token.col)
+        node.add_child(clause)
+
+        # then unlimited elseif
         while self.get_token().get_text() == 'elseif':
-            elseif_clause = self.parse_selection_clause(self.tokens.pop(0).get_text())
-            node.add_child(elseif_clause)
+            clause = self.parse_selection_clause(self.tokens.pop(0).get_text())
+            if clause is None:
+                raise IncompleteStatementError(start_token.row, start_token.col)
+            node.add_child(clause)
 
+        # finally sometimes a else
         if self.get_token().get_text() == 'else':
-            node.add_child(self.parse_selection_clause(self.tokens.pop(0).get_text()))
+            clause = self.parse_selection_clause(self.tokens.pop(0).get_text())
+            if clause is None:
+                raise IncompleteStatementError(start_token.row, start_token.col)
+            node.add_child(clause)
 
-        if self.get_token().get_text() != 'end':
-            # todo: throw invalid statement exception
-            return None
         self.tokens.pop(0)  # remove 'end'
 
         if self.get_token().get_type() != TokenType.EO_STMT:
@@ -183,21 +194,25 @@ class Parser:
                 return None
             node.add_child(expression)
 
-        node.add_child(self.parse_statement_list(terminators=SEL_TERMINATOR_MAP[clause]))
+        statement_list = self.parse_statement_list(terminators=SEL_TERMINATOR_MAP[clause])
+        if statement_list is None:
+            # exception raised outside
+            return None
+        node.add_child(statement_list)
 
         return node
 
     def parse_iteration_statement(self):
         if self.get_token(0).get_text() not in ('while', 'for'):
             return None
-
         node = ASTNode(n_type=ASTNodeType.ITR_STMT)
+        start_token = self.tokens.pop(0)
 
-        node.add_child(self.parse_iteration_clause(self.tokens.pop(0).get_text()))
+        clause = self.parse_iteration_clause(start_token.get_text())
+        if clause is None:
+            raise IncompleteStatementError(start_token.row, start_token.col)
+        node.add_child()
 
-        if self.get_token().get_text() != 'end':
-            # todo: throw invalid statement exception
-            return None
         self.tokens.pop(0)  # remove 'end'
 
         if self.get_token().get_type() != TokenType.EO_STMT:
@@ -216,7 +231,11 @@ class Parser:
             return None
         node.add_child(expression)
 
-        node.add_child(self.parse_statement_list(terminators=('end', )))
+        statement_list = self.parse_statement_list(terminators=('end', ))
+        if statement_list is None:
+            # exception raised outside
+            return None
+        node.add_child(statement_list)
 
         return node
 

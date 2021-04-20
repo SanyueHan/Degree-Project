@@ -45,7 +45,15 @@ def matlab_execute(path, error=False):
     return "\n".join(result.split("\n")[10:])
 
 
-def test_method_builder(actual, target):
+def test_method_builder(target, actual):
     def method(self):
-        self.assertEqual(actual, target)
+        self.assertEqual(target, actual)
     return method
+
+
+def package_test_class(class_name, directory, error=False):
+    for test_case in os.listdir(directory):
+        matlab_result = matlab_execute(directory + test_case, error=error)
+        python_result = python_execute(directory + test_case)
+        test_method = test_method_builder(matlab_result, python_result)
+        setattr(class_name, test_case, test_method)

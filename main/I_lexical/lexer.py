@@ -4,12 +4,11 @@ from main.exceptions.lexical_exception import *
 
 
 def lexer(program):
-    row = 0
+    row = 1
     result_token_list = []
     lines = [line + '\n' for line in program.split('\n')]
     for line in lines:
-        row += 1
-        col = 0
+        col = 1
         text = ''
         while line:
             for TYPE in TokenType:
@@ -20,7 +19,7 @@ def lexer(program):
                     # otherwise it would be considered as a normal transpose character at the lexical analysis stage.
                     if TYPE == TokenType.TRA:
                         if TokenType.WHITESPACE.value.sub('', text) == '':
-                            raise CharacterVectorTerminationError(row, col + 1)
+                            raise CharacterVectorTerminationError(row, col)
 
                     text = match.group()
                     line = line[len(text):]
@@ -30,10 +29,11 @@ def lexer(program):
                     break
             else:
                 if line[0] in "#$`":
-                    raise InvalidCharacterError(row, col + 1)
+                    raise InvalidCharacterError(row, col)
                 elif line[0] == '\"':
-                    raise StringTerminationError(row, col + 1)
+                    raise StringTerminationError(row, col)
                 else:
-                    raise InvalidCharacterError(row, col + 1)
+                    raise InvalidCharacterError(row, col)
+        row += 1
 
     return result_token_list
