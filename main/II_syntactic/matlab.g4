@@ -333,7 +333,7 @@ NCTRANSPOSE // finished
    ;
 
 
-STRING_LITERAL
+STRING_LITERAL // finished
    : '\'' ( ~ '\'' | '\'\'' ) * '\''
    ;
 

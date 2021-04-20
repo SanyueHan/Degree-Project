@@ -3,50 +3,13 @@
 ## Description
 This is a Python implemented interpreter, 
 supporting a subset of the functionalities of MATLAB:
-1. Operators supported including
-- binary operators: (left-associative)
-    - arithmetic operators: 
-        - '+'
-        - '-'
-        - '*'
-        - '/'
-        - '\'
-        - '.*'
-        - './'
-        - '.\'
-    - relational operators: 
-        - '>='
-        - '>'
-        - '<='
-        - '<'
-        - '=='
-        - '~='
-    - logical operators:
-        - '&' (LOGICAL AND)
-        - '|' (LOGICAL OR)
-- unary operators:
-    - logical operator: (right-associative)
-        - '~' (LOGICAL NOT)
-    - sign operators: (right-associative)
-        - '+' (POSITIVE)
-        - '-' (NEGATIVE)
-    - transpose operators:
-        - ''' (TRANSPOSE)
-        - '.'' (NC TRANSPOSE)
-- multi-element operators:
-    - ':' (ARRAY CONSTRUCTOR)
-    - '[]' (MATRIX CONSTRUCTOR)
-    
-2. Statements supported including:
 - assignment statement
 - expression statement
 - selection statement
-    - if
-    - elseif
-    - else
 - iteration statement
-    - while
-    - for
+
+To get a more detailed explanation of all the features realized,
+please read the [documentation](Doc.md). 
 
 ## Run
 #### Environment
@@ -82,7 +45,7 @@ optional arguments:
   -a A, --a A  print abstract syntax tree
   -v V, --v V  print variables
 ```
-#### REPL Execute (Interactive Execute)
+#### Interactive Execute (REPL Execute)
 If the filename after MATLAB.py is not specified, the interpreter will read commands from standard input, 
 just like most interpreted programming language. 
 ```

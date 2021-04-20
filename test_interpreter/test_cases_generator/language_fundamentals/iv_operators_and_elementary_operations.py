@@ -45,8 +45,6 @@ if __name__ == "__main__":
         file_1.write("\n% Array Sign\n")
         file_1.write(create_prefix_operator_cases('-'))
         file_1.write(create_prefix_operator_cases('+'))
-        # todo: modulo division and rounding
-        # todo: custom binary functions
     with open(DIRECTORY+"test_2_relational_operations.m", 'w') as file_2:
         file_2.write(create_binary_operator_cases('=='))
         file_2.write(create_binary_operator_cases('>='))
@@ -61,8 +59,6 @@ if __name__ == "__main__":
         file_3.write(create_prefix_operator_cases('~'))
         file_3.write(create_binary_operator_cases('|'))
     with open(DIRECTORY+"test_4_set_operations.m", 'w') as file_4:
-        # todo: set_operations
         pass
     with open(DIRECTORY+"test_5_bitwise_operations.m", 'w') as file_5:
-        # todo: bitwise operations
         pass
