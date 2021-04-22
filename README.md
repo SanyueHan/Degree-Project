@@ -12,8 +12,8 @@ supporting a subset of the functionalities of the MATLAB language:
 Like most interpreted language, two types of running methods namely interactive execute and script execute are supported.  
 To get the full explanation of all the features realized,
 please look at the [user's manual](user_manual.md). 
-To understand the technical details of this project, 
-please read the [documentation](technical_doc.md).  
+To understand the implementation details of this project, 
+please read the [technical documentation](technical_doc.md).  
 
 ## Run
 #### Environment
