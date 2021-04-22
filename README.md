@@ -2,15 +2,18 @@
 
 ## Description
 This is a Python implemented MATLAB code interpreter, 
-supporting a subset of the functionalities of MATLAB:
-- assignment statement
-- expression statement
-- selection statement
-- iteration statement 
+supporting a subset of the functionalities of the MATLAB language:
+
+- Operators and Elementary Operations
+- Loops and Conditional Statements
+- Matrices and Arrays
+- Data Types
 
 Like most interpreted language, two types of running methods namely interactive execute and script execute are supported.  
-To get a more detailed explanation of all the features realized,
-please read the [documentation](documentation.md). 
+To get the full explanation of all the features realized,
+please look at the [user's manual](user_manual.md). 
+To understand the technical details of this project, 
+please read the [documentation](technical_doc.md).  
 
 ## Run
 #### Environment
