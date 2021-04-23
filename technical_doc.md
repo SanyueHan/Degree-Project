@@ -8,13 +8,13 @@ that is as similar as possible as the official software, specially MATLAB_R2021a
 in terms of text outputs, from a normal user perspective. 
 
 There are two main approaches used when developing this project. 
-The first one is to read the explanation in the official [documentation](https://ww2.mathworks.cn/help/matlab/), 
+The first one is to read the explanation in the [official documentation](https://ww2.mathworks.cn/help/matlab/), 
 and the second one is to run some experimental code on the official MATLAB and then watch the results. 
 In other words, like reverse engineering, this project implements similar features by inferring the internal realization of the official software, 
-or finding some equivalent ways, within a limit range defined in the following sections. 
+or finding some equivalent ways, within a limit range defined in the [user's manual](user_manual.md). 
 If the input code exceeds the designed working range of this project, the behavior of the program is undefined, 
 which means that any result could be possible: the interpreter may react correctly, or produce a wrong result, or stuck in infinite loop, or even crash. 
-Therefore, to test the software, it is necessary to know exactly the designed working range explained in the following parts. 
+Therefore, to test the software, it is necessary to know exactly the designed working range illustrated in the manual. 
 
 ## 1 Project Structure Overview
 ### 1.1 Interpreter
