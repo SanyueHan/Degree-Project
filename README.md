@@ -269,3 +269,55 @@ a =
 
 
 ```
+
+generate assemble language
+
+```shell
+E:\Desktop\Degree-Project>python MATLAB.py test_interpreter/test_cases/test_zy.m
+
+a =
+
+     2
+
+
+b =
+
+     4
+
+        .section        __TEXT,__text,regular,pure_instructions
+        .section        __TEXT,__text,regular,pure_instructions
+
+# main
+        .glbl _main
+_main:
+
+        pushq   %rbp
+        movq    %rsp, %rbp
+
+        # set stack top
+        subq    $36.0, %rsp
+
+        # process body
+        movl    $1, -8(%rbp)
+        addl    $1, -8(%rbp)
+        movl    -8(%rbp), -4(%rbp)      movl    , -16(%rbp)
+        addl    $1, -16(%rbp)
+        movl    -16(%rbp), -20(%rbp)
+        addl    $1, -20(%rbp)
+        movl    -20(%rbp), -12(%rbp)
+        # recover stack top
+        addq    $36.0, %rsp
+
+        #return value
+        xorl    %eax, %eax
+
+        # end
+        popq    %rbp
+        retq
+
+# string literals
+        .section        __TEXT,__cstring,cstring_literals
+
+
+```
+
