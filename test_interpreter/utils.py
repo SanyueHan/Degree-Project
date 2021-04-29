@@ -14,16 +14,16 @@ def read_from(path):
 
 def python_execute(path):
     # working directory is Degree-Project/test_interpreter, so relative path is ../MATLAB.py
-    command = f"python3 ../MATLAB.py {path} > {path[-3]}_python.txt"
+    command = f"python3 ../MATLAB.py {path} > {path[:-2]}_python.txt"
     print(command)
     os.system(command)
-    result = read_from(f"{path[-3]}_python.txt")
+    result = read_from(f"{path[:-2]}_python.txt")
     os.system(f"rm {path[-3]}_python.txt")
     return result
 
 
 def matlab_execute(path, error=False):
-    command = f"matlab -nodisplay -nosplash -nodesktop -r \"run('{path}'); exit;\" -logfile {path[-3]}_matlab.txt"
+    command = f"matlab -nodisplay -nosplash -nodesktop -r \"run('{path}'); exit;\" -logfile {path[:-2]}_matlab.txt"
     if error:
         # adding a & at the end of the command to cancel blocking the unittest process
         command += " &"
@@ -32,7 +32,7 @@ def matlab_execute(path, error=False):
     if error:
         # wait for the matlab software process finish its running and error reporting
         time.sleep(10)
-    result = read_from(f"{path[-3]}_matlab.txt")
+    result = read_from(f"{path[:-2]}_matlab.txt")
     os.system(f"rm {path[-3]}_matlab.txt")
 
     if error:
