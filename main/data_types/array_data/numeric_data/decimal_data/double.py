@@ -9,7 +9,7 @@ class Double(Decimal):
     parent = String
 
     def __str__(self):
-        if self.Size == (0, 0):
+        if self.size == (0, 0):
             return "     []"
         if self.n == 0:
             return "  1x0 empty double row vector"

@@ -9,26 +9,34 @@ class Array(Data):
                 return
         else:
             size = (1, len(data))
-        self.Data = [self.convert(element) for element in data]
-        self.Size = size
+        self.data = [self.convert(element) for element in data]
+        self.size = size
 
     def __bool__(self):
-        return all(self.Data)
+        return all(self.data)
 
     def __iter__(self):
-        return iter(self.Data)
+        return iter(self.data)
 
     def __getitem__(self, i):
-        return self.Data[i]
+        return self.data[i]
 
     def __len__(self):
-        return len(self.Data)
+        return len(self.data)
 
     def rows(self):
         return [[self[i * self.n + j] for j in range(self.n)] for i in range(self.m)]
 
     def cols(self):
         return [[self[i * self.n + j] for i in range(self.m)] for j in range(self.n)]
+
+    def expand_row(self, num):
+        self.data = self.data * num
+        self.size = (self.size[0] * num, self.size[1])
+
+    def expand_col(self, num):
+        self.data = sum(([i for _ in range(num)] for i in self), [])
+        self.size = (self.size[0], self.size[1] * num)
 
     @property
     def refactored(self):
@@ -57,7 +65,7 @@ class Array(Data):
             if index == ':':
                 return self.__class__(self.refactored, size=(len(self), 1))
             data = self.refactored
-            return self.__class__([data[to_int(element)-1] for element in index], size=index.Size)
+            return self.__class__([data[to_int(element)-1] for element in index], size=index.size)
         elif len(index_list) == 2:
             index_m = index_list[0]
             if index_m == ":":
@@ -78,11 +86,11 @@ class Array(Data):
 
     @property
     def m(self):
-        return self.Size[0]
+        return self.size[0]
 
     @property
     def n(self):
-        return self.Size[1]
+        return self.size[1]
 
 
 def to_int(number):

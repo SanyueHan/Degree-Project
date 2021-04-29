@@ -14,5 +14,5 @@ class Char(Array):
         else:
             prefix = f"  {self.m}x{self.n} char array\n\n"
 
-        return prefix + '\n'.join('    ' + '\'' + ''.join(c for c in row) + '\'' for row in self.rows())
+        return prefix + '\n'.join('    ' + '\'' + ''.join(chr(i) for i in row) + '\'' for row in self.rows())
 

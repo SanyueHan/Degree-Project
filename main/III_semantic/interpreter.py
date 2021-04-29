@@ -1,35 +1,7 @@
 from main.II_syntactic.node_types import ASTNodeType
-from main.data_types.array_data.char import Char
-from main.data_types.array_data.string import String
-from main.data_types.array_data.logical import Logical
-from main.data_types.array_data.numeric_data.decimal_data.double import Double
 from main.III_semantic.utils import concatenate
-
-
-BSO_MAP = {
-    '|': (Logical, lambda x, y: x or y),
-    '||': (Logical, lambda x, y: x or y),
-    '&': (Logical, lambda x, y: x and y),
-    '&&': (Logical, lambda x, y: x and y),
-    '==': (Logical, lambda x, y: x == y),
-    '~=': (Logical, lambda x, y: x != y),
-    '>=': (Logical, lambda x, y: x >= y),
-    '>':  (Logical, lambda x, y: x > y),
-    '<=': (Logical, lambda x, y: x <= y),
-    '<':  (Logical, lambda x, y: x < y),
-    '+': (Double, lambda x, y: x + y),
-    '-': (Double, lambda x, y: x - y),
-    '*': (Double, lambda x, y: x * y),
-    '.*': (Double, lambda x, y: x * y),
-    './': (Double, lambda x, y: x / y),
-    '.\\': (Double, lambda x, y: y / x),
-}
-
-USO_MAP = {
-    '+': (Double, lambda x: x),
-    '-': (Double, lambda x: -x),
-    '~': (Logical, lambda x: not x)
-}
+from main.III_semantic.literals import *
+from main.III_semantic.operations import *
 
 
 class Interpreter:
@@ -44,22 +16,28 @@ class Interpreter:
         }
         self.evaluate = {
             ASTNodeType.CLN_EXP: self.evaluate_colon_expression,
-            ASTNodeType.BSO_EXP: self.evaluate_binary_scalar_operator_expression,
-            ASTNodeType.MML_EXP: self.evaluate_matrix_multiplication_expression,
-            ASTNodeType.MRD_EXP: self.evaluate_matrix_right_division_expression,
-            ASTNodeType.MLD_EXP: self.evaluate_matrix_left_division_expression,
-            ASTNodeType.PRE_EXP: self.evaluate_prefix_expression,
-            ASTNodeType.PST_EXP: self.evaluate_postfix_expression,
-            ASTNodeType.PRI_EXP: self.evaluate_primary_expression,
-            ASTNodeType.ARR_EXP: self.evaluate_array_expression,
-            ASTNodeType.IDENTIFIER: self.evaluate_identifier_expression,
-            ASTNodeType.NUMBER_LIT: self.evaluate_number_literal,
-            ASTNodeType.STRING_LIT: self.evaluate_string_literal,
-            ASTNodeType.VECTOR_LIT: self.evaluate_vector_literal,
-            ASTNodeType.ARRAY_LIST: self.evaluate_array_list,
-            ASTNodeType.INDEX_LIST: self.evaluate_index_list
+            ASTNodeType.UOP_EXP: self.evaluate_unary_operation_expression,
+            ASTNodeType.BOP_EXP: self.evaluate_binary_operation_expression,
+            ASTNodeType.NUMBER_LIT_EXP: evaluate_number_literal_expression,
+            ASTNodeType.STRING_LIT_EXP: evaluate_string_literal_expression,
+            ASTNodeType.VECTOR_LIT_EXP: evaluate_vector_literal_expression,
+            ASTNodeType.IDENTIFIER_EXP: self.evaluate_identifier_expression,
+            ASTNodeType.ARRAY_LIST_EXP: self.evaluate_array_list_expression,
+            ASTNodeType.INDEX_LIST_EXP: self.evaluate_index_list_expression,
+            ASTNodeType.INDEXING_EXP: self.evaluate_indexing_expression,
         }
         self.variables = {}
+
+    def get_variables(self):
+        return self.variables
+
+    def del_variables(self, var_list=None):
+        if var_list:
+            for var in var_list:
+                # todo: check exist and raise error
+                del self.variables[var]
+        else:
+            self.variables = {}
 
     def interpret_statement_list(self, root):
         for child in root.get_children():
@@ -81,7 +59,7 @@ class Interpreter:
             val = self.evaluate_expression(expression.get_child(1))
             self.variables[var] = val
         else:  # normal expression
-            if expression.get_type() == ASTNodeType.IDENTIFIER:
+            if expression.get_type() == ASTNodeType.IDENTIFIER_EXP:
                 var = expression.get_text()
                 val = self.variables[var]
             else:
@@ -132,6 +110,35 @@ class Interpreter:
     def evaluate_expression(self, node):
         return self.evaluate[node.get_type()](node)
 
+    def evaluate_unary_operation_expression(self, node):
+        operator = node.get_text()
+        operand = self.evaluate_expression(node.get_child(0))
+        if operator in ('.\'', '\''):
+            return evaluate_transpose_operation(operand)
+        if operator in ('+', '-'):
+            return evaluate_array_sign_operation(operand, operator)
+        if operator == '~':
+            return evaluate_logic_not_operator(operand)
+
+    def evaluate_binary_operation_expression(self, node):
+        operator = node.get_text()
+
+        a = self.evaluate_expression(node.get_child(0))
+        b = self.evaluate_expression(node.get_child(1))
+
+        if operator in MATRIX_OPERATORS:
+            return MATRIX_OPERATORS[operator](a, b)
+
+        # binary scalar operators left
+        compat(a, b)
+
+        if operator in ARITHMETIC_OPERATORS:
+            return ARITHMETIC_OPERATORS[operator](a, b)
+        if operator in RELATIONAL_OPERATORS:
+            return evaluate_relational_operations(a, b, operator)
+        if operator in LOGICAL_OPERATORS:
+            return evaluate_logical_operations(a, b, operator)
+
     def evaluate_colon_expression(self, node):
         if node.num_children() == 0:
             return ":"
@@ -154,54 +161,6 @@ class Interpreter:
             start += step
         return Double(values)
 
-    def evaluate_binary_scalar_operator_expression(self, node):
-        data0 = self.evaluate_expression(node.get_child(0))
-        data1 = self.evaluate_expression(node.get_child(1))
-        cls, fun = BSO_MAP[node.get_text()]
-        if data0.Size == data1.Size:
-            return cls([fun(*tup) for tup in zip(data0, data1)], size=data0.Size)
-        if data0.Size == (1, 1):
-            number = data0[0]
-            return cls([fun(i, number) for i in data1], size=data1.Size)
-        if data1.Size == (1, 1):
-            number = data1[0]
-            return cls([fun(i, number) for i in data0], size=data0.Size)
-        # todo: Arrays have incompatible sizes for this operation.
-
-    def evaluate_matrix_multiplication_expression(self, node):
-        data0 = self.evaluate_expression(node.get_child(0))
-        data1 = self.evaluate_expression(node.get_child(1))
-        if data0.Size == (1, 1) or data1.Size == (1, 1):
-            return self.evaluate_binary_scalar_operator_expression(node)
-        # todo: matrix multiplication
-
-    def evaluate_matrix_right_division_expression(self, node):
-        data0 = self.evaluate_expression(node.get_child(0))
-        data1 = self.evaluate_expression(node.get_child(1))
-        if data0.Size == (1, 1) and data1.Size == (1, 1):
-            return Double([data0[0] / data1[0]])
-        # todo: matrix multiplication
-
-    def evaluate_matrix_left_division_expression(self, node):
-        data0 = self.evaluate_expression(node.get_child(0))
-        data1 = self.evaluate_expression(node.get_child(1))
-        if data0.Size == (1, 1) and data1.Size == (1, 1):
-            return Double([data1[0] / data0[0]])
-        # todo: matrix multiplication
-
-    def evaluate_prefix_expression(self, node):
-        data = self.evaluate_expression(node.get_child())
-        cls, fun = USO_MAP[node.get_text()]
-        return cls([fun(v) for v in data], size=data.Size)
-
-    def evaluate_postfix_expression(self, node):
-        data = self.evaluate_expression(node.get_child())
-        return data.get_class()(data.refactored, size=tuple(reversed(data.Size)))
-
-    def evaluate_primary_expression(self, node):
-        # will not be used since in AST it is optimised to skip single-child node
-        pass
-
     def evaluate_identifier_expression(self, node):
         var_name = node.get_text()
         if var_name in self.variables:
@@ -210,22 +169,7 @@ class Interpreter:
             # todo: raise unknown variable exception
             pass
 
-    @staticmethod
-    def evaluate_number_literal(node):
-        """
-        By default, MATLAB® stores all numeric variables as double-precision floating-point values.
-        """
-        return Double([node.get_text()])
-
-    @staticmethod
-    def evaluate_string_literal(node):
-        return String([node.get_text()])
-
-    @staticmethod
-    def evaluate_vector_literal(node):
-        return Char([c for c in node.get_text()])
-
-    def evaluate_array_list(self, node):
+    def evaluate_array_list_expression(self, node):
         array_list = []
         array = []
         for child in node.get_children():
@@ -236,7 +180,7 @@ class Interpreter:
                         array = []
             else:
                 data = self.evaluate_expression(child)
-                if data.Data:
+                if data.data:
                     array.append(data)
         if array:
             array_list.append(array)
@@ -246,24 +190,13 @@ class Interpreter:
         else:
             return Double([], size=(0, 0))
 
-    def evaluate_array_expression(self, node):
+    def evaluate_index_list_expression(self, node):
+        return [self.evaluate_expression(child) for child in node.get_children()]
+
+    def evaluate_indexing_expression(self, node):
         name = node.get_child(0).get_text()
         if name not in self.variables:
             # todo:
             return None
         data = self.variables[name]
-        return data.visit(self.evaluate_index_list(node.get_child(1)))
-
-    def evaluate_index_list(self, node):
-        return [self.evaluate_expression(child) for child in node.get_children()]
-
-    def get_variables(self):
-        return self.variables
-
-    def del_variables(self, var_list=None):
-        if var_list:
-            for var in var_list:
-                # todo: check exist and raise error
-                del self.variables[var]
-        else:
-            self.variables = {}
+        return data.visit(self.evaluate_index_list_expression(node.get_child(1)))

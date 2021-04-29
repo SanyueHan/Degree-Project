@@ -55,9 +55,7 @@ if __name__ == "__main__":
     with open(DIRECTORY+"test_3_logical_operations.m", 'w') as file_3:
         file_3.write(create_binary_operator_cases('&&'))
         file_3.write(create_binary_operator_cases('||'))
-        file_3.write(create_binary_operator_cases('&'))
         file_3.write(create_prefix_operator_cases('~'))
-        file_3.write(create_binary_operator_cases('|'))
     with open(DIRECTORY+"test_4_set_operations.m", 'w') as file_4:
         pass
     with open(DIRECTORY+"test_5_bitwise_operations.m", 'w') as file_5:

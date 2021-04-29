@@ -46,3 +46,29 @@ def find_nearest_mutual_ancestor(class_a, class_b):
                 return class_b
             else:
                 b_ancestors.add(class_b)
+
+
+def compat(a, b):
+    """
+    https://ww2.mathworks.cn/help/matlab/matlab_prog/compatible-array-sizes-for-basic-operations.html
+    """
+    if a.size == b.size:
+        return
+
+    if a.size[0] != b.size[0]:
+        if a.size[0] == 1:
+            a.expand_row(b.size[0])
+        elif b.size[0] == 1:
+            b.expand_row(a.size[0])
+        else:
+            # error
+            pass
+    if a.size[1] != b.size[1]:
+        if a.size[1] == 1:
+            a.expand_col(b.size[1])
+        elif b.size[1] == 1:
+            b.expand_col(a.size[1])
+        else:
+            # error
+            pass
+    return
