@@ -18,7 +18,7 @@ def python_execute(path):
     print(command)
     os.system(command)
     result = read_from(f"{path[:-2]}_python.txt")
-    os.system(f"rm {path[-3]}_python.txt")
+    os.system(f"rm {path[:-2]}_python.txt")
     return result
 
 
@@ -33,7 +33,7 @@ def matlab_execute(path, error=False):
         # wait for the matlab software process finish its running and error reporting
         time.sleep(10)
     result = read_from(f"{path[:-2]}_matlab.txt")
-    os.system(f"rm {path[-3]}_matlab.txt")
+    os.system(f"rm {path[:-2]}_matlab.txt")
 
     if error:
         # cancel the backspace character along with the character behind it (if exist)
@@ -53,7 +53,8 @@ def test_method_builder(target, actual):
 
 def package_test_class(class_name, directory, error=False):
     for test_case in os.listdir(directory):
-        matlab_result = matlab_execute(directory + test_case, error=error)
-        python_result = python_execute(directory + test_case)
-        test_method = test_method_builder(matlab_result, python_result)
-        setattr(class_name, test_case, test_method)
+        if test_case[-1] == 'm':
+            matlab_result = matlab_execute(directory + test_case, error=error)
+            python_result = python_execute(directory + test_case)
+            test_method = test_method_builder(matlab_result, python_result)
+            setattr(class_name, test_case, test_method)
