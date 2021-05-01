@@ -30,8 +30,8 @@ class TestLoopsAndConditionalStatements(unittest.TestCase):
 
 
 package_test_class(TestMatricesAndArrays, II_MATRICES_AND_ARRAYS)
-package_test_class(TestOperatorAndElementaryOperations, IV_OPERATORS_AND_ELEMENTARY_OPERATIONS)
-package_test_class(TestLoopsAndConditionalStatements, V_LOOPS_AND_CONDITIONAL_STATEMENTS)
+# package_test_class(TestOperatorAndElementaryOperations, IV_OPERATORS_AND_ELEMENTARY_OPERATIONS)
+# package_test_class(TestLoopsAndConditionalStatements, V_LOOPS_AND_CONDITIONAL_STATEMENTS)
 
 
 if __name__ == '__main__':

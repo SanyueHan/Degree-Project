@@ -55,6 +55,7 @@ class Parser:
         self.primary_cases = {
             TokenType.IDENTIFIER: self.parse_identifier_expression,
             TokenType.NUMBER_LIT: self.parse_number_literal,
+            TokenType.SCIENTIFIC_E: self.parse_scientific_literal,
             TokenType.STRING_LIT: self.parse_string_literal,
             TokenType.VECTOR_LIT: self.parse_vector_literal,
             TokenType.L_PAREN: self.parse_paren_expression,
@@ -387,6 +388,9 @@ class Parser:
 
     def parse_number_literal(self):
         return ASTNode(n_type=ASTNodeType.NUMBER_LIT_EXP, n_text=self.tokens.pop(0).get_text())
+
+    def parse_scientific_literal(self):  # Scientific notation
+        return ASTNode(n_type=ASTNodeType.SCIENTIFIC_LIT, n_text=self.tokens.pop(0).get_text())
 
     def parse_string_literal(self):
         return ASTNode(n_type=ASTNodeType.STRING_LIT_EXP, n_text=self.tokens.pop(0).get_text().strip('\"'))

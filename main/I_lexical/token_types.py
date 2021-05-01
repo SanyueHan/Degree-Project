@@ -4,6 +4,7 @@ import re
 
 class TokenType(Enum):
     KEYWORD = re.compile("break|clear|else|elseif|end|for|function|global|if|return|while")
+    SCIENTIFIC_E = re.compile(r"[0-9]\.?[0-9]*e[+-]?[0-9]+")  # 放在前面，先判断科学技术法
     IDENTIFIER = re.compile(r"[a-zA-Z]+[a-zA-Z0-9_]*")
     NUMBER_LIT = re.compile(r"[0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+|[0-9]+")
     STRING_LIT = re.compile(r"\"[^\"]*\"")
@@ -58,3 +59,4 @@ if __name__ == "__main__":
     print(re.findall(TokenType.R_PAREN.value, r"\ \\ ) ("))
     print(re.findall(TokenType.L_BRACKET.value, r"\ \ ] [ "))
     print(re.findall(TokenType.R_BRACKET.value, r' \ \ ] ['))
+    print(re.findall(TokenType.SCIENTIFIC_E.value, "1.234e003  1.23e"))  #1.234e

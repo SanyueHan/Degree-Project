@@ -37,3 +37,6 @@ def script_execute(path, print_tokens=False, print_ast=False, print_var=False):
         print("File:")
         print(os.getcwd() + '/' + path)
         print(e, end='')
+
+if __name__ == "__main__":
+    script_execute("../test_interpreter/test_cases/language_fundamentals/ii_matrices_and_arrays/test_float_question.m")
