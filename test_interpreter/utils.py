@@ -14,7 +14,7 @@ def read_from(path):
 
 def python_execute(path):
     # working directory is Degree-Project/test_interpreter, so relative path is ../miniMATLAB.py
-    command = f"python3 ../MATLAB.py {path} > {path[:-2]}_python.txt"
+    command = f"python3 ../miniMATLAB.py {path} > {path[:-2]}_python.txt"
     print(command)
     os.system(command)
     result = read_from(f"{path[:-2]}_python.txt")
@@ -23,7 +23,7 @@ def python_execute(path):
 
 
 def matlab_execute(path, error=False):
-    command = f"matlab -nodisplay -nosplash -nodesktop -r \"run('{path}'); exit;\" -logfile {path[:-2]}_MiniMATLAB.txt"
+    command = f"matlab -nodisplay -nosplash -nodesktop -r \"run('{path}'); exit;\" -logfile {path[:-2]}_matlab.txt"
     if error:
         # adding a & at the end of the command to cancel blocking the unittest process
         command += " &"

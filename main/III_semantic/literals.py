@@ -10,7 +10,6 @@ def evaluate_scientific_literal_expression(node):
     return Double([node.get_text()])
 
 
-
 def evaluate_number_literal_expression(node):
     """
     By default, MATLAB® stores all numeric variables as double-precision floating-point values.
