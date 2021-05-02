@@ -18,7 +18,7 @@ Therefore, to test the software, it is necessary to know exactly the designed wo
 
 ## 1 Project Structure Overview
 ### 1.1 Interpreter
-#### 1.1.0 [Program Entrance](MATLAB.py)
+#### 1.1.0 [Program Entrance](MiniMATLAB.py)
 #### 1.1.1 [Lexical Analysis](main/I_lexical)
 #### 1.1.2 [Syntactic Analysis](main/II_syntactic)
 #### 1.1.3 [Semantic Analysis](main/III_semantic)

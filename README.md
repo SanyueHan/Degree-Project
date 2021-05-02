@@ -27,18 +27,18 @@ please read the [technical documentation](technical_doc.md).
 #### Command
 ###### Mac OS
 ```shell
-python3 MATLAB.py [-h] [-t T] [-a A] [-v V] [file]
+python3 MiniMATLAB.py [-h] [-t T] [-a A] [-v V] [file]
 ```
 ###### Windows
 ```shell
-python MATLAB.py [-h] [-t T] [-a A] [-v V] [file]
+python MiniMATLAB.py [-h] [-t T] [-a A] [-v V] [file]
 ```
 
 ## Examples
 #### Show Help Information
 ```shell
- % python3 MATLAB.py -h
-usage: MATLAB.py [-h] [-t T] [-a A] [-v V] [file]
+ % python3 MiniMATLAB.py -h
+usage: MiniMATLAB.py [-h] [-t T] [-a A] [-v V] [file]
 
 positional arguments:
   file         program read from script file
@@ -50,10 +50,10 @@ optional arguments:
   -v V, --v V  print variables
 ```
 #### Interactive Execute (REPL Execute)
-If the filename after MATLAB.py is not specified, the interpreter will read commands from standard input, 
+If the filename after MiniMATLAB.py is not specified, the interpreter will read commands from standard input, 
 just like most interpreted programming language. 
 ```
-% python3 MATLAB.py
+% python3 MiniMATLAB.py
 >> 1 & 0 | 1 == 2 < 5 + 5
 
 ans =
@@ -170,7 +170,7 @@ c =
 #### Script Execute
 In this example the tokens and abstract syntax tree are printed
 ```
-% python3 MATLAB.py test_interpreter/test_cases/example.m -a=True -t=True
+% python3 MiniMATLAB.py test_interpreter/test_cases/example.m -a=True -t=True
 row =   1        col =   0        type = IDENTIFIER        text = 'a'
 row =   1        col =   2        type = ASS               text = '='
 row =   1        col =   4        type = NUMBER_LIT        text = '0'
