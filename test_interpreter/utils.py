@@ -13,17 +13,19 @@ def read_from(path):
 
 
 def python_execute(path):
+    temp = path[:-2] + "_python.txt"
     # working directory is Degree-Project/test_interpreter, so relative path is ../miniMATLAB.py
-    command = f"python3 ../miniMATLAB.py {path} > {path[:-2]}_python.txt"
+    command = f"python3 ../miniMATLAB.py {path} > {temp}"
     print(command)
     os.system(command)
-    result = read_from(f"{path[:-2]}_python.txt")
-    os.system(f"rm {path[:-2]}_python.txt")
+    result = read_from(f"{temp}")
+    os.system(f"rm {temp}")
     return result
 
 
 def matlab_execute(path, error=False):
-    command = f"matlab -nodisplay -nosplash -nodesktop -r \"run('{path}'); exit;\" -logfile {path[:-2]}_matlab.txt"
+    temp = path[:-2] + "_matlab.txt"
+    command = f"matlab -nodisplay -nosplash -nodesktop -nojvm -r \"run('{path}'); exit;\" -logfile {temp}"
     if error:
         # adding a & at the end of the command to cancel blocking the unittest process
         command += " &"
@@ -32,8 +34,8 @@ def matlab_execute(path, error=False):
     if error:
         # wait for the matlab software process finish its running and error reporting
         time.sleep(10)
-    result = read_from(f"{path[:-2]}_matlab.txt")
-    os.system(f"rm {path[:-2]}_matlab.txt")
+    result = read_from(f"{temp}")
+    os.system(f"rm {temp}")
 
     if error:
         # cancel the backspace character along with the character behind it (if exist)
@@ -51,10 +53,10 @@ def test_method_builder(target, actual):
     return method
 
 
-def package_test_class(class_name, directory, error=False):
-    for test_case in os.listdir(directory):
-        if test_case[-1] == 'm':
-            matlab_result = matlab_execute(directory + test_case, error=error)
-            python_result = python_execute(directory + test_case)
+def package_test_class(class_name, error=False):
+    for filename in os.listdir(class_name.directory):
+        if filename[-1] == 'm':
+            matlab_result = matlab_execute(class_name.directory + filename, error=error)
+            python_result = python_execute(class_name.directory + filename)
             test_method = test_method_builder(matlab_result, python_result)
-            setattr(class_name, test_case, test_method)
+            setattr(class_name, filename, test_method)
