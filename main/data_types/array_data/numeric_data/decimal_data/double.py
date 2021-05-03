@@ -13,11 +13,11 @@ class Double(Decimal):
             return "     []"
         if self.n == 0:  # 1：0.1
             return "  1x0 empty double row vector"
-        if all((int(n) == n) for n in self):
-            max_len = max(self.excluding_sign_integer_length(n) for n in self)
+        if all(not self.has_decimal(n) for n in self):
+            max_len = max(self.integer_length_excluding_sign(n) for n in self)
             if max_len <= 3:
                 return self.pile(self.format_setter(width=6, precision=0))
-            elif max_len <= 8:
+            elif max_len <= 9:
                 return self.pile(self.format_setter(width=12, precision=0))
             else:
                 return self.pile(self.format_setter(width=13, sci=True))
@@ -27,19 +27,29 @@ class Double(Decimal):
             return self.pile(self.format_setter(width=13, sci=True))
         return self.sci_representation()
 
-    # todo: Finished!!!scientific notation for too big or too small
+    @staticmethod
+    def has_decimal(n):
+        if n == float('inf') or n == float('nan'):
+            return False
+        if int(n) == n:
+            return False
+        return True
+
     def need_scientific(self):
         count = 0
         for n in self:
-            if int(n) == n and self.excluding_sign_integer_length(n) < 9:
+            if int(n) == n and self.integer_length_excluding_sign(n) < 9:
                 continue
-            if int(n) == n and self.excluding_sign_integer_length(n) >= 9:
+            if int(n) == n and self.integer_length_excluding_sign(n) >= 9:
                 return True
             if abs(n) > 999.9999:
                 return True
             if abs(n) <= 0.001:
                 count += 1
         return count == self.__len__()
+
+    def need_scientific_2(self):
+        pass
 
     def sci_representation(self):
         _min = _max = self[0]
@@ -64,22 +74,35 @@ class Double(Decimal):
         return base
 
     @staticmethod
-    def excluding_sign_integer_length(number):
-        string = str(int(number)).lstrip('-')  # 删掉-
-        return len(string)
+    def integer_length_excluding_sign(number):
+        if number == float('inf') or number == float('nan'):
+            return 3
+        return len(str(int(number)).lstrip('-'))
 
     @staticmethod
     def format_setter(width=10, precision=4, sci=False):
         if sci:
             def fun(item):
+                if item == float('inf'):
+                    return " " * (width-3) + "Inf"
+                if item == float('nan'):
+                    return " " * (width-3) + "NaN"
                 return f"{item:>{width}.{precision}e}"
             return fun
         elif precision == 0:
             def fun(item):
+                if item == float('inf'):
+                    return " " * (width-3) + "Inf"
+                if item == float('nan'):
+                    return " " * (width-3) + "NaN"
                 return f"{int(item):>{width}d}"  # format
             return fun
         else:
             def fun(item):
+                if item == float('inf'):
+                    return " " * (width-3) + "Inf"
+                if item == float('nan'):
+                    return " " * (width-3) + "NaN"
                 return f"{item:>{width}.{precision}f}"
             return fun
 

@@ -343,7 +343,7 @@ IDENTIFIER // finished
    ;
 
 
-CONSTANT
+CONSTANT // finished
    : NUMBER (E SIGN? NUMBER)?
    ;
 

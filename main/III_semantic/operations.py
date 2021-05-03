@@ -94,8 +94,7 @@ def evaluate_array_right_division_operation(operand_0, operand_1):
             if b:
                 return a / b
             else:
-                # todo: Inf, NaN
-                return None
+                return float('inf') if a else float('nan')
         return Double([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 
@@ -108,9 +107,7 @@ def evaluate_array_left_division_operation(operand_0, operand_1):
             if a:
                 return b / a
             else:
-                # todo: Inf, NaN
-                return None
-
+                return float('inf') if b else float('nan')
         return Double([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 

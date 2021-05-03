@@ -18,7 +18,6 @@ class Interpreter:
             ASTNodeType.CLN_EXP: self.evaluate_colon_expression,
             ASTNodeType.UOP_EXP: self.evaluate_unary_operation_expression,
             ASTNodeType.BOP_EXP: self.evaluate_binary_operation_expression,
-            ASTNodeType.SCIENTIFIC_LIT: evaluate_scientific_literal_expression,
             ASTNodeType.NUMBER_LIT_EXP: evaluate_number_literal_expression,
             ASTNodeType.STRING_LIT_EXP: evaluate_string_literal_expression,
             ASTNodeType.VECTOR_LIT_EXP: evaluate_vector_literal_expression,

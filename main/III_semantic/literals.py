@@ -3,18 +3,16 @@ from main.data_types.array_data.string import String
 from main.data_types.array_data.numeric_data.decimal_data.double import Double
 
 
-def evaluate_scientific_literal_expression(node):
-    """
-    By default, MATLAB® stores all numeric variables as double-precision floating-point values.
-    """
-    return Double([node.get_text()])
-
-
 def evaluate_number_literal_expression(node):
     """
     By default, MATLAB® stores all numeric variables as double-precision floating-point values.
     """
-    return Double([node.get_text()])
+    text = node.get_text()
+    if text in ('Inf', 'inf'):
+        return Double([float('inf')])
+    if text in ('NaN', 'nan'):
+        return Double([float('nan')])
+    return Double([text])
 
 
 def evaluate_string_literal_expression(node):
