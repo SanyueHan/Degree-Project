@@ -1,14 +1,16 @@
 import random
 
-NUMBER_RANGE = 100
-REPETITION = 10
+REPETITION = 20
 DIRECTORY = '../../test_cases/language_fundamentals/iv_operators_and_elementary_operations/'
 
 
 def random_double():
-    # todo: upgrade to array type, after realized matrix operations in interpreter
-    # todo: enlarge number range after finished scientific notation in double
-    return random.randint(-NUMBER_RANGE, NUMBER_RANGE)
+    choice = random.choice(['fp', 'sc', 'inf'])
+    if choice == 'fp':
+        return (random.random()-0.5) * 100000000
+    if choice == 'sc':
+        return f"{(random.random()-0.5) * 10000}e{random.choice(['+', '-', ''])+str(random.randint(0, 100))}"
+    return choice
 
 
 def create_binary_operator_cases(operator):

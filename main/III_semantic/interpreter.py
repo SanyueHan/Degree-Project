@@ -122,22 +122,24 @@ class Interpreter:
 
     def evaluate_binary_operation_expression(self, node):
         operator = node.get_text()
+        child_0 = node.get_child(0)
+        child_1 = node.get_child(1)
+        if operator in ('&&', '||'):
+            return self.evaluate_logical_operations(child_0, child_1, operator)
 
-        a = self.evaluate_expression(node.get_child(0))
-        b = self.evaluate_expression(node.get_child(1))
+        operand_0 = self.evaluate_expression(child_0)
+        operand_1 = self.evaluate_expression(child_1)
 
         if operator in MATRIX_OPERATORS:
-            return MATRIX_OPERATORS[operator](a, b)
+            return MATRIX_OPERATORS[operator](operand_0, operand_1)
 
         # binary scalar operators left
-        compat(a, b)
+        compat(operand_0, operand_1)
 
         if operator in ARITHMETIC_OPERATORS:
-            return ARITHMETIC_OPERATORS[operator](a, b)
+            return ARITHMETIC_OPERATORS[operator](operand_0, operand_1)
         if operator in RELATIONAL_OPERATORS:
-            return evaluate_relational_operations(a, b, operator)
-        if operator in LOGICAL_OPERATORS:
-            return evaluate_logical_operations(a, b, operator)
+            return evaluate_relational_operations(operand_0, operand_1, operator)
 
     def evaluate_colon_expression(self, node):
         if node.num_children() == 0:
@@ -200,6 +202,31 @@ class Interpreter:
             return None
         data = self.variables[name]
         return data.visit(self.evaluate_index_list_expression(node.get_child(1)))
+
+    def evaluate_logical_operations(self, child_0, child_1, operator):
+        """
+        https://ww2.mathworks.cn/help/matlab/ref/logicaloperatorsshortcircuit.html#bt_0nai-1
+        """
+        operand_0 = self.evaluate_expression(child_0)
+        if len(operand_0) > 1:
+            "Operands to the logical and (&&) and or (||) operators must be convertible to logical scalar\nvalues."
+        operand_0 = Logical([operand_0[0]])
+
+        if operator == '||' and operand_0[0]:
+            return Logical([True])
+        if operator == '&&' and not operand_0[0]:
+            return Logical([False])
+
+        operand_1 = self.evaluate_expression(child_1)
+        if len(operand_1) > 1:
+            "Operands to the logical and (&&) and or (||) operators must be convertible to logical scalar\nvalues."
+        operand_1 = Logical([operand_1[0]])
+        return Logical([True]) if operand_1[0] else Logical([False])
+
+
+
+
+
 
 
 

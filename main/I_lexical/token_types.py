@@ -6,7 +6,7 @@ NUMBER = r"[0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+|[0-9]+"
 
 class TokenType(Enum):
     KEYWORD = re.compile("break|clear|else|elseif|end|for|function|global|if|return|while")
-    NUMBER_LIT = re.compile(rf"({NUMBER})e[+-]?[0-9]+|{NUMBER}|(Inf|inf|NaN|nan)(?![a-zA-Z0-9_])")
+    NUMBER_LIT = re.compile(rf"({NUMBER})[eE][+-]?[0-9]+|{NUMBER}|(Inf|inf|NaN|nan)(?![a-zA-Z0-9_])")
     STRING_LIT = re.compile(r"\"[^\"]*\"")
     VECTOR_LIT = re.compile(r"\'[^\']*\'")
     IDENTIFIER = re.compile(r"[a-zA-Z]+[a-zA-Z0-9_]*")

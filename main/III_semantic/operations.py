@@ -27,8 +27,8 @@ def evaluate_logic_not_operator(operand):
     if isinstance(operand, String):
         # todo: Unary operator '~' is not supported for operand of type 'string'.
         pass
-    if operand.get_class() in (Char, Logical, Double):
-        return Logical([not i for i in operand], size=operand.size)
+    operand = Logical([i for i in operand], size=operand.size)
+    return Logical([not i for i in operand], size=operand.size)
 
 
 # binary
@@ -36,7 +36,7 @@ def evaluate_matrix_multiplication_operation(operand_0, operand_1):
     if operand_0.size == (1, 1) or operand_1.size == (1, 1):
         compat(operand_0, operand_1)
         if isinstance(operand_0, String) or isinstance(operand_1, String):
-            #: todo: Operator '*' is not supported for operands of type 'string'.
+            # todo: Operator '*' is not supported for operands of type 'string'.
             pass
         return evaluate_array_multiplication_operation(operand_0, operand_1)
     # todo: matrix multiplication
@@ -120,14 +120,6 @@ def evaluate_relational_operations(operand_0, operand_1, operator):
     return Logical([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 
-def evaluate_logical_operations(operand_0, operand_1, operator):
-    if isinstance(operand_0, String) or isinstance(operand_1, String):
-        # todo: "Conversion to logical from string is not possible."
-        pass
-    fun = LOGICAL_OPERATORS[operator]
-    return Logical([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
-
-
 MATRIX_OPERATORS = {
     '*': evaluate_matrix_multiplication_operation,
     '/': evaluate_matrix_right_division_operation,
@@ -149,9 +141,4 @@ RELATIONAL_OPERATORS = {
     '<=': lambda x, y: x <= y,
     '<': lambda x, y: x < y,
     '~=': lambda x, y: x != y
-}
-
-LOGICAL_OPERATORS = {
-    '&&': lambda x, y: x and y,
-    '||': lambda x, y: x or y
 }

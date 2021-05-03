@@ -21,4 +21,10 @@ class Logical(Array):
 
     @staticmethod
     def convert(obj):
+        if isinstance(obj, str):
+            # todo: "Conversion to logical from string is not possible."
+            return None
+        if obj == float('nan'):
+            # todo: "NaN values cannot be converted to logicals."
+            return None
         return bool(obj)

@@ -1,5 +1,6 @@
 from main.data_types.array_data.numeric_data.decimal import Decimal
 from main.data_types.array_data.string import String
+import math
 
 
 class Double(Decimal):
@@ -29,7 +30,7 @@ class Double(Decimal):
 
     @staticmethod
     def has_decimal(n):
-        if n == float('inf') or n == float('nan'):
+        if math.isinf(n) or math.isnan(n):
             return False
         if int(n) == n:
             return False
@@ -74,37 +75,34 @@ class Double(Decimal):
         return base
 
     @staticmethod
-    def integer_length_excluding_sign(number):
-        if number == float('inf') or number == float('nan'):
+    def integer_length_excluding_sign(n):
+        if math.isinf(n) or math.isnan(n):
             return 3
-        return len(str(int(number)).lstrip('-'))
+        return len(str(int(n)).lstrip('-'))
 
     @staticmethod
     def format_setter(width=10, precision=4, sci=False):
+        def function_constructor(mode):
+            def parser_function(item):
+                if math.isinf(item):
+                    if item < 0:
+                        return " " * (width - 4) + "-Inf"
+                    else:
+                        return " " * (width - 3) + "Inf"
+                if math.isnan(item):
+                    return " " * (width-3) + "NaN"
+                return {
+                    'sci': f"{item:>{width}.{precision}e}",
+                    'int': f"{int(item):>{width}d}",
+                    'float': f"{item:>{width}.{precision}f}"
+                    }[mode]
+            return parser_function
         if sci:
-            def fun(item):
-                if item == float('inf'):
-                    return " " * (width-3) + "Inf"
-                if item == float('nan'):
-                    return " " * (width-3) + "NaN"
-                return f"{item:>{width}.{precision}e}"
-            return fun
+            return function_constructor('sci')
         elif precision == 0:
-            def fun(item):
-                if item == float('inf'):
-                    return " " * (width-3) + "Inf"
-                if item == float('nan'):
-                    return " " * (width-3) + "NaN"
-                return f"{int(item):>{width}d}"  # format
-            return fun
+            return function_constructor('int')
         else:
-            def fun(item):
-                if item == float('inf'):
-                    return " " * (width-3) + "Inf"
-                if item == float('nan'):
-                    return " " * (width-3) + "NaN"
-                return f"{item:>{width}.{precision}f}"
-            return fun
+            return function_constructor('float')
 
     @staticmethod
     def convert(obj):
