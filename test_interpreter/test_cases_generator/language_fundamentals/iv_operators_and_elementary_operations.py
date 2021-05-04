@@ -4,8 +4,11 @@ REPETITION = 20
 DIRECTORY = '../../test_cases/language_fundamentals/iv_operators_and_elementary_operations/'
 
 
-def random_double():
-    choice = random.choice(['fp', 'sc', 'inf'])
+def random_double(nan=False):
+    candidates = ['fp', 'sc', 'inf']
+    if nan:
+        candidates.append('nan')
+    choice = random.choice(candidates)
     if choice == 'fp':
         return (random.random()-0.5) * 100000000
     if choice == 'sc':
@@ -13,16 +16,16 @@ def random_double():
     return choice
 
 
-def create_binary_operator_cases(operator):
-    return ''.join([f"{random_double()} {operator} {random_double()}\n" for _ in range(REPETITION)])
+def create_binary_operator_cases(operator, nan=True):
+    return ''.join([f"{random_double(nan=nan)} {operator} {random_double(nan=nan)}\n" for _ in range(REPETITION)])
 
 
-def create_prefix_operator_cases(operator):
-    return ''.join([f"{operator}{random_double()}\n" for _ in range(REPETITION)])
+def create_prefix_operator_cases(operator, nan=True):
+    return ''.join([f"{operator}{random_double(nan=nan)}\n" for _ in range(REPETITION)])
 
 
-def create_postfix_operator_cases(operator):
-    return ''.join([f"{random_double()}{operator}\n" for _ in range(REPETITION)])
+def create_postfix_operator_cases(operator, nan=True):
+    return ''.join([f"{random_double(nan=nan)}{operator}\n" for _ in range(REPETITION)])
 
 
 if __name__ == "__main__":
@@ -55,9 +58,9 @@ if __name__ == "__main__":
         file_2.write(create_binary_operator_cases('<'))
         file_2.write(create_binary_operator_cases('~='))
     with open(DIRECTORY+"test_3_logical_operations.m", 'w') as file_3:
-        file_3.write(create_binary_operator_cases('&&'))
-        file_3.write(create_binary_operator_cases('||'))
-        file_3.write(create_prefix_operator_cases('~'))
+        file_3.write(create_binary_operator_cases('&&', nan=False))
+        file_3.write(create_binary_operator_cases('||', nan=False))
+        file_3.write(create_prefix_operator_cases('~', nan=False))
     with open(DIRECTORY+"test_4_set_operations.m", 'w') as file_4:
         pass
     with open(DIRECTORY+"test_5_bitwise_operations.m", 'w') as file_5:
