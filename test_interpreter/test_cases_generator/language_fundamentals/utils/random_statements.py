@@ -3,7 +3,7 @@ from test_interpreter.test_cases_generator.language_fundamentals.utils.random_ex
 
 def random_statement_list(indentation=0, number=0):
     if number == 0:
-        number = random.randint(3, 7)
+        number = random.randint(3, 5)
     return [random_statement(indentation=indentation) for _ in range(number)]
 
 
@@ -33,7 +33,7 @@ def random_if_else_statement(indentation=0):
         " " * indentation + f"if {random_expression()}\n",
         *random_statement_list(indentation=indentation + 4),
     ]
-    while random.random() < 0.6:
+    while random.random() < 0.4:
         statements.extend([
             " " * indentation + f"elseif {random_expression()}\n",
             *random_statement_list(indentation=indentation + 4),
@@ -49,21 +49,20 @@ def random_if_else_statement(indentation=0):
 
 def random_switch_case_statement(indentation=0):
     case_var = random_identifier()
-    case_list = [i for i in range(random.randint(0, 5))]
-    random.shuffle(case_list)
+    case_list = random.sample([i for i in range(5)], random.randint(2, 3))
     statements = [
         " " * indentation + f"{case_var} = {random.randint(0, 5)}\n",
         " " * indentation + f"switch {case_var}\n"
     ]
     while case_list:
         statements.extend([
-            " " * indentation + f"case {case_list.pop()}\n",
-            *random_statement_list(indentation=indentation + 4, number=random.randint(3, 5)),
+            " " * (indentation + 4) + f"case {case_list.pop()}\n",
+            *random_statement_list(indentation=indentation + 8),
         ])
     if random.random() < 0.5:
         statements.extend([
-            " " * indentation + f"otherwise\n",
-            *random_statement_list(indentation=indentation + 4, number=random.randint(3, 5)),
+            " " * (indentation + 4) + f"otherwise\n",
+            *random_statement_list(indentation=indentation + 8),
         ])
     statements.append(" " * indentation + "end\n")
     return ''.join(statements)
@@ -81,7 +80,7 @@ def random_for_statement(indentation=0):
 def random_while_statement(indentation=0):
     loop_var = random_identifier()
     return ''.join([
-        " " * indentation + f"{loop_var} = {random.randint(0, 10)}\n",
+        " " * indentation + f"{loop_var} = {random.randint(0, 5)}\n",
         " " * indentation + f"while {loop_var}\n",
         *random_statement_list(indentation=indentation + 4),
         " " * (indentation + 4) + f"{loop_var} = {loop_var} - 1\n",

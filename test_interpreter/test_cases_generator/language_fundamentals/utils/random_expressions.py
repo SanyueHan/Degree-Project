@@ -45,5 +45,5 @@ def random_expression():
 
 def random_colon_expression():
     length = random.randint(3, 7)
-    start = random.randint(0, 10)
+    start = random.randint(0, 5)
     return f"{start}:{start+length}"

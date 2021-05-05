@@ -15,6 +15,6 @@ def random_double():
 
 
 def random_identifier():
-    first_char = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
-    other_char = first_char + "0123456789"
+    first_char = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    other_char = first_char + "0123456789_"
     return random.choice(first_char) + ''.join(random.choice(other_char) for _ in range(random.randint(1, 9)))
