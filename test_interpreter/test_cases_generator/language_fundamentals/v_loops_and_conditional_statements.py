@@ -1,38 +1,22 @@
-import random
-
-REPETITION = 3
-FIRST_CHAR = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
-OTHER_CHAR = FIRST_CHAR + "0123456789"
+"""
+https://ww2.mathworks.cn/help/matlab/control-flow.html?s_tid=CRUX_lftnav
+"""
 
 
-def random_identifier():
-    return random.choice(FIRST_CHAR) + ''.join(random.choice(OTHER_CHAR) for _ in range(random.randint(1, 9)))
+from utils.random_statements import *
 
 
-def random_integer():
-    return random.randint(-10, 10)
+DIRECTORY = '../../test_cases/language_fundamentals/v_loops_and_conditional_statements/'
 
 
-def random_relational_expression():
-    return str(random_integer()) + random.choice(['>=', '>', '<=', '<', '==', '~=']) + str(random_integer())
-
-
-def if_else_samples():
-    pass
-
-
-def switch_case_samples():
-    pass
-
-
-def for_samples():
-    iter_var = random_identifier()
-    return '\n'.join([
-        f"for {iter_var}={random.randint(-10, 0)}:{random.randint(0, 10)}",
-        f"    {iter_var}",
-        f"end\n"
-    ])
-
-
-def while_samples():
-    pass
+if __name__ == "__main__":
+    with open(DIRECTORY+"test_1_if_else.m", 'w') as file_1:
+        file_1.write(random_if_else_statement())
+    with open(DIRECTORY+"test_2_switch_case.m", 'w') as file_2:
+        file_2.write(random_switch_case_statement())
+    with open(DIRECTORY+"test_3_for.m", 'w') as file_3:
+        file_3.write(random_for_statement())
+    with open(DIRECTORY+"test_4_while.m", 'w') as file_4:
+        file_4.write(random_while_statement())
+    with open(DIRECTORY+"test_total.m", 'w') as file_t:
+        file_t.write(''.join(random_statement_list(number=100)))
