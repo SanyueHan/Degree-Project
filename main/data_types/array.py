@@ -24,6 +24,9 @@ class Array(Data):
     def __len__(self):
         return len(self.data)
 
+    def __eq__(self, other):
+        return self.data == other.data and self.size == other.size
+
     def rows(self):
         return [[self[i * self.n + j] for j in range(self.n)] for i in range(self.m)]
 

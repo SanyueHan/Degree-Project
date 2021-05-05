@@ -73,16 +73,23 @@ class Interpreter:
         self.del_variables(var_list=variables if variables else None)
 
     def interpret_selection_statement(self, node):
-        for clause in node.get_children():
-            if self.interpret_selection_clause(clause):
-                break
+        if node.get_text() == 'if':
+            for clause in node.get_children()[:-1]:
+                if self.interpret_selection_clause(clause):
+                    break
+        else:
+            switch_clause = node.get_child(0)
+            switch_exp = self.evaluate_expression(switch_clause.get_child(0))
+            for clause in node.get_children()[1:-1]:
+                if self.interpret_selection_clause(clause, switch_exp=switch_exp):
+                    break
 
-    def interpret_selection_clause(self, node):
-        if node.get_text() == 'else':
+    def interpret_selection_clause(self, node, switch_exp=None):
+        if node.get_text() in ('else', 'otherwise'):
             self.interpret_statement_list(node.get_child(0))
         else:
-            expression = node.get_child(0)
-            if self.evaluate_expression(expression):
+            exp = self.evaluate_expression(node.get_child(0))
+            if node.get_text() in ('if', 'elseif') and exp or node.get_text() == 'case' and exp == switch_exp:
                 self.interpret_statement_list(node.get_child(1))
                 return True
             else:

@@ -5,7 +5,7 @@ NUMBER = r"[0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+|[0-9]+"
 
 
 class TokenType(Enum):
-    KEYWORD = re.compile("break|clear|else|elseif|end|for|function|global|if|return|while")
+    KEYWORD = re.compile("break|case|clear|elseif|else|end|for|function|global|if|otherwise|return|switch|while")
     NUMBER_LIT = re.compile(rf"({NUMBER})[eE][+-]?[0-9]+|{NUMBER}|(Inf|inf|NaN|nan)(?![a-zA-Z0-9_])")
     STRING_LIT = re.compile(r"\"[^\"]*\"")
     VECTOR_LIT = re.compile(r"\'[^\']*\'")
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     print(re.findall(TokenType.LOR.value, "c || d"))
     print(re.findall(TokenType.LNT.value, "~e"))
     print(re.findall(TokenType.MUL.value, r" * / \ .* ./ .\ "))
-    print(re.findall(TokenType.NUMBER_LIT.value, "1234, 11.90, .23, 12."))
+    print(re.findall(TokenType.NUMBER_LIT.value, "1.234e003  1.23e 1234, 11.90, .23, 12."))
     print(re.findall(TokenType.STRING_LIT.value, "'apple', 'banana', \"candy\", \"dog\""))
     print(re.findall(TokenType.CLN.value, "1234 : 1234"))
     print(re.findall(TokenType.EO_STMT.value, "1234\nabc;1234,efg"))
@@ -60,4 +60,3 @@ if __name__ == "__main__":
     print(re.findall(TokenType.R_PAREN.value, r"\ \\ ) ("))
     print(re.findall(TokenType.L_BRACKET.value, r"\ \ ] [ "))
     print(re.findall(TokenType.R_BRACKET.value, r' \ \ ] ['))
-    print(re.findall(TokenType.SCIENTIFIC_E.value, "1.234e003  1.23e"))  #1.234e

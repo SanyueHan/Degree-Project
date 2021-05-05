@@ -4,10 +4,18 @@ from main.II_syntactic.node_types import ASTNodeType
 from main.exceptions.syntactic_exceptions import *
 
 
+SEL_CLAUSES_MAP = {
+    'if': ('elseif', 'else'),
+    'switch': ('case', 'otherwise')
+}
+
+
 SEL_TERMINATOR_MAP = {
     'if': ('elseif', 'else', 'end'),
     'elseif': ('elseif', 'else', 'end'),
-    'else': ('end', )
+    'else': ('end', ),
+    'case': ('case', 'otherwise', 'end'),
+    'otherwise': ('end', )
 }
 
 
@@ -118,27 +126,28 @@ class Parser:
         return node
 
     def parse_selection_statement(self):
-        if self.get_token().get_text() != "if":
+        if self.get_token().get_text() not in ("if", 'switch'):
             return None
-        node = ASTNode(n_type=ASTNodeType.SEL_STMT)
+        node = ASTNode(n_type=ASTNodeType.SEL_STMT, n_text=self.get_token().get_text())
 
         start_token = self.tokens.pop(0)
 
-        # firstly a if
+        # firstly a if/switch
         clause = self.parse_selection_clause(start_token.get_text())
         if clause is None:
             raise IncompleteStatementError(start_token.row, start_token.col)
         node.add_child(clause)
 
-        # then unlimited elseif
-        while self.get_token().get_text() == 'elseif':
+        a, b = SEL_CLAUSES_MAP[start_token.get_text()]
+        # then unlimited elseif/case
+        while self.get_token().get_text() == a:
             clause = self.parse_selection_clause(self.tokens.pop(0).get_text())
             if clause is None:
                 raise IncompleteStatementError(start_token.row, start_token.col)
             node.add_child(clause)
 
-        # finally sometimes a else
-        if self.get_token().get_text() == 'else':
+        # finally sometimes a else/otherwise
+        if self.get_token().get_text() == b:
             clause = self.parse_selection_clause(self.tokens.pop(0).get_text())
             if clause is None:
                 raise IncompleteStatementError(start_token.row, start_token.col)
@@ -156,25 +165,30 @@ class Parser:
     def parse_selection_clause(self, clause):
         node = ASTNode(n_type=ASTNodeType.SEL_ClS, n_text=clause)
 
-        if clause != 'else':
+        if clause not in ('else', 'otherwise'):
             expression = self.parse_colon_expression()
             if expression is None:
                 # todo: throw exception
                 return None
             node.add_child(expression)
 
-        statement_list = self.parse_statement_list(terminators=SEL_TERMINATOR_MAP[clause])
-        if statement_list is None:
-            # exception raised outside
-            return None
-        node.add_child(statement_list)
+        if clause != 'switch':
+            statement_list = self.parse_statement_list(terminators=SEL_TERMINATOR_MAP[clause])
+            if statement_list is None:
+                # exception raised outside
+                return None
+            node.add_child(statement_list)
+        else:
+            # remove redundant EO_STMT tokens after switch before the first case
+            while self.get_token().get_type() == TokenType.EO_STMT:
+                self.tokens.pop(0)
 
         return node
 
     def parse_iteration_statement(self):
-        if self.get_token(0).get_text() not in ('while', 'for'):
+        if self.get_token().get_text() not in ('while', 'for'):
             return None
-        node = ASTNode(n_type=ASTNodeType.ITR_STMT)
+        node = ASTNode(n_type=ASTNodeType.ITR_STMT, n_text=self.get_token().get_text())
         start_token = self.tokens.pop(0)
 
         clause = self.parse_iteration_clause(start_token.get_text())
@@ -226,7 +240,7 @@ class Parser:
             return node
 
     def parse_assignment_expression(self):
-        if self.get_token(0).get_type() != TokenType.IDENTIFIER or self.get_token(1).get_type() != TokenType.ASS:
+        if self.get_token().get_type() != TokenType.IDENTIFIER or self.get_token(1).get_type() != TokenType.ASS:
             return None
         identifier = ASTNode(n_type=ASTNodeType.IDENTIFIER_EXP, n_text=self.tokens.pop(0).get_text())
         node = ASTNode(n_type=ASTNodeType.ASS_EXP, n_text=self.tokens.pop(0).get_text(), children=[identifier])
