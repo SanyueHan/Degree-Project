@@ -15,8 +15,7 @@ class TokenType(Enum):
     ADD = re.compile("[+]|-")
     MUL = re.compile(r"[*]|/|\\|\.\*|\./|\.\\")
 
-    EQL = re.compile("==|~=")
-    REL = re.compile(">=|>|<=|<")
+    REL = re.compile(">=|>|<=|<|==|~=")
 
     ASS = re.compile(r"=")
 
@@ -53,7 +52,6 @@ if __name__ == "__main__":
     print(re.findall(TokenType.IDENTIFIER.value, "Z123 78 ht a12a _1  "))
     print(re.findall(TokenType.KEYWORD.value, "if a==b"))
     print(re.findall(TokenType.ADD.value, "a=3+4-1"))
-    print(re.findall(TokenType.EQL.value, r" a=1 b=3  ~= "))
     print(re.findall(TokenType.REL.value, "a>=1 b==1 c<1 d<=1"))
     print(re.findall(TokenType.ASS.value, r"a=1 b==c"))
     print(re.findall(TokenType.L_PAREN.value, r"\ ( ) "))

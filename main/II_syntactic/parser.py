@@ -289,29 +289,15 @@ class Parser:
         return root
 
     def parse_logic_and_expression(self):
-        root = self.parse_equal_expression()
+        root = self.parse_relational_expression()
         if root is None:
             return None
 
         while self.get_token().get_type() == TokenType.LAN:
             token = self.tokens.pop(0)  # '&'
-            child = self.parse_equal_expression()
-            if child is None:
-                # todo: raise invalid logic and expression exception
-                return None
-            root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
-        return root
-
-    def parse_equal_expression(self):
-        root = self.parse_relational_expression()
-        if root is None:
-            return None
-
-        while self.get_token().get_type() == TokenType.EQL:
-            token = self.tokens.pop(0)  # equal symbol
             child = self.parse_relational_expression()
             if child is None:
-                # todo: raise invalid equal expression exception
+                # todo: raise invalid logic and expression exception
                 return None
             root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
