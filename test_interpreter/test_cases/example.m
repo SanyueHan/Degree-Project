@@ -4,11 +4,5 @@ while a < 10
     a = a + 1;
 end
 
-switch a
-    case 9
-        "9"
-    case 10
-        "10"
-    case 11
-        "11"
-end
+b = [1,2,3]
+b(2)

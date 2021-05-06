@@ -31,12 +31,12 @@ class Parser:
             self.parse_jump_statement,
         ]
         self.primary_cases = {
-            TokenType.IDENTIFIER: self.parse_identifier_expression,
             TokenType.NUMBER_LIT: self.parse_number_literal,
             TokenType.STRING_LIT: self.parse_string_literal,
             TokenType.VECTOR_LIT: self.parse_vector_literal,
             TokenType.L_PAREN: self.parse_paren_expression,
             TokenType.L_BRACKET: self.parse_bracket_expression,
+            TokenType.IDENTIFIER: self.parse_identifier_expression,
         }
 
     def get_token(self, index=0):
@@ -349,12 +349,6 @@ class Parser:
             return None
         return self.primary_cases[self.tokens[0].get_type()]()
 
-    def parse_identifier_expression(self):
-        if self.get_token(1).get_type() == TokenType.L_PAREN:
-            return self.parse_array_expression()
-        else:
-            return ASTNode(n_type=ASTNodeType.IDENTIFIER_EXP, n_text=self.tokens.pop(0).get_text())
-
     def parse_number_literal(self):
         return ASTNode(n_type=ASTNodeType.NUMBER_LIT_EXP, n_text=self.tokens.pop(0).get_text())
 
@@ -376,16 +370,8 @@ class Parser:
 
     def parse_bracket_expression(self):
         self.tokens.pop(0)  # remove left bracket
-        node = self.parse_array_list()
-        if node and self.get_token().get_type() == TokenType.R_BRACKET:
-            self.tokens.pop(0)  # remove right bracket
-        else:
-            # todo: raise invalid bracket expression exception
-            return None
-        return node
-
-    def parse_array_list(self):
         node = ASTNode(n_type=ASTNodeType.ARRAY_LIST_EXP)
+
         while self.get_token().get_type() != TokenType.R_BRACKET:
             child = self.parse_logic_or_expression()
             if child is None:
@@ -394,20 +380,29 @@ class Parser:
             node.add_child(child)
             while self.get_token().get_type() == TokenType.EO_STMT:
                 node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
+
+        if node and self.get_token().get_type() == TokenType.R_BRACKET:
+            self.tokens.pop(0)  # remove right bracket
+        else:
+            # todo: raise invalid bracket expression exception
+            return None
         return node
 
-    def parse_array_expression(self):
-        root = ASTNode(n_type=ASTNodeType.INDEXING_EXP)
-        root.add_child(ASTNode(n_type=ASTNodeType.IDENTIFIER_EXP, n_text=self.tokens.pop(0).get_text()))
-        self.tokens.pop(0)  # remove left paren
-        node = self.parse_index_list()
-        if node and self.get_token().get_type() == TokenType.R_PAREN:
-            self.tokens.pop(0)  # remove right paren
+    def parse_identifier_expression(self):
+        if self.get_token(1).get_type() == TokenType.L_PAREN:
+            root = ASTNode(n_type=ASTNodeType.INDEXING_EXP)
+            root.add_child(ASTNode(n_type=ASTNodeType.IDENTIFIER_EXP, n_text=self.tokens.pop(0).get_text()))
+            self.tokens.pop(0)  # remove left paren
+            node = self.parse_index_list()
+            if node and self.get_token().get_type() == TokenType.R_PAREN:
+                self.tokens.pop(0)  # remove right paren
+            else:
+                # todo: raise invalid indexing expression exception
+                return None
+            root.add_child(node)
+            return root
         else:
-            # todo: raise invalid array expression exception
-            return None
-        root.add_child(node)
-        return root
+            return ASTNode(n_type=ASTNodeType.IDENTIFIER_EXP, n_text=self.tokens.pop(0).get_text())
 
     def parse_index_list(self):
         root = ASTNode(n_type=ASTNodeType.INDEX_LIST_EXP)

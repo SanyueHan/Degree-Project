@@ -21,9 +21,9 @@ class Interpreter:
             ASTNodeType.NUMBER_LIT_EXP: evaluate_number_literal_expression,
             ASTNodeType.STRING_LIT_EXP: evaluate_string_literal_expression,
             ASTNodeType.VECTOR_LIT_EXP: evaluate_vector_literal_expression,
-            ASTNodeType.IDENTIFIER_EXP: self.evaluate_identifier_expression,
             ASTNodeType.ARRAY_LIST_EXP: self.evaluate_array_list_expression,
             ASTNodeType.INDEX_LIST_EXP: self.evaluate_index_list_expression,
+            ASTNodeType.IDENTIFIER_EXP: self.evaluate_identifier_expression,
             ASTNodeType.INDEXING_EXP: self.evaluate_indexing_expression,
         }
         self.variables = {}
@@ -229,14 +229,3 @@ class Interpreter:
             "Operands to the logical and (&&) and or (||) operators must be convertible to logical scalar\nvalues."
         operand_1 = Logical([operand_1[0]])
         return Logical([True]) if operand_1[0] else Logical([False])
-
-
-
-
-
-
-
-
-
-
-
