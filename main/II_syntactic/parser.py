@@ -20,37 +20,7 @@ SEL_TERMINATOR_MAP = {
 
 
 class Parser:
-    r"""
-    grammar rules in EBNF (Extended Backus-Naur-Form):
-    stmt_list ::= stmt*
 
-    stmt ::= ass_stmt | exp_stmt | clr_stmt | sel_stmt | itr_stmt | jmp_stmt | eo_stmt
-
-    ass_stmt ::= ass_exp eo_stmt
-    exp_stmt ::= cln_exp eo_stmt
-    clr_stmt ::= 'clear' id_list eo_stmt
-    sel_stmt ::= 'if' cln_exp stmt_list ('elseif' cln_exp stmt_list)* ('else' stmt_list)? 'end' eo_stmt
-    itr_stmt ::= 'while' cln_exp stmt_list
-    jmp_stmt ::=
-
-    id_list ::= identifier*
-
-    ass_exp ::= id '=' cln_exp
-    cln_exp ::= lor_exp (':' lor_exp)*
-    lor_exp ::= lan_exp (('||'|'|') lan_exp)*
-    lan_exp ::= eql_exp (('&&'|'&') eql_exp)*
-    eql_exp ::= rel_exp (('~='|'==') rel_exp)*
-    rel_exp ::= add_exp (('<='|'<'|'>='|'>') add_exp)*
-    add_exp ::= mul_exp (('+'|'-') mul_exp)*
-    mul_exp ::= uny_exp (('*'|'/') uny_exp)*
-    uny_exp ::= ('+'|'-'|'~')* pri_exp
-    pri_exp ::= identifier | number_lit | string_lit | '('cln_exp')' | '[' array_list ']'
-
-    identifier ::=
-    number_lit ::=
-    string_lit ::=
-    array_list ::= (cln_exp exp_stmt*)*
-    """
     def __init__(self, token_list):
         self.tokens = token_list
         self.statement_cases = [
@@ -166,7 +136,7 @@ class Parser:
         node = ASTNode(n_type=ASTNodeType.SEL_ClS, n_text=clause)
 
         if clause not in ('else', 'otherwise'):
-            expression = self.parse_colon_expression()
+            expression = self.parse_logic_or_expression()
             if expression is None:
                 # todo: throw exception
                 return None
@@ -208,7 +178,7 @@ class Parser:
     def parse_iteration_clause(self, clause):
         node = ASTNode(n_type=ASTNodeType.ITR_CLS, n_text=clause)
 
-        expression = self.parse_colon_expression() if clause == 'while' else self.parse_assignment_expression()
+        expression = self.parse_logic_or_expression() if clause == 'while' else self.parse_assignment_expression()
         if expression is None:
             # exception raised outside
             return None
@@ -235,7 +205,7 @@ class Parser:
         node = self.parse_assignment_expression()
         if node:
             return node
-        node = self.parse_colon_expression()
+        node = self.parse_logic_or_expression()
         if node:
             return node
 
@@ -244,35 +214,12 @@ class Parser:
             return None
         identifier = ASTNode(n_type=ASTNodeType.IDENTIFIER_EXP, n_text=self.tokens.pop(0).get_text())
         node = ASTNode(n_type=ASTNodeType.ASS_EXP, n_text=self.tokens.pop(0).get_text(), children=[identifier])
-        expression = self.parse_colon_expression()
+        expression = self.parse_logic_or_expression()
         if expression is None:
             # todo: throw invalid assignment statement exception
             return None
         node.add_child(expression)
         return node
-
-    def parse_colon_expression(self):
-        root = self.parse_logic_or_expression()
-        if root is None:
-            return None
-        while self.get_token().get_type() == TokenType.CLN:
-            token = self.tokens.pop(0)  # ':'
-            node1 = self.parse_logic_or_expression()
-            if node1 is None:
-                # todo: raise invalid colon expression exception
-                return None
-            if self.get_token().get_type() == TokenType.CLN:
-                # colon expression with three value
-                token = self.tokens.pop(0)  # ':'
-                node2 = self.parse_logic_or_expression()
-                if node2 is None:
-                    # todo: raise invalid colon expression exception
-                    return None
-                root = ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=token.get_text(), children=[root, node1, node2])
-            else:
-                # colon expression with two value
-                root = ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=token.get_text(), children=[root, node1])
-        return root
 
     def parse_logic_or_expression(self):
         root = self.parse_logic_and_expression()
@@ -303,17 +250,40 @@ class Parser:
         return root
 
     def parse_relational_expression(self):
-        root = self.parse_additive_expression()
+        root = self.parse_colon_expression()
         if root is None:
             return None
 
         while self.get_token().get_type() == TokenType.REL:
             token = self.tokens.pop(0)  # relational symbol
-            child = self.parse_additive_expression()
+            child = self.parse_colon_expression()
             if child is None:
                 # todo: raise invalid relational expression exception
                 return None
             root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
+        return root
+
+    def parse_colon_expression(self):
+        root = self.parse_additive_expression()
+        if root is None:
+            return None
+        while self.get_token().get_type() == TokenType.CLN:
+            token = self.tokens.pop(0)  # ':'
+            node1 = self.parse_additive_expression()
+            if node1 is None:
+                # todo: raise invalid colon expression exception
+                return None
+            if self.get_token().get_type() == TokenType.CLN:
+                # colon expression with three value
+                token = self.tokens.pop(0)  # ':'
+                node2 = self.parse_additive_expression()
+                if node2 is None:
+                    # todo: raise invalid colon expression exception
+                    return None
+                root = ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=token.get_text(), children=[root, node1, node2])
+            else:
+                # colon expression with two value
+                root = ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=token.get_text(), children=[root, node1])
         return root
 
     def parse_additive_expression(self):
@@ -396,7 +366,7 @@ class Parser:
 
     def parse_paren_expression(self):
         self.tokens.pop(0)  # remove left paren
-        node = self.parse_colon_expression()
+        node = self.parse_logic_or_expression()
         if node and self.get_token().get_type() == TokenType.R_PAREN:
             self.tokens.pop(0)  # remove right paren
         else:
@@ -417,7 +387,7 @@ class Parser:
     def parse_array_list(self):
         node = ASTNode(n_type=ASTNodeType.ARRAY_LIST_EXP)
         while self.get_token().get_type() != TokenType.R_BRACKET:
-            child = self.parse_colon_expression()
+            child = self.parse_logic_or_expression()
             if child is None:
                 # todo:
                 return None
@@ -445,14 +415,16 @@ class Parser:
             if self.get_token().get_type() == TokenType.CLN:
                 root.add_child(ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=self.tokens.pop(0).get_text()))
             else:
-                child = self.parse_colon_expression()
+                child = self.parse_logic_or_expression()
                 if child is None:
                     # todo:
                     return None
                 root.add_child(child)
 
             if str(self.get_token()) == ",":
-                self.tokens.pop(0)  # remove ','
+                # one argument finished, continue to parse another argument
+                self.tokens.pop(0)
             else:
+                # no more argument
                 break
         return root

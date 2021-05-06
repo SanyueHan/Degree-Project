@@ -65,19 +65,19 @@ class Array(Data):
     def visit(self, index_list):
         if len(index_list) == 1:
             index = index_list[0]
-            if index == ':':
+            if isinstance(index, str):
                 return self.__class__(self.refactored, size=(len(self), 1))
             data = self.refactored
             return self.__class__([data[to_int(element)-1] for element in index], size=index.size)
         elif len(index_list) == 2:
             index_m = index_list[0]
-            if index_m == ":":
+            if isinstance(index_m, str):
                 index_m = [i for i in range(0, self.m)]
             else:
                 index_m = [to_int(i) - 1 for i in index_m.refactored]
 
             index_n = index_list[1]
-            if index_n == ":":
+            if isinstance(index_n, str):
                 index_n = [i for i in range(0, self.n)]
             else:
                 index_n = [to_int(i) - 1 for i in index_n.refactored]
