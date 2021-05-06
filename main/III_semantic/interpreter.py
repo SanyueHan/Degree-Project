@@ -1,7 +1,9 @@
 from main.II_syntactic.node_types import ASTNodeType
 from main.III_semantic.utils import concatenate
+from main.III_semantic.builtins import *
 from main.III_semantic.literals import *
 from main.III_semantic.operations import *
+from main.data_types.array import Array
 
 
 class Interpreter:
@@ -24,12 +26,19 @@ class Interpreter:
             ASTNodeType.ARRAY_LIST_EXP: self.evaluate_array_list_expression,
             ASTNodeType.INDEX_LIST_EXP: self.evaluate_index_list_expression,
             ASTNodeType.IDENTIFIER_EXP: self.evaluate_identifier_expression,
-            ASTNodeType.INDEXING_EXP: self.evaluate_indexing_expression,
         }
         self.variables = {}
+        self.builtins = BUILTINS
 
     def get_variables(self):
         return self.variables
+
+    def retrieve(self, identifier):
+        if identifier in self.variables:
+            return self.variables[identifier]
+        if identifier in self.builtins:
+            return self.builtins[identifier]
+        # todo: Unrecognized function or variable {identifier}.
 
     def del_variables(self, var_list=None):
         if var_list:
@@ -39,12 +48,12 @@ class Interpreter:
         else:
             self.variables = {}
 
-    def interpret_statement_list(self, root):
-        for child in root.get_children():
+    def interpret_statement_list(self, lst):
+        for child in lst.get_children():
             self.interpret_statement(child)
 
-    def interpret_statement(self, node):
-        result = self.interpret[node.get_type()](node)
+    def interpret_statement(self, stmt):
+        result = self.interpret[stmt.get_type()](stmt)
         # if statement does not ended with a semicolon, the result is printed
         if result:
             var = result[0]
@@ -52,56 +61,56 @@ class Interpreter:
             ass_str = " = " if obj.get_class() == String else " ="
             print(f"\n{var}{ass_str}\n\n{str(obj)}\n")
 
-    def interpret_expression_statement(self, node):
-        expression = node.get_child(0)
+    def interpret_expression_statement(self, stmt):
+        expression = stmt.get_child(0)
         if expression.get_type() == ASTNodeType.ASS_EXP:
             var = expression.get_child(0).get_text()
             val = self.evaluate_expression(expression.get_child(1))
             self.variables[var] = val
         else:  # normal expression
-            if expression.get_type() == ASTNodeType.IDENTIFIER_EXP:
+            if expression.get_type() == ASTNodeType.IDENTIFIER_EXP and expression.get_children() == []:
                 var = expression.get_text()
-                val = self.variables[var]
+                val = self.retrieve(var)
             else:
                 var = "ans"
                 val = self.evaluate_expression(expression)
                 self.variables["ans"] = val
-        return (var, val) if node.get_child(1).get_text() != ';' else None
+        return (var, val) if stmt.get_child(1).get_text() != ';' else None
 
-    def interpret_clear_statement(self, node):
-        variables = [child.get_text() for child in node.get_child(0).get_children()]
+    def interpret_clear_statement(self, stmt):
+        variables = [child.get_text() for child in stmt.get_child(0).get_children()]
         self.del_variables(var_list=variables if variables else None)
 
-    def interpret_selection_statement(self, node):
-        if node.get_text() == 'if':
-            for clause in node.get_children()[:-1]:
+    def interpret_selection_statement(self, stmt):
+        if stmt.get_text() == 'if':
+            for clause in stmt.get_children()[:-1]:
                 if self.interpret_selection_clause(clause):
                     break
         else:
-            switch_clause = node.get_child(0)
+            switch_clause = stmt.get_child(0)
             switch_exp = self.evaluate_expression(switch_clause.get_child(0))
-            for clause in node.get_children()[1:-1]:
+            for clause in stmt.get_children()[1:-1]:
                 if self.interpret_selection_clause(clause, switch_exp=switch_exp):
                     break
 
-    def interpret_selection_clause(self, node, switch_exp=None):
-        if node.get_text() in ('else', 'otherwise'):
-            self.interpret_statement_list(node.get_child(0))
+    def interpret_selection_clause(self, clause, switch_exp=None):
+        if clause.get_text() in ('else', 'otherwise'):
+            self.interpret_statement_list(clause.get_child(0))
         else:
-            exp = self.evaluate_expression(node.get_child(0))
-            if node.get_text() in ('if', 'elseif') and exp or node.get_text() == 'case' and exp == switch_exp:
-                self.interpret_statement_list(node.get_child(1))
+            exp = self.evaluate_expression(clause.get_child(0))
+            if clause.get_text() in ('if', 'elseif') and exp or clause.get_text() == 'case' and exp == switch_exp:
+                self.interpret_statement_list(clause.get_child(1))
                 return True
             else:
                 return False
 
-    def interpret_iteration_statement(self, node):
-        self.interpret_iteration_clause(node.get_child())
+    def interpret_iteration_statement(self, stmt):
+        self.interpret_iteration_clause(stmt.get_child())
 
-    def interpret_iteration_clause(self, node):
-        expression = node.get_child(0)
-        statement_list = node.get_child(1)
-        if node.get_text() == 'while':
+    def interpret_iteration_clause(self, clause):
+        expression = clause.get_child(0)
+        statement_list = clause.get_child(1)
+        if clause.get_text() == 'while':
             while self.evaluate_expression(expression):
                 self.interpret_statement_list(statement_list)
         else:
@@ -111,15 +120,15 @@ class Interpreter:
                 self.variables[name] = data.get_class()(col, size=(len(col), 1))
                 self.interpret_statement_list(statement_list)
 
-    def interpret_jump_statement(self, node):
+    def interpret_jump_statement(self, stmt):
         pass
 
-    def evaluate_expression(self, node):
-        return self.evaluate[node.get_type()](node)
+    def evaluate_expression(self, exp):
+        return self.evaluate[exp.get_type()](exp)
 
-    def evaluate_unary_operation_expression(self, node):
-        operator = node.get_text()
-        operand = self.evaluate_expression(node.get_child(0))
+    def evaluate_unary_operation_expression(self, exp):
+        operator = exp.get_text()
+        operand = self.evaluate_expression(exp.get_child(0))
         if operator in ('.\'', '\''):
             return evaluate_transpose_operation(operand)
         if operator in ('+', '-'):
@@ -127,10 +136,10 @@ class Interpreter:
         if operator == '~':
             return evaluate_logic_not_operator(operand)
 
-    def evaluate_binary_operation_expression(self, node):
-        operator = node.get_text()
-        child_0 = node.get_child(0)
-        child_1 = node.get_child(1)
+    def evaluate_binary_operation_expression(self, exp):
+        operator = exp.get_text()
+        child_0 = exp.get_child(0)
+        child_1 = exp.get_child(1)
         if operator in ('&&', '||'):
             return self.evaluate_logical_operations(child_0, child_1, operator)
 
@@ -148,18 +157,18 @@ class Interpreter:
         if operator in RELATIONAL_OPERATORS:
             return evaluate_relational_operations(operand_0, operand_1, operator)
 
-    def evaluate_colon_expression(self, node):
-        if node.num_children() == 0:
+    def evaluate_colon_expression(self, exp):
+        if exp.num_children() == 0:
             return ":"
 
-        if node.num_children() == 2:
-            start = self.evaluate_expression(node.get_child(0))[0]
+        if exp.num_children() == 2:
+            start = self.evaluate_expression(exp.get_child(0))[0]
             step = 1
-            end = self.evaluate_expression(node.get_child(1))[0]
+            end = self.evaluate_expression(exp.get_child(1))[0]
         else:
-            start = self.evaluate_expression(node.get_child(0))[0]
-            step = self.evaluate_expression(node.get_child(1))[0]
-            end = self.evaluate_expression(node.get_child(2))[0]
+            start = self.evaluate_expression(exp.get_child(0))[0]
+            step = self.evaluate_expression(exp.get_child(1))[0]
+            end = self.evaluate_expression(exp.get_child(2))[0]
 
         if step == 0 or start < end and step < 0 or start > end and step > 0:
             return Double([])
@@ -170,18 +179,23 @@ class Interpreter:
             start += step
         return Double(values)
 
-    def evaluate_identifier_expression(self, node):
-        var_name = node.get_text()
-        if var_name in self.variables:
-            return self.variables[var_name]
-        else:
-            # todo: raise unknown variable exception
-            pass
+    def evaluate_identifier_expression(self, exp):
+        ref = exp.get_text()
+        obj = self.retrieve(ref)
 
-    def evaluate_array_list_expression(self, node):
+        if exp.get_children():
+            # indexing expression or function call
+            index_list = self.evaluate_index_list_expression(exp.get_child(0))
+            if isinstance(obj, Array):
+                return obj.visit(index_list)
+        else:
+            # variable expression
+            return obj
+
+    def evaluate_array_list_expression(self, exp):
         array_list = []
         array = []
-        for child in node.get_children():
+        for child in exp.get_children():
             if child.get_type() == ASTNodeType.EO_STMT:
                 if child.get_text() == ';' or child.get_text() == '\n':
                     if array:
@@ -199,16 +213,8 @@ class Interpreter:
         else:
             return Double([], size=(0, 0))
 
-    def evaluate_index_list_expression(self, node):
-        return [self.evaluate_expression(child) for child in node.get_children()]
-
-    def evaluate_indexing_expression(self, node):
-        name = node.get_child(0).get_text()
-        if name not in self.variables:
-            # todo:
-            return None
-        data = self.variables[name]
-        return data.visit(self.evaluate_index_list_expression(node.get_child(1)))
+    def evaluate_index_list_expression(self, exp):
+        return [self.evaluate_expression(child) for child in exp.get_children()]
 
     def evaluate_logical_operations(self, child_0, child_1, operator):
         """

@@ -389,9 +389,8 @@ class Parser:
         return node
 
     def parse_identifier_expression(self):
-        if self.get_token(1).get_type() == TokenType.L_PAREN:
-            root = ASTNode(n_type=ASTNodeType.INDEXING_EXP)
-            root.add_child(ASTNode(n_type=ASTNodeType.IDENTIFIER_EXP, n_text=self.tokens.pop(0).get_text()))
+        root = ASTNode(n_type=ASTNodeType.IDENTIFIER_EXP, n_text=self.tokens.pop(0).get_text())
+        if self.get_token() and self.get_token().get_type() == TokenType.L_PAREN:
             self.tokens.pop(0)  # remove left paren
             node = self.parse_index_list()
             if node and self.get_token().get_type() == TokenType.R_PAREN:
@@ -401,8 +400,7 @@ class Parser:
                 return None
             root.add_child(node)
             return root
-        else:
-            return ASTNode(n_type=ASTNodeType.IDENTIFIER_EXP, n_text=self.tokens.pop(0).get_text())
+        return root
 
     def parse_index_list(self):
         root = ASTNode(n_type=ASTNodeType.INDEX_LIST_EXP)

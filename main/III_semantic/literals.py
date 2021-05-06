@@ -7,12 +7,7 @@ def evaluate_number_literal_expression(node):
     """
     By default, MATLAB® stores all numeric variables as double-precision floating-point values.
     """
-    text = node.get_text()
-    if text in ('Inf', 'inf'):
-        return Double([float('inf')])
-    if text in ('NaN', 'nan'):
-        return Double([float('nan')])
-    return Double([text])
+    return Double([node.get_text()])
 
 
 def evaluate_string_literal_expression(node):
