@@ -37,20 +37,26 @@ def evaluate_matrix_multiplication_operation(operand_0, operand_1):
         compat(operand_0, operand_1)
         if isinstance(operand_0, String) or isinstance(operand_1, String):
             # todo: Operator '*' is not supported for operands of type 'string'.
-            pass
+            return None
         return evaluate_array_multiplication_operation(operand_0, operand_1)
     # todo: matrix multiplication
 
 
 def evaluate_matrix_right_division_operation(operand_0, operand_1):
     if operand_0.size == (1, 1) and operand_1.size == (1, 1):
-        return Double([operand_0[0] / operand_1[0]])
+        if isinstance(operand_0, String) or isinstance(operand_1, String):
+            # todo: Error using  /  \nArguments must be numeric, char, or logical.
+            return None
+        return evaluate_array_right_division_operation(operand_0, operand_1)
     # todo: matrix multiplication
 
 
 def evaluate_matrix_left_division_operation(operand_0, operand_1):
     if operand_0.size == (1, 1) and operand_1.size == (1, 1):
-        return Double([operand_1[0] / operand_0[0]])
+        if isinstance(operand_0, String) or isinstance(operand_1, String):
+            # todo: Error using  \  \nArguments must be numeric, char, or logical.
+            return None
+        return evaluate_array_left_division_operation(operand_0, operand_1)
     # todo: matrix multiplication
 
 
