@@ -20,6 +20,9 @@ SEL_TERMINATOR_MAP = {
 
 
 class Parser:
+    """
+    https://ww2.mathworks.cn/help/matlab/matlab_prog/operator-precedence.html
+    """
 
     def __init__(self, token_list):
         self.tokens = token_list
@@ -212,47 +215,53 @@ class Parser:
         return root
 
     def parse_logic_and_expression(self):
-        root = self.parse_relational_expression()
+        root = self.parse_level_8_expression()
         if root is None:
             return None
 
         while self.get_token().get_type() == TokenType.SCA:
             token = self.tokens.pop(0)  # '&'
-            child = self.parse_relational_expression()
+            child = self.parse_level_8_expression()
             if child is None:
                 # todo: raise invalid logic and expression exception
                 return None
             root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
-    def parse_relational_expression(self):
-        root = self.parse_colon_expression()
+    def parse_level_8_expression(self):
+        """
+        binary relational operators (left associate):
+        """
+        root = self.parse_level_7_expression()
         if root is None:
             return None
 
         while self.get_token().get_type() == TokenType.REL:
             token = self.tokens.pop(0)  # relational symbol
-            child = self.parse_colon_expression()
+            child = self.parse_level_7_expression()
             if child is None:
                 # todo: raise invalid relational expression exception
                 return None
             root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
-    def parse_colon_expression(self):
-        root = self.parse_additive_expression()
+    def parse_level_7_expression(self):
+        """
+        binary/trinary colon operator (left associate): :
+        """
+        root = self.parse_level_6__expression()
         if root is None:
             return None
         while self.get_token().get_type() == TokenType.CLN:
             token = self.tokens.pop(0)  # ':'
-            node1 = self.parse_additive_expression()
+            node1 = self.parse_level_6__expression()
             if node1 is None:
                 # todo: raise invalid colon expression exception
                 return None
             if self.get_token().get_type() == TokenType.CLN:
                 # colon expression with three value
                 token = self.tokens.pop(0)  # ':'
-                node2 = self.parse_additive_expression()
+                node2 = self.parse_level_6__expression()
                 if node2 is None:
                     # todo: raise invalid colon expression exception
                     return None
@@ -262,60 +271,70 @@ class Parser:
                 root = ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=token.get_text(), children=[root, node1])
         return root
 
-    def parse_additive_expression(self):
-        root = self.parse_multiplicative_expression()
+    def parse_level_6__expression(self):
+        """
+        binary additive operators (left associate): + -
+        """
+        root = self.parse_level_5_expression()
         if root is None:
             return None
 
         while self.get_token().get_type() == TokenType.ADD:
             token = self.tokens.pop(0)  # additive symbol
-            child = self.parse_multiplicative_expression()
+            child = self.parse_level_5_expression()
             if child is None:
                 # todo: raise invalid additive expression exception
                 return None
             root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
-    def parse_multiplicative_expression(self):
-        root = self.parse_prefix_expression()
+    def parse_level_5_expression(self):
+        """
+        binary multiplicative operators (left associate): .* ./ .\\ * / \\
+        """
+        root = self.parse_level_4_expression()
         if root is None:
             return None
 
         while self.get_token().get_type() == TokenType.MUL:
             token = self.tokens.pop(0)  # multiplicative symbol
-            child = self.parse_prefix_expression()
+            child = self.parse_level_4_expression()
             if child is None:
                 # todo: raise invalid multiplicative expression exception
                 return None
             root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
-    def parse_prefix_expression(self):
+    def parse_level_4_expression(self):
         """
-        unary operator
-        right associate
+        unary prefix operators: + - ~
         """
         if self.get_token().get_type() in (TokenType.ADD, TokenType.EWN):
             token = self.tokens.pop(0)  # unary operator symbol
-            child = self.parse_prefix_expression()
+            child = self.parse_level_4_expression()
             if child is None:
                 # todo: raise invalid unary expression exception
                 return None
             return ASTNode(n_type=ASTNodeType.UOP_EXP, n_text=token.get_text(), children=[child])
-        return self.parse_postfix_expression()
+        return self.parse_level_2_expression()
 
-    def parse_postfix_expression(self):
+    def parse_level_2_expression(self):
         """
-        unary operator
-        left associate
+        unary postfix operators: .' '
+        binary operators (left associate): .^ ^
         """
         root = self.parse_primary_expression()
         if root is None:
             return None
 
-        while self.get_token().get_type() == TokenType.TRA:
-            token = self.tokens.pop(0)  # transpose symbol
-            root = ASTNode(n_type=ASTNodeType.UOP_EXP, n_text=token.get_text(), children=[root])
+        while self.get_token().get_type() in (TokenType.TRA, TokenType.POW):
+            if self.get_token().get_type() == TokenType.TRA:
+                token = self.tokens.pop(0)  # transpose symbol
+                root = ASTNode(n_type=ASTNodeType.UOP_EXP, n_text=token.get_text(), children=[root])
+            else:
+                token = self.tokens.pop(0)  # power symbol
+                child = self.parse_primary_expression()
+                root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
     def parse_primary_expression(self):
