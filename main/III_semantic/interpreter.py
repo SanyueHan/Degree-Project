@@ -11,7 +11,6 @@ class Interpreter:
         self.interpret = {
             ASTNodeType.STMT_LIST: self.interpret_statement_list,
             ASTNodeType.EXP_STMT: self.interpret_expression_statement,
-            ASTNodeType.CLR_STMT: self.interpret_clear_statement,
             ASTNodeType.SEL_STMT: self.interpret_selection_statement,
             ASTNodeType.ITR_STMT: self.interpret_iteration_statement,
             ASTNodeType.JMP_STMT: self.interpret_jump_statement,
@@ -179,19 +178,6 @@ class Interpreter:
             start += step
         return Double(values)
 
-    def evaluate_identifier_expression(self, exp):
-        ref = exp.get_text()
-        obj = self.retrieve(ref)
-
-        if exp.get_children():
-            # indexing expression or function call
-            index_list = self.evaluate_index_list_expression(exp.get_child(0))
-            if isinstance(obj, Array):
-                return obj.visit(index_list)
-        else:
-            # variable expression
-            return obj
-
     def evaluate_array_list_expression(self, exp):
         array_list = []
         array = []
@@ -215,6 +201,19 @@ class Interpreter:
 
     def evaluate_index_list_expression(self, exp):
         return [self.evaluate_expression(child) for child in exp.get_children()]
+
+    def evaluate_identifier_expression(self, exp):
+        ref = exp.get_text()
+        obj = self.retrieve(ref)
+
+        if exp.get_children():
+            # indexing expression or function call
+            index_list = self.evaluate_index_list_expression(exp.get_child(0))
+            if isinstance(obj, Array):
+                return obj.visit(index_list)
+        else:
+            # variable expression
+            return obj
 
     def evaluate_logical_operations(self, child_0, child_1, operator):
         """

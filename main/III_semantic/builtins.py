@@ -1,4 +1,5 @@
 from main.data_types.array_data.numeric_data.decimal_data.double import Double
+from main.data_types.array_data.logical import Logical
 
 
 BUILTINS = {
@@ -7,5 +8,7 @@ BUILTINS = {
     'Inf': Double([float('inf')]),
     'nan': Double([float('nan')]),
     'NaN': Double([float('nan')]),
-    'eps': Double([2.220446049250313e-16])
+    'eps': Double([2.220446049250313e-16]),
+    'true': Logical([True]),
+    'false': Logical([False]),
 }

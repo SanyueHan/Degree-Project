@@ -1,5 +1,6 @@
 from main.data_types.array import Array
 from main.data_types.array_data.numeric_data.decimal_data.double import Double
+import math
 
 
 class Logical(Array):
@@ -24,7 +25,7 @@ class Logical(Array):
         if isinstance(obj, str):
             # todo: "Conversion to logical from string is not possible."
             return None
-        if obj == float('nan'):
+        if math.isnan(obj):
             # todo: "NaN values cannot be converted to logicals."
             return None
         return bool(obj)
