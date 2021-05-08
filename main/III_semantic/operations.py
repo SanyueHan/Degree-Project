@@ -33,31 +33,36 @@ def evaluate_logic_not_operator(operand):
 
 # binary
 def evaluate_matrix_multiplication_operation(operand_0, operand_1):
+    if isinstance(operand_0, String) or isinstance(operand_1, String):
+        # todo: Operator '*' is not supported for operands of type 'string'.
+        return None
     if operand_0.size == (1, 1) or operand_1.size == (1, 1):
         compat(operand_0, operand_1)
-        if isinstance(operand_0, String) or isinstance(operand_1, String):
-            # todo: Operator '*' is not supported for operands of type 'string'.
-            return None
         return evaluate_array_multiplication_operation(operand_0, operand_1)
     # todo: matrix multiplication
 
 
 def evaluate_matrix_right_division_operation(operand_0, operand_1):
+    if isinstance(operand_0, String) or isinstance(operand_1, String):
+        # todo: Error using  /  \nArguments must be numeric, char, or logical.
+        return None
     if operand_0.size == (1, 1) and operand_1.size == (1, 1):
-        if isinstance(operand_0, String) or isinstance(operand_1, String):
-            # todo: Error using  /  \nArguments must be numeric, char, or logical.
-            return None
         return evaluate_array_right_division_operation(operand_0, operand_1)
     # todo: matrix multiplication
 
 
 def evaluate_matrix_left_division_operation(operand_0, operand_1):
+    if isinstance(operand_0, String) or isinstance(operand_1, String):
+        # todo: Error using  \  \nArguments must be numeric, char, or logical.
+        return None
     if operand_0.size == (1, 1) and operand_1.size == (1, 1):
-        if isinstance(operand_0, String) or isinstance(operand_1, String):
-            # todo: Error using  \  \nArguments must be numeric, char, or logical.
-            return None
         return evaluate_array_left_division_operation(operand_0, operand_1)
     # todo: matrix multiplication
+
+
+def evaluate_matrix_power_operation(operand_0, operand_1):
+    if operand_0.size == (1, 1) and operand_1.size == (1, 1):
+        return evaluate_array_power_operation(operand_0, operand_1)
 
 
 def evaluate_addition_operation(operand_0, operand_1):
@@ -117,6 +122,16 @@ def evaluate_array_left_division_operation(operand_0, operand_1):
         return Double([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 
+def evaluate_array_power_operation(operand_0, operand_1):
+    if isinstance(operand_0, String) or isinstance(operand_1, String):
+        # todo: Operator '.^' is not supported for operands of type 'string'.
+        return None
+    else:
+        def fun(a, b):
+            return a ** b
+        return Double([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
+
+
 def evaluate_relational_operations(operand_0, operand_1, operator):
     if isinstance(operand_0, String) != isinstance(operand_1, String):
         # one is String while one is not String
@@ -130,6 +145,7 @@ MATRIX_OPERATORS = {
     '*': evaluate_matrix_multiplication_operation,
     '/': evaluate_matrix_right_division_operation,
     '\\': evaluate_matrix_left_division_operation,
+    '^': evaluate_matrix_power_operation,
 }
 
 ARITHMETIC_OPERATORS = {
@@ -137,7 +153,8 @@ ARITHMETIC_OPERATORS = {
     '-': evaluate_subtraction_operation,
     '.*': evaluate_array_multiplication_operation,
     './': evaluate_array_right_division_operation,
-    '.\\': evaluate_array_left_division_operation
+    '.\\': evaluate_array_left_division_operation,
+    '.^': evaluate_array_power_operation,
 }
 
 RELATIONAL_OPERATORS = {
