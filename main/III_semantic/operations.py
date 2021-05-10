@@ -128,7 +128,10 @@ def evaluate_array_power_operation(operand_0, operand_1):
         return None
     else:
         def fun(a, b):
-            return a ** b
+            try:
+                return a ** b
+            except OverflowError:
+                return float('inf')
         return Double([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 

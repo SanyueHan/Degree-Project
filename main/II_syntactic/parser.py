@@ -305,7 +305,7 @@ class Parser:
             root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
-    def parse_level_4_expression(self):
+    def parse_level_4_expression(self, next_level=None):
         """
         unary prefix operators: + - ~
         """
@@ -316,7 +316,7 @@ class Parser:
                 # todo: raise invalid unary expression exception
                 return None
             return ASTNode(n_type=ASTNodeType.UOP_EXP, n_text=token.get_text(), children=[child])
-        return self.parse_level_2_expression()
+        return self.parse_level_2_expression() if next_level is None else next_level()
 
     def parse_level_2_expression(self):
         """
@@ -333,7 +333,7 @@ class Parser:
                 root = ASTNode(n_type=ASTNodeType.UOP_EXP, n_text=token.get_text(), children=[root])
             else:
                 token = self.tokens.pop(0)  # power symbol
-                child = self.parse_primary_expression()
+                child = self.parse_level_4_expression(next_level=self.parse_primary_expression)
                 root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
