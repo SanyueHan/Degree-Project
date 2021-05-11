@@ -252,13 +252,13 @@ class Parser:
         root = self.parse_level_6__expression()
         if root is None:
             return None
-        while self.get_token().get_type() == TokenType.CLN:
+        while self.get_token().get_type() == TokenType.COLON:
             token = self.tokens.pop(0)  # ':'
             node1 = self.parse_level_6__expression()
             if node1 is None:
                 # todo: raise invalid colon expression exception
                 return None
-            if self.get_token().get_type() == TokenType.CLN:
+            if self.get_token().get_type() == TokenType.COLON:
                 # colon expression with three value
                 token = self.tokens.pop(0)  # ':'
                 node2 = self.parse_level_6__expression()
@@ -400,7 +400,7 @@ class Parser:
     def parse_index_list(self):
         root = ASTNode(n_type=ASTNodeType.INDEX_LIST_EXP)
         while True:
-            if self.get_token().get_type() == TokenType.CLN:
+            if self.get_token().get_type() == TokenType.COLON:
                 root.add_child(ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=self.tokens.pop(0).get_text()))
             else:
                 child = self.parse_logic_or_expression()
