@@ -3,7 +3,6 @@ from main.III_semantic.utils import concatenate
 from main.III_semantic.builtins import *
 from main.III_semantic.literals import *
 from main.III_semantic.operations import *
-from main.data_types.array import Array
 
 
 class Interpreter:
@@ -27,7 +26,7 @@ class Interpreter:
             ASTNodeType.IDENTIFIER_EXP: self.evaluate_identifier_expression,
         }
         self.variables = {}
-        self.builtins = BUILTINS
+        self.builtins = BUILT_IN_FUNCTIONS
 
     def get_variables(self):
         return self.variables
@@ -66,14 +65,15 @@ class Interpreter:
             var = expression.get_child(0).get_text()
             val = self.evaluate_expression(expression.get_child(1))
             self.variables[var] = val
-        else:  # normal expression
-            if expression.get_type() == ASTNodeType.IDENTIFIER_EXP and expression.get_children() == []:
+        else:
+            if expression.get_type() == ASTNodeType.IDENTIFIER_EXP and expression.get_children() == [] \
+                    and expression.get_text() not in self.builtins:
+                # calling builtin function always result in 'ans', although sometime it looks like retrieval a variable
                 var = expression.get_text()
-                val = self.retrieve(var)
             else:
                 var = "ans"
-                val = self.evaluate_expression(expression)
-                self.variables["ans"] = val
+            val = self.evaluate_expression(expression)
+            self.variables[var] = val
         return (var, val) if stmt.get_child(1).get_text() != ';' else None
 
     def interpret_clear_statement(self, stmt):
@@ -202,18 +202,23 @@ class Interpreter:
     def evaluate_index_list_expression(self, exp):
         return [self.evaluate_expression(child) for child in exp.get_children()]
 
+    @staticmethod
+    def evaluate_ident_list_expression(exp):
+        return [String([child.get_text()]) for child in exp.get_children()]
+
     def evaluate_identifier_expression(self, exp):
         ref = exp.get_text()
         obj = self.retrieve(ref)
 
+        arguments = []
         if exp.get_children():
-            # indexing expression or function call
-            index_list = self.evaluate_index_list_expression(exp.get_child(0))
-            if isinstance(obj, Array):
-                return obj.visit(index_list)
-        else:
-            # variable expression
-            return obj
+            child = exp.get_child(0)
+            if child.get_type() == ASTNodeType.INDEX_LIST_EXP:
+                arguments = self.evaluate_index_list_expression(child)
+            else:
+                arguments = self.evaluate_ident_list_expression(child)
+
+        return obj(arguments)
 
     def evaluate_logical_operations(self, child_0, child_1, operator):
         """

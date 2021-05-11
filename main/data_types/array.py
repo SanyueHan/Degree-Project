@@ -62,8 +62,10 @@ class Array(Data):
     def convert(obj):
         return obj
 
-    def visit(self, index_list):
-        if len(index_list) == 1:
+    def __call__(self, index_list):
+        if len(index_list) == 0:
+            return self
+        elif len(index_list) == 1:
             index = index_list[0]
             if isinstance(index, str):
                 return self.__class__(self.refactored, size=(len(self), 1))
@@ -84,8 +86,6 @@ class Array(Data):
 
             return self.__class__([self[i * self.n + j] for i in index_m for j in index_n],
                                   size=(len(index_m), len(index_n)))
-        else:
-            pass
 
     @property
     def m(self):

@@ -1,14 +1,68 @@
-from main.data_types.array_data.numeric_data.decimal_data.double import Double
-from main.data_types.array_data.logical import Logical
+from main.III_semantic.built_in.elmat.special_variables_and_constants import *
 
 
-BUILTINS = {
-    'pi': Double([3.141592653589793]),
-    'inf': Double([float('inf')]),
-    'Inf': Double([float('inf')]),
-    'nan': Double([float('nan')]),
-    'NaN': Double([float('nan')]),
-    'eps': Double([2.220446049250313e-16]),
-    'true': Logical([True]),
-    'false': Logical([False]),
+ELEMENTARY_MATRICES = {
+
+}
+
+
+BASIC_ARRAY_INFORMATION = {
+
+}
+
+
+MATRIX_MANIPULATION = {
+
+}
+
+
+MULTI_DIMENSIONAL_ARRAY_FUNCTIONS = {
+
+}
+
+
+ARRAY_UTILITY_FUNCTIONS = {
+
+}
+
+
+SPECIAL_VARIABLES_AND_CONSTANTS = {
+    'eps': eps,
+    'realmax': realmax,
+    'intmax': intmax,
+    'intmin': intmin,
+    'flintmax': flintmax,
+    'pi': pi,
+    'i': None,
+    'inf': inf,
+    'Inf': inf,
+    'nan': nan,
+    'Nan': nan,
+    'isnan': isnan,
+    'isinf': isinf,
+    'isfinite': isfinite,
+    'j': None,
+    'true': true,
+    'false': false,
+}
+
+
+SPECIALIZED_MATRICES = {
+
+}
+
+
+ELEMENTARY = {
+    **ELEMENTARY_MATRICES,
+    **BASIC_ARRAY_INFORMATION,
+    **MATRIX_MANIPULATION,
+    **MULTI_DIMENSIONAL_ARRAY_FUNCTIONS,
+    **ARRAY_UTILITY_FUNCTIONS,
+    **SPECIAL_VARIABLES_AND_CONSTANTS,
+    **SPECIALIZED_MATRICES
+}
+
+
+BUILT_IN_FUNCTIONS = {
+    **ELEMENTARY,
 }

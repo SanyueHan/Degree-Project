@@ -175,7 +175,7 @@ class Parser:
         pass
 
     def parse_identifier_list(self):
-        node = ASTNode(n_type=ASTNodeType.ID_LIST)
+        node = ASTNode(n_type=ASTNodeType.IDENT_LIST_EXP)
         while self.get_token().get_type() == TokenType.IDENTIFIER:
             node.add_child(ASTNode(n_type=ASTNodeType.IDENTIFIER_EXP, n_text=self.tokens.pop(0).get_text()))
         return node
