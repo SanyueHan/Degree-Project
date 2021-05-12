@@ -153,8 +153,7 @@ class Interpreter:
 
         if operator in ARITHMETIC_OPERATORS:
             return ARITHMETIC_OPERATORS[operator](operand_0, operand_1)
-        if operator in RELATIONAL_OPERATORS:
-            return evaluate_relational_operations(operand_0, operand_1, operator)
+        return evaluate_relational_operations(operand_0, operand_1, operator)
 
     def evaluate_colon_expression(self, exp):
         if exp.num_children() == 0:

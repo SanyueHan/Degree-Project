@@ -108,6 +108,8 @@ class Double(Decimal):
     def convert(obj):
         if isinstance(obj, bool):
             return 1.0 if obj else 0.0
+        if isinstance(obj, complex):
+            return obj.real
         return float(obj)
 
 

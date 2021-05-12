@@ -101,12 +101,7 @@ def evaluate_array_right_division_operation(operand_0, operand_1):
         # todo: Operator './' is not supported for operands of type 'string'.
         return None
     else:
-        def fun(a, b):
-            if b:
-                return a / b
-            else:
-                return float('inf') if a else float('nan')
-        return Double([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
+        return Double([division(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 
 def evaluate_array_left_division_operation(operand_0, operand_1):
@@ -115,10 +110,7 @@ def evaluate_array_left_division_operation(operand_0, operand_1):
         return None
     else:
         def fun(a, b):
-            if a:
-                return b / a
-            else:
-                return float('inf') if b else float('nan')
+            return division(b, a)
         return Double([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 
@@ -140,7 +132,14 @@ def evaluate_relational_operations(operand_0, operand_1, operator):
         # one is String while one is not String
         # todo: f"Comparison between {a.get_class_name().lower()} and {b.get_class_name().lower()} is not supported."
         pass
-    fun = RELATIONAL_OPERATORS[operator]
+    fun = {
+        '==': lambda x, y: x == y,
+        '>=': lambda x, y: x >= y,
+        '>': lambda x, y: x > y,
+        '<=': lambda x, y: x <= y,
+        '<': lambda x, y: x < y,
+        '~=': lambda x, y: x != y
+    }[operator]
     return Logical([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 
@@ -160,11 +159,11 @@ ARITHMETIC_OPERATORS = {
     '.^': evaluate_array_power_operation,
 }
 
-RELATIONAL_OPERATORS = {
-    '==': lambda x, y: x == y,
-    '>=': lambda x, y: x >= y,
-    '>': lambda x, y: x > y,
-    '<=': lambda x, y: x <= y,
-    '<': lambda x, y: x < y,
-    '~=': lambda x, y: x != y
-}
+
+def division(a, b):
+    if b:
+        return a / b
+    elif a:
+        return float('inf') if a > 0 else float('-inf')
+    else:
+        return float('nan')
