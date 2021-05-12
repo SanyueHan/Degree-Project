@@ -11,15 +11,18 @@ DIRECTORY = '../../test_cases/language_fundamentals/iv_operators_and_elementary_
 
 
 def batch_binary_operation_statements(operator):
-    return ''.join([random_binary_expression(operator)+'\n' for _ in range(REPETITION)])
+    generator = RandomExpressionGenerator()
+    return ''.join([generator.random_binary_expression(operator)+'\n' for _ in range(REPETITION)])
 
 
 def batch_prefix_operation_statements(operator):
-    return ''.join([random_prefix_expression(operator)+'\n' for _ in range(REPETITION)])
+    generator = RandomExpressionGenerator()
+    return ''.join([generator.random_prefix_expression(operator)+'\n' for _ in range(REPETITION)])
 
 
 def batch_postfix_operation_statements(operator):
-    return ''.join([random_postfix_expression(operator)+'\n' for _ in range(REPETITION)])
+    generator = RandomExpressionGenerator()
+    return ''.join([generator.random_postfix_expression(operator)+'\n' for _ in range(REPETITION)])
 
 
 if __name__ == "__main__":
@@ -38,6 +41,8 @@ if __name__ == "__main__":
         file_1.write(batch_binary_operation_statements('/'))
         file_1.write(batch_binary_operation_statements('\\'))
         file_1.write("\n% Powers\n")
+        file_1.write(batch_binary_operation_statements('.^'))
+        file_1.write(batch_binary_operation_statements('^'))
         file_1.write("\n% Transpose\n")
         file_1.write(batch_postfix_operation_statements('.\''))
         file_1.write(batch_postfix_operation_statements('\''))
