@@ -368,6 +368,8 @@ class Parser:
         node = ASTNode(n_type=ASTNodeType.ARRAY_LIST_EXP)
 
         while self.get_token().get_type() != TokenType.R_BRACKET:
+            if self.get_token().get_type() == TokenType.EO_STMT:
+                self.tokens.pop(0)  # remove unnecessary delimiters
             child = self.parse_logic_or_expression()
             if child is None:
                 # todo:

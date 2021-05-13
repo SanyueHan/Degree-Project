@@ -9,9 +9,9 @@ def lexer(program):
     lines = [line + '\n' for line in program.split('\n')]
     for line in lines:
         col = 1
-        text = ''
+        token_text = ''
+        token_type = None
         brackets_depth = 0
-        last = None
         while line:
             for TYPE in TokenType:
                 match = TYPE.value.match(line)
@@ -20,30 +20,30 @@ def lexer(program):
                     # it is a CharacterVectorTerminationError,
                     # otherwise it would be considered as a normal transpose character at the lexical analysis stage.
                     if TYPE == TokenType.TRA:
-                        if TokenType.WHITESPACE.value.sub('', text) == '':
+                        if TokenType.WHITESPACE.value.sub('', token_text) == '':
                             raise CharacterVectorTerminationError(row, col)
-                    text = match.group()
-                    line = line[len(text):]
-                    if TYPE == TokenType.ADD and brackets_depth > 0 and last == TokenType.WHITESPACE:
+                    # preprocess: replace comma for space in some array construction cases
+                    if brackets_depth > 0 and TYPE == TokenType.ADD and token_type == TokenType.WHITESPACE:
                         result_token_list.append(Token(t_type=TokenType.EO_STMT, t_text=',', row=row, col=col - 1))
-                        result_token_list.append(Token(t_type=TokenType.ADD, t_text=text, row=row, col=col))
-                    elif TYPE == TokenType.WHITESPACE and last == TokenType.ADD and brackets_depth > 0 and result_token_list.__getitem__(result_token_list.__len__() - 2).get_type() == TokenType.EO_STMT:  # space - space就要删掉减号前的逗号
-                        result_token_list.remove(result_token_list.__getitem__(result_token_list.__len__() - 2))
-                    elif TYPE != TokenType.WHITESPACE and TYPE != TokenType.ANNOTATION:
-                        result_token_list.append(Token(t_type=TYPE, t_text=text, row=row, col=col))
+                    if brackets_depth > 0 and TYPE == TokenType.WHITESPACE and token_type == TokenType.ADD \
+                            and result_token_list[-2].get_type() == TokenType.EO_STMT:  # space - space就要删掉减号前的逗号
+                        result_token_list.pop(-2)
                     if TYPE == TokenType.L_BRACKET:
                         brackets_depth += 1
                     if TYPE == TokenType.R_BRACKET:
                         brackets_depth -= 1
-                    last = TYPE
-                    col += len(text)
+
+                    token_text = match.group()
+                    token_type = TYPE
+                    if TYPE != TokenType.WHITESPACE and TYPE != TokenType.ANNOTATION:
+                        result_token_list.append(Token(t_type=TYPE, t_text=token_text, row=row, col=col))
+                    line = line[len(token_text):]
+                    col += len(token_text)
                     break
-            else:   # 抛出异常
-                if line[0] in "#$`":
-                    raise InvalidCharacterError(row, col)
-                elif line[0] == '\"':
+            else:
+                if line[0] == '"':
                     raise StringTerminationError(row, col)
-                else:
+                else:  # line[0] in "#$`"
                     raise InvalidCharacterError(row, col)
         row += 1
     return result_token_list
