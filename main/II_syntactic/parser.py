@@ -405,14 +405,10 @@ class Parser:
             else:
                 child = self.parse_logic_or_expression()
                 if child is None:
-                    # todo:
-                    return None
+                    break
                 root.add_child(child)
 
             if str(self.get_token()) == ",":
                 # one argument finished, continue to parse another argument
                 self.tokens.pop(0)
-            else:
-                # no more argument
-                break
         return root
