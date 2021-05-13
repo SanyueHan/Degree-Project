@@ -4,7 +4,6 @@ from main.data_types.array_data.string import String
 from main.data_types.array_data.logical import Logical
 from main.data_types.array_data.numeric_data.decimal_data.double import Double
 from main.exceptions.semantic_exceptions import *
-import numpy as np
 
 
 # unary
@@ -56,15 +55,14 @@ def evaluate_matrix_multiplication_operation(operand_0, operand_1):
     else:
         pass
         # todo: Error using  *
-# Incorrect dimensions for matrix multiplication. Check that the number of columns in the first matrix
-# matches the number of rows in the second matrix. To perform elementwise multiplication, use '.*'.
-#
 
 
+"""
 def inv_matrix(operand_0):
     if operand_0.size[1] == operand_0.size[0]:
         return np.linalg.inv(operand_0)
     return None
+"""
 
 
 def evaluate_matrix_right_division_operation(operand_0, operand_1):
@@ -73,7 +71,7 @@ def evaluate_matrix_right_division_operation(operand_0, operand_1):
         return None
     if operand_0.size == (1, 1) and operand_1.size == (1, 1):
         return evaluate_array_right_division_operation(operand_0, operand_1)
-    return evaluate_matrix_multiplication_operation(operand_0, inv_matrix(operand_1))
+    # return evaluate_matrix_multiplication_operation(operand_0, inv_matrix(operand_1))
 
 
 def evaluate_matrix_left_division_operation(operand_0, operand_1):
@@ -82,7 +80,6 @@ def evaluate_matrix_left_division_operation(operand_0, operand_1):
         return None
     if operand_0.size == (1, 1) and operand_1.size == (1, 1):
         return evaluate_array_left_division_operation(operand_0, operand_1)
-    # todo: matrix multiplication
 
 
 def evaluate_matrix_power_operation(operand_0, operand_1):

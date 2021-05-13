@@ -3,14 +3,8 @@ from main.data_types.data import Data
 
 class Array(Data):
     def __init__(self, data, size=None):
-        if size:
-            if size[0] * size[1] != len(data):
-                # todo raise error
-                return
-        else:
-            size = (1, len(data))
         self.data = [self.convert(element) for element in data]
-        self.size = size
+        self.size = size if size else (1, len(data))
 
     def __bool__(self):
         return all(self.data)

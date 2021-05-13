@@ -73,9 +73,6 @@ class Parser:
             node = stmt()
             if node:
                 return node
-        else:
-            # todo: throw unknown statement exception
-            return None
 
     def parse_expression_statement(self):
         expression = self.parse_expression()
@@ -121,9 +118,6 @@ class Parser:
 
         if clause not in ('else', 'otherwise'):
             expression = self.parse_logic_or_expression()
-            if expression is None:
-                # todo: throw exception
-                return None
             node.add_child(expression)
 
         if clause != 'switch':
@@ -191,13 +185,11 @@ class Parser:
     def parse_assignment_expression(self):
         if self.get_token().get_type() != TokenType.IDENTIFIER or self.get_token(1).get_type() != TokenType.ASS:
             return None
-        identifier = ASTNode(n_type=ASTNodeType.IDENTIFIER_EXP, n_text=self.tokens.pop(0).get_text())
-        node = ASTNode(n_type=ASTNodeType.ASS_EXP, n_text=self.tokens.pop(0).get_text(), children=[identifier])
-        expression = self.parse_logic_or_expression()
-        if expression is None:
-            # todo: throw invalid assignment statement exception
-            return None
-        node.add_child(expression)
+        identifier = ASTNode(n_type=ASTNodeType.IDENTIFIER_EXP,
+                             n_text=self.tokens.pop(0).get_text())
+        node = ASTNode(n_type=ASTNodeType.ASS_EXP,
+                       n_text=self.tokens.pop(0).get_text(),
+                       children=[identifier, self.parse_logic_or_expression()])
         return node
 
     def parse_logic_or_expression(self):
@@ -208,9 +200,6 @@ class Parser:
         while self.get_token().get_type() == TokenType.SCO:
             token = self.tokens.pop(0)  # '|'
             child = self.parse_logic_and_expression()
-            if child is None:
-                # todo: raise invalid logic or expression exception
-                return None
             root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
@@ -222,9 +211,6 @@ class Parser:
         while self.get_token().get_type() == TokenType.SCA:
             token = self.tokens.pop(0)  # '&'
             child = self.parse_level_8_expression()
-            if child is None:
-                # todo: raise invalid logic and expression exception
-                return None
             root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
@@ -239,9 +225,6 @@ class Parser:
         while self.get_token().get_type() == TokenType.REL:
             token = self.tokens.pop(0)  # relational symbol
             child = self.parse_level_7_expression()
-            if child is None:
-                # todo: raise invalid relational expression exception
-                return None
             root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
@@ -255,20 +238,11 @@ class Parser:
         while self.get_token().get_type() == TokenType.COLON:
             token = self.tokens.pop(0)  # ':'
             node1 = self.parse_level_6__expression()
-            if node1 is None:
-                # todo: raise invalid colon expression exception
-                return None
+            root = ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=token.get_text(), children=[root, node1])
             if self.get_token().get_type() == TokenType.COLON:
-                # colon expression with three value
                 token = self.tokens.pop(0)  # ':'
                 node2 = self.parse_level_6__expression()
-                if node2 is None:
-                    # todo: raise invalid colon expression exception
-                    return None
-                root = ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=token.get_text(), children=[root, node1, node2])
-            else:
-                # colon expression with two value
-                root = ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=token.get_text(), children=[root, node1])
+                root.add_child(node2)
         return root
 
     def parse_level_6__expression(self):
@@ -282,9 +256,6 @@ class Parser:
         while self.get_token().get_type() == TokenType.ADD:
             token = self.tokens.pop(0)  # additive symbol
             child = self.parse_level_5_expression()
-            if child is None:
-                # todo: raise invalid additive expression exception
-                return None
             root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
@@ -299,9 +270,6 @@ class Parser:
         while self.get_token().get_type() == TokenType.MUL:
             token = self.tokens.pop(0)  # multiplicative symbol
             child = self.parse_level_4_expression()
-            if child is None:
-                # todo: raise invalid multiplicative expression exception
-                return None
             root = ASTNode(n_type=ASTNodeType.BOP_EXP, n_text=token.get_text(), children=[root, child])
         return root
 
@@ -312,9 +280,6 @@ class Parser:
         if self.get_token().get_type() in (TokenType.ADD, TokenType.EWN):
             token = self.tokens.pop(0)  # unary operator symbol
             child = self.parse_level_4_expression()
-            if child is None:
-                # todo: raise invalid unary expression exception
-                return None
             return ASTNode(n_type=ASTNodeType.UOP_EXP, n_text=token.get_text(), children=[child])
         return self.parse_level_2_expression() if next_level is None else next_level()
 
@@ -342,6 +307,7 @@ class Parser:
             return None
         if self.get_token().get_type() not in self.primary_cases:
             return None
+            # todo: Error: Invalid expression. Check for missing or extra characters.
         return self.primary_cases[self.tokens[0].get_type()]()
 
     def parse_number_literal(self):
@@ -359,7 +325,8 @@ class Parser:
         if node and self.get_token().get_type() == TokenType.R_PAREN:
             self.tokens.pop(0)  # remove right paren
         else:
-            # todo: raise invalid parens exception
+            # todo: Invalid expression. When calling a function or indexing a variable, use parentheses.
+            # Otherwise, check for mismatched delimiters.
             return None
         return node
 
@@ -370,18 +337,15 @@ class Parser:
         while self.get_token().get_type() != TokenType.R_BRACKET:
             if self.get_token().get_type() == TokenType.EO_STMT:
                 self.tokens.pop(0)  # remove unnecessary delimiters
-            child = self.parse_logic_or_expression()
-            if child is None:
-                # todo:
-                return None
-            node.add_child(child)
+            node.add_child(self.parse_logic_or_expression())
             while self.get_token().get_type() == TokenType.EO_STMT:
                 node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
 
         if node and self.get_token().get_type() == TokenType.R_BRACKET:
             self.tokens.pop(0)  # remove right bracket
         else:
-            # todo: raise invalid bracket expression exception
+            # todo: Invalid expression. When calling a function or indexing a variable, use parentheses.
+            # Otherwise, check for mismatched delimiters.
             return None
         return node
 
@@ -393,7 +357,8 @@ class Parser:
             if node and self.get_token().get_type() == TokenType.R_PAREN:
                 self.tokens.pop(0)  # remove right paren
             else:
-                # todo: raise invalid indexing expression exception
+                # todo: Invalid expression. When calling a function or indexing a variable, use parentheses.
+                # Otherwise, check for mismatched delimiters.
                 return None
             root.add_child(node)
             return root
