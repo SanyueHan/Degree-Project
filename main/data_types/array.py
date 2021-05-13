@@ -51,13 +51,6 @@ class Array(Data):
     def get_class(self):
         return self.__class__
 
-    @classmethod
-    def get_super(cls):
-        return cls.__base__
-
-    def get_class_name(self):
-        return self.__class__.__qualname__
-
     @staticmethod
     def convert(obj):
         return obj
@@ -70,19 +63,19 @@ class Array(Data):
             if isinstance(index, str):
                 return self.__class__(self.refactored, size=(len(self), 1))
             data = self.refactored
-            return self.__class__([data[to_int(element)-1] for element in index], size=index.size)
+            return self.__class__([data[self.get_int_index(element) - 1] for element in index], size=index.size)
         elif len(index_list) == 2:
             index_m = index_list[0]
             if isinstance(index_m, str):
                 index_m = [i for i in range(0, self.m)]
             else:
-                index_m = [to_int(i) - 1 for i in index_m.refactored]
+                index_m = [self.get_int_index(i) - 1 for i in index_m.refactored]
 
             index_n = index_list[1]
             if isinstance(index_n, str):
                 index_n = [i for i in range(0, self.n)]
             else:
-                index_n = [to_int(i) - 1 for i in index_n.refactored]
+                index_n = [self.get_int_index(i) - 1 for i in index_n.refactored]
 
             return self.__class__([self[i * self.n + j] for i in index_m for j in index_n],
                                   size=(len(index_m), len(index_n)))
@@ -95,10 +88,10 @@ class Array(Data):
     def n(self):
         return self.size[1]
 
-
-def to_int(number):
-    if int(number) == number:
-        return int(number)
-    else:
-        # todo: Array indices must be positive integers or logical values.
-        return None
+    @staticmethod
+    def get_int_index(number):
+        if int(number) == number:
+            return int(number)
+        else:
+            # todo: Array indices must be positive integers or logical values.
+            return None

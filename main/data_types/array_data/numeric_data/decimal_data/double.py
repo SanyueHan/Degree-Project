@@ -115,7 +115,5 @@ class Double(Decimal):
 
 if __name__ == "__main__":
     print(Double([]).get_class())
-    print(Double([]).get_super())
-    print(Double.get_super())
     print(Decimal is not Double)
     print(Decimal is (not Double))

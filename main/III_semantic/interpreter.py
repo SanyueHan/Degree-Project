@@ -38,14 +38,6 @@ class Interpreter:
             return self.builtins[identifier]
         # todo: Unrecognized function or variable {identifier}.
 
-    def del_variables(self, var_list=None):
-        if var_list:
-            for var in var_list:
-                # todo: check exist and raise error
-                del self.variables[var]
-        else:
-            self.variables = {}
-
     def interpret_statement_list(self, lst):
         for child in lst.get_children():
             self.interpret_statement(child)
@@ -75,10 +67,6 @@ class Interpreter:
             val = self.evaluate_expression(expression)
             self.variables[var] = val
         return (var, val) if stmt.get_child(1).get_text() != ';' else None
-
-    def interpret_clear_statement(self, stmt):
-        variables = [child.get_text() for child in stmt.get_child(0).get_children()]
-        self.del_variables(var_list=variables if variables else None)
 
     def interpret_selection_statement(self, stmt):
         if stmt.get_text() == 'if':
