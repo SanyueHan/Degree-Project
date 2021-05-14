@@ -344,8 +344,8 @@ class Parser:
                 node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
             else:
                 if self.get_token_type() != TokenType.R_BRACKET:
-                    # todo: type 3 error
-                    pass
+                    token = self.get_token()
+                    raise InvalidExpressionError(token.row, token.col, 3)
         self.tokens.pop(0)  # remove right bracket
         return node
 
@@ -372,6 +372,6 @@ class Parser:
                 self.tokens.pop(0)
             else:
                 if self.get_token_type() != TokenType.R_PAREN:
-                    # todo: type 3 error
-                    pass
+                    token = self.get_token()
+                    raise InvalidExpressionError(token.row, token.col, 3)
         return root
