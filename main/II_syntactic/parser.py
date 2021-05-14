@@ -48,7 +48,7 @@ class Parser:
     def complete_statement(self, node):
         if self.get_token().get_type() != TokenType.EO_STMT:
             token = self.get_token()
-            raise InvalidExpressionError(token.row, token.col)
+            raise InvalidExpressionError(token.row, token.col, 1)
         node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
         return node
 
@@ -306,8 +306,8 @@ class Parser:
         if not self.tokens:
             return None
         if self.get_token().get_type() not in self.primary_cases:
-            return None
-            # todo: Error: Invalid expression. Check for missing or extra characters.
+            token = self.get_token()
+            raise InvalidExpressionError(token.row, token.col, 2)
         return self.primary_cases[self.tokens[0].get_type()]()
 
     def parse_number_literal(self):
@@ -325,9 +325,8 @@ class Parser:
         if node and self.get_token().get_type() == TokenType.R_PAREN:
             self.tokens.pop(0)  # remove right paren
         else:
-            # todo: Invalid expression. When calling a function or indexing a variable, use parentheses.
-            # Otherwise, check for mismatched delimiters.
-            return None
+            token = self.get_token()
+            raise InvalidExpressionError(token.row, token.col, 3)
         return node
 
     def parse_bracket_expression(self):
@@ -344,9 +343,10 @@ class Parser:
         if node and self.get_token().get_type() == TokenType.R_BRACKET:
             self.tokens.pop(0)  # remove right bracket
         else:
-            # todo: Invalid expression. When calling a function or indexing a variable, use parentheses.
-            # Otherwise, check for mismatched delimiters.
-            return None
+            token = self.get_token()
+            raise InvalidExpressionError(token.row, token.col, 3)
+        # todo: Invalid expression. When calling a function or indexing a variable, use parentheses.
+        # Otherwise, check for mismatched delimiters.
         return node
 
     def parse_identifier_expression(self):
