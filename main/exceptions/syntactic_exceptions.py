@@ -1,7 +1,7 @@
 from main.exceptions.interpret_exception import InterpretException
 
 
-class IncompleteStatementError(InterpretException):
+class EndMissingError(InterpretException):
     message = "At least one END is missing. The statement beginning here does not have a\nmatching end."
 
 
@@ -10,14 +10,18 @@ class InvalidExpressionError(InterpretException):
         super().__init__(line, column)
         if error_type == 1:
             self.message = "Invalid expression. Check for missing multiplication operator, missing or\n" \
-                      "unbalanced delimiters, or other syntax error. To construct matrices, use\n" \
-                      "brackets instead of parentheses."
+                           "unbalanced delimiters, or other syntax error. To construct matrices, use\n" \
+                           "brackets instead of parentheses."
         elif error_type == 2:
             self.message = "Invalid expression. Check for missing or extra characters."
         elif error_type == 3:
-            self.message = "Invalid expression. When calling a function or indexing a variable, use parentheses.\n" \
-                      "Otherwise, check for mismatched delimiters."
-        elif error_type == 4:
-            self.message = "This statement is incomplete."
-        elif error_type == 5:
-            self.message = "Invalid use of operator."
+            self.message = "Invalid expression. When calling a function or indexing a variable, use\n" \
+                           "parentheses. Otherwise, check for mismatched delimiters."
+
+
+class InvalidOperatorError(InterpretException):
+    message = "Invalid use of operator."
+
+
+class IncompleteStatementError(InterpretException):
+    message = "This statement is incomplete."

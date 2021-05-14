@@ -19,6 +19,21 @@ SEL_TERMINATOR_MAP = {
 }
 
 
+NON_PREFIX_OPERATOR_TOKENS = {
+    TokenType.MUL,
+    TokenType.POW,
+    TokenType.TRA,
+    TokenType.REL,
+    TokenType.SCA,
+    TokenType.SCO,
+    TokenType.EWA,
+    TokenType.EWO,
+    TokenType.EWN,
+    TokenType.DOT,
+    TokenType.COLON
+}
+
+
 class Parser:
     """
     https://ww2.mathworks.cn/help/matlab/matlab_prog/operator-precedence.html
@@ -94,7 +109,7 @@ class Parser:
         # firstly a if/switch
         clause = self.parse_selection_clause(start_token.get_text())
         if clause is None:
-            raise IncompleteStatementError(start_token.row, start_token.col)
+            raise EndMissingError(start_token.row, start_token.col)
         node.add_child(clause)
 
         a, b = SEL_CLAUSES_MAP[start_token.get_text()]
@@ -102,14 +117,14 @@ class Parser:
         while self.get_token().get_text() == a:
             clause = self.parse_selection_clause(self.tokens.pop(0).get_text())
             if clause is None:
-                raise IncompleteStatementError(start_token.row, start_token.col)
+                raise EndMissingError(start_token.row, start_token.col)
             node.add_child(clause)
 
         # finally sometimes a else/otherwise
         if self.get_token().get_text() == b:
             clause = self.parse_selection_clause(self.tokens.pop(0).get_text())
             if clause is None:
-                raise IncompleteStatementError(start_token.row, start_token.col)
+                raise EndMissingError(start_token.row, start_token.col)
             node.add_child(clause)
 
         self.tokens.pop(0)  # remove 'end'
@@ -144,7 +159,7 @@ class Parser:
 
         clause = self.parse_iteration_clause(start_token.get_text())
         if clause is None:
-            raise IncompleteStatementError(start_token.row, start_token.col)
+            raise EndMissingError(start_token.row, start_token.col)
         node.add_child(clause)
 
         self.tokens.pop(0)  # remove 'end'
@@ -283,15 +298,18 @@ class Parser:
         return root
 
     def parse_primary_expression(self):
+        if self.get_token_type() == TokenType.KEYWORD:
+            # not parsed as expression,
+            # instead, parsed by other statement parser method following expression statement
+            return None
         if self.get_token_type() in self.primary_cases:
             return self.primary_cases[self.tokens[0].get_type()]()
-        if self.get_token_type() == TokenType.KEYWORD:
-            return None
-        if self.get_token_type() is None:
-            # todo: This statement is incomplete.
-            return None
+
         token = self.get_token()
-        raise InvalidExpressionError(token.row, token.col, 2)
+        if self.get_token_type() == TokenType.EO_STMT:
+            raise InvalidExpressionError(token.row, token.col, 2)
+        if self.get_token_type() in NON_PREFIX_OPERATOR_TOKENS:
+            raise InvalidOperatorError(token.row, token.col)
 
     def parse_number_literal(self):
         return ASTNode(n_type=ASTNodeType.NUMBER_LIT_EXP, n_text=self.tokens.pop(0).get_text())
@@ -312,8 +330,6 @@ class Parser:
             raise InvalidExpressionError(token.row, token.col, 3)
         return node
 
-
-
     def parse_bracket_expression(self):
         self.tokens.pop(0)  # remove left bracket
         node = ASTNode(n_type=ASTNodeType.ARRAY_LIST_EXP)
@@ -329,12 +345,6 @@ class Parser:
             else:
                 if self.get_token_type() != TokenType.R_BRACKET:
                     # todo: type 3 error
-                    # token=self.get_token()
-                    # if token is None:
-                    #     raise InvalidExpressionError(token.row,token.col,4)
-                    # elif token.get_text()=='@':
-                    #     raise InvalidExpressionError(token.row,token.col,5)
-
                     pass
         self.tokens.pop(0)  # remove right bracket
         return node
@@ -361,11 +371,7 @@ class Parser:
                 # one argument finished, continue to parse another argument
                 self.tokens.pop(0)
             else:
-                if self.get_token_type() == TokenType.R_PAREN:
-                    # todo: "This statement is incomplete."  This error is still need to do.
-
+                if self.get_token_type() != TokenType.R_PAREN:
+                    # todo: type 3 error
                     pass
-                else:
-                    token = self.get_token()
-                    raise InvalidExpressionError(token.row, token.col, 3)
         return root
