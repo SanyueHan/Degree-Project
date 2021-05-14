@@ -289,7 +289,7 @@ class Parser:
             return None
         if self.get_token_type() is None:
             # todo: This statement is incomplete.
-            pass
+            return None
         token = self.get_token()
         raise InvalidExpressionError(token.row, token.col, 2)
 
@@ -312,6 +312,8 @@ class Parser:
             raise InvalidExpressionError(token.row, token.col, 3)
         return node
 
+
+
     def parse_bracket_expression(self):
         self.tokens.pop(0)  # remove left bracket
         node = ASTNode(n_type=ASTNodeType.ARRAY_LIST_EXP)
@@ -327,6 +329,12 @@ class Parser:
             else:
                 if self.get_token_type() != TokenType.R_BRACKET:
                     # todo: type 3 error
+                    # token=self.get_token()
+                    # if token is None:
+                    #     raise InvalidExpressionError(token.row,token.col,4)
+                    # elif token.get_text()=='@':
+                    #     raise InvalidExpressionError(token.row,token.col,5)
+
                     pass
         self.tokens.pop(0)  # remove right bracket
         return node
@@ -353,7 +361,11 @@ class Parser:
                 # one argument finished, continue to parse another argument
                 self.tokens.pop(0)
             else:
-                if self.get_token_type() != TokenType.R_PAREN:
-                    # todo: type 3 error
+                if self.get_token_type() == TokenType.R_PAREN:
+                    # todo: "This statement is incomplete."  This error is still need to do.
+
                     pass
+                else:
+                    token = self.get_token()
+                    raise InvalidExpressionError(token.row, token.col, 3)
         return root

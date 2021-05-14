@@ -17,3 +17,7 @@ class InvalidExpressionError(InterpretException):
         elif error_type == 3:
             self.message = "Invalid expression. When calling a function or indexing a variable, use parentheses.\n" \
                       "Otherwise, check for mismatched delimiters."
+        elif error_type == 4:
+            self.message = "This statement is incomplete."
+        elif error_type == 5:
+            self.message = "Invalid use of operator."
