@@ -1,8 +1,8 @@
 from main.II_syntactic.node_types import ASTNodeType
 from main.III_semantic.utils import concatenate
-from main.III_semantic.builtins import *
-from main.III_semantic.literals import *
 from main.III_semantic.operations import *
+from main.III_semantic.literals import *
+from main.builtin_functions.catalog import MATLAB
 
 
 class Interpreter:
@@ -26,7 +26,7 @@ class Interpreter:
             ASTNodeType.IDENTIFIER_EXP: self.evaluate_identifier_expression,
         }
         self.variables = {}
-        self.builtins = BUILT_IN_FUNCTIONS
+        self.builtins = MATLAB
 
     def get_variables(self):
         return self.variables
