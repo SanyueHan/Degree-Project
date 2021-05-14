@@ -223,18 +223,18 @@ class Parser:
         """
         binary/trinary colon operator (left associate): :
         """
-        root = self.parse_level_6__expression()
+        root = self.parse_level_6_expression()
         while self.get_token_type() == TokenType.COLON:
             token = self.tokens.pop(0)  # ':'
-            node1 = self.parse_level_6__expression()
+            node1 = self.parse_level_6_expression()
             root = ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=token.get_text(), children=[root, node1])
             if self.get_token_type() == TokenType.COLON:
                 token = self.tokens.pop(0)  # ':'
-                node2 = self.parse_level_6__expression()
+                node2 = self.parse_level_6_expression()
                 root.add_child(node2)
         return root
 
-    def parse_level_6__expression(self):
+    def parse_level_6_expression(self):
         """
         binary additive operators (left associate): + -
         """
@@ -318,13 +318,16 @@ class Parser:
         while self.get_token_type() != TokenType.R_BRACKET:
             if self.get_token_type() == TokenType.EO_STMT:
                 self.tokens.pop(0)  # remove unnecessary delimiters
+
             child = self.parse_logic_or_expression()
-            if child is None:
-                # todo: type 3 error
-                pass
             node.add_child(child)
+
             while self.get_token_type() == TokenType.EO_STMT:
                 node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
+            else:
+                if self.get_token_type() != TokenType.R_BRACKET:
+                    # todo: type 3 error
+                    pass
         self.tokens.pop(0)  # remove right bracket
         return node
 
@@ -335,7 +338,6 @@ class Parser:
             node = self.parse_index_list()
             self.tokens.pop(0)  # remove right paren
             root.add_child(node)
-            return root
         return root
 
     def parse_index_list(self):
@@ -345,11 +347,13 @@ class Parser:
                 root.add_child(ASTNode(n_type=ASTNodeType.CLN_EXP, n_text=self.tokens.pop(0).get_text()))
             else:
                 child = self.parse_logic_or_expression()
-                if child is None:
-                    # todo: type 3 error
-                    pass
                 root.add_child(child)
+
             if str(self.get_token()) == ",":
                 # one argument finished, continue to parse another argument
                 self.tokens.pop(0)
+            else:
+                if self.get_token_type() != TokenType.R_PAREN:
+                    # todo: type 3 error
+                    pass
         return root
