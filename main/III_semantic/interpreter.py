@@ -6,6 +6,9 @@ from main.builtin_functions.catalog import MATLAB
 
 
 class Interpreter:
+    """
+    https://ww2.mathworks.cn/help/matlab/matlab_prog/function-precedence-order.html
+    """
     def __init__(self):
         self.interpret = {
             ASTNodeType.STMT_LIST: self.interpret_statement_list,
