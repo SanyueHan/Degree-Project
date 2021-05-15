@@ -1,4 +1,4 @@
-import os
+import os, sys
 from main.I_lexical.lexer import lexer
 from main.I_lexical.token import TokenListPrinter
 from main.II_syntactic.parser import Parser
@@ -34,7 +34,10 @@ def script_execute(path, print_tokens=False, print_ast=False, print_var=False):
         if print_var:
             print(interpreter.get_variables())
     except InterpretException as e:
-        print(os.getcwd() + '/' + path)
+        if sys.platform == 'darwin':
+            print(os.getcwd() + '/' + path)
+        else:
+            print(os.getcwd() + '\\' + path.replace('/', '\\'), end=' ')
         print(e, end='')
 
 
