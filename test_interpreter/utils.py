@@ -3,7 +3,10 @@ import re
 import time
 
 
-REMOVE = re.compile(".\b|\b|Error: ")
+REDUNDANT_TEXT_1 = re.compile(r"[\s\S]*For online documentation, see https://www.mathworks.com/support\n"
+                              "For product information, visit www.mathworks.com.\n \n")
+REDUNDANT_TEXT_2 = re.compile(".\b|\b|Error: File:[ \n]")
+REDUNDANT_TEXT_3 = re.compile(r"[\n]*Error in run[\s\S]*")
 
 
 def read_from(path):
@@ -37,14 +40,14 @@ def matlab_execute(path, error=False):
     result = read_from(f"{temp}")
     os.system(f"rm {temp}")
 
-    if error:
-        # cancel the backspace character along with the character behind it (if exist)
-        result = re.sub(REMOVE, '', result)
+    # cancel license information (this information on windows is different with that on mac)
+    result = re.sub(REDUNDANT_TEXT_1, '', result)
+    # cancel the backspace character along with the character behind it (if exist)
+    result = re.sub(REDUNDANT_TEXT_2, '', result)
+    # cancel the stack information from matlab software
+    result = re.sub(REDUNDANT_TEXT_3, '', result)
 
-    if error:
-        # remove licenses information and matlab program stack information
-        return "\n".join(result.split("\n")[10:-5])
-    return "\n".join(result.split("\n")[10:])
+    return result
 
 
 def test_method_builder(target, actual):
