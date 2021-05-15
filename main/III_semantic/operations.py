@@ -14,6 +14,7 @@ def evaluate_transpose_operation(operand):
 def evaluate_array_sign_operation(operand, operator):
     if isinstance(operand, String):
         # todo: Unary operator '+' is not supported for operand of type 'string'.
+        raise UnaryOperatorForStrError()
         pass
     if operand.get_class() in (Char, Logical, Double):
         fun = {
