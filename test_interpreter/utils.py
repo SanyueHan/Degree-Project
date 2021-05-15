@@ -5,8 +5,9 @@ import time
 
 REDUNDANT_TEXT_1 = re.compile(r"[\s\S]*For online documentation, see https://www.mathworks.com/support\n"
                               "For product information, visit www.mathworks.com.\n \n")
-REDUNDANT_TEXT_2 = re.compile(".\b|\b|Error: File:[ \n]")
-REDUNDANT_TEXT_3 = re.compile(r"[\n]*Error in run[\s\S]*")
+REDUNDANT_TEXT_2 = re.compile(".\b|\b|")
+REDUNDANT_TEXT_3 = re.compile("Error: |File:[ \n]")
+REDUNDANT_TEXT_4 = re.compile(r"[\n]*Error in run[\s\S]*")
 
 
 def read_from(path):
@@ -44,8 +45,10 @@ def matlab_execute(path, error=False):
     result = re.sub(REDUNDANT_TEXT_1, '', result)
     # cancel the backspace character along with the character behind it (if exist)
     result = re.sub(REDUNDANT_TEXT_2, '', result)
-    # cancel the stack information from matlab software
+    # remove indeterminate "Error: " and "File: " or "File:\n"
     result = re.sub(REDUNDANT_TEXT_3, '', result)
+    # cancel the stack information from matlab software
+    result = re.sub(REDUNDANT_TEXT_4, '', result)
 
     return result
 
