@@ -29,7 +29,7 @@ def python_execute(path):
 
 def matlab_execute(path, error=False):
     temp = path[:-2] + "_matlab.txt"
-    command = f"matlab -nodisplay -nosplash -nodesktop -nojvm -r \"run('{path}'); exit;\" -logfile {temp}"
+    command = f"matlab -nosplash -nodesktop -nojvm -r \"run('{path}'); exit;\" -logfile {temp}"
     if error:
         # adding a & at the end of the command to cancel blocking the unittest process
         command += " &"

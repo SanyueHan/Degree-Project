@@ -3,7 +3,7 @@ from main.exceptions.interpret_exception import InterpretException
 
 class InvalidCharacterError(InterpretException):
     message = {
-        'darwin': "Invalid text character. Check for unsupported symbol, invisible character, or\n" \
+        'darwin': "Invalid text character. Check for unsupported symbol, invisible character, or\n"
                   "pasting of non-ASCII characters."
     }
 
