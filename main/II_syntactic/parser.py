@@ -66,7 +66,7 @@ class Parser:
     def complete_statement(self, node):
         if self.get_token_type() != TokenType.EO_STMT:
             token = self.get_token()
-            raise InvalidExpressionError(token.row, token.col, 1)
+            raise InvalidExpressionError1(token.row, token.col)
         node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT, n_text=self.tokens.pop(0).get_text()))
         return node
 
@@ -307,10 +307,10 @@ class Parser:
 
         token = self.get_token()
         if self.get_token_type() == TokenType.EO_STMT:
-            raise InvalidExpressionError(token.row, token.col, 2)
+            raise InvalidExpressionError2(token.row, token.col)
         if self.get_token_type() in NON_PREFIX_OPERATOR_TOKENS:
             raise InvalidOperatorError(token.row, token.col)
-        raise InvalidExpressionError(token.row, token.col, 3)
+        raise InvalidExpressionError3(token.row, token.col)
 
     def parse_number_literal(self):
         return ASTNode(n_type=ASTNodeType.NUMBER_LIT_EXP, n_text=self.tokens.pop(0).get_text())
@@ -328,7 +328,7 @@ class Parser:
             self.tokens.pop(0)  # remove right paren
         else:
             token = self.get_token()
-            raise InvalidExpressionError(token.row, token.col, 3)
+            raise InvalidExpressionError3(token.row, token.col)
         return node
 
     def parse_bracket_expression(self):
@@ -373,5 +373,5 @@ class Parser:
             else:
                 if self.get_token_type() != TokenType.R_PAREN:
                     token = self.get_token()
-                    raise InvalidExpressionError(token.row, token.col, 3)
+                    raise InvalidExpressionError3(token.row, token.col)
         return root
