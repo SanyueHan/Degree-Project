@@ -23,13 +23,14 @@ def python_execute(path):
     print(command)
     os.system(command)
     result = read_from(f"{temp}")
-    os.system(f"rm {temp}")
+    # os.system(f"rm {temp}")
     return result
 
 
 def matlab_execute(path, error=False):
     temp = path[:-2] + "_matlab.txt"
-    command = f"matlab -nosplash -nodesktop -nojvm -r \"run('{path}'); exit;\" -logfile {temp}"
+    command = f"matlab -nosplash -nodesktop -nojvm -batch \"run('{path}')\" -logfile {temp}"
+    # command = f"matlab -nosplash -nodesktop -nojvm -r \"run('{path}'); exit;\" -logfile {temp}"
     if error:
         # adding a & at the end of the command to cancel blocking the unittest process
         command += " &"
@@ -39,7 +40,7 @@ def matlab_execute(path, error=False):
         # wait for the matlab software process finish its running and error reporting
         time.sleep(10)
     result = read_from(f"{temp}")
-    os.system(f"rm {temp}")
+    # os.system(f"rm {temp}")
 
     # cancel license information (this information on windows is different with that on mac)
     result = re.sub(REDUNDANT_TEXT_1, '', result)
