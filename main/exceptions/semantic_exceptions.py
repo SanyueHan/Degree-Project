@@ -28,7 +28,7 @@ class CompareWithStrError(InterpretException2):
 
     def modify_mess(self, operator='', operand0='', operand1=''):
         CompareWithStrError.message = {
-            'win32': f"Error using {operator}\nComparison between {operand0} and {operand1} is not supported."
+            'win32': f"Error using {operator}\nComparison between {operand0} and {operand1} is not supported.\n"
         }
 
 
@@ -37,6 +37,22 @@ class ErrorUsingDivision(InterpretException2):
     def modify_mess(self, operator=''):
         OperatorForStrError.message = {
             'win32': f"Error using {operator}\nArguments must be numeric, char, or logical.\n"  # 左除注意\\
+        }
+
+
+class UnrecognizedFunctionOrVar(InterpretException2):
+
+    def modify_mess(self, identifier=''):
+        UnrecognizedFunctionOrVar.message = {
+            'win32': f"Unrecognized function or variable '{identifier}'.\n"
+        }
+
+
+class DimensionNotConsistentError(InterpretException2):
+
+    def modify_mess(self, error_type=''):
+        DimensionNotConsistentError.message = {
+            'win32': f"Error using {error_type}\nDimensions of arrays being concatenated are not consistent.\n"
         }
 
 
