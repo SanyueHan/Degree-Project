@@ -58,6 +58,7 @@ class DimensionNotConsistentError(InterpretException2):
 
 # windows平台此处message过长，出现180列换行问题，需要修改
 class ErrorUsingMultiply(InterpretException2):
+
     message = {
         'win32': "Error using *\nIncorrect dimensions for matrix multiplication. Check that the number of columns in the first matrix matches the number of rows in the second matrix. To perform elementwise multiplication, use '.*'.\n"
     }

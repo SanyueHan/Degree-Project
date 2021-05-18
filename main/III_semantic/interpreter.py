@@ -3,6 +3,7 @@ from main.III_semantic.utils import concatenate
 from main.III_semantic.operations import *
 from main.III_semantic.literals import *
 from main.builtin_functions.catalog import MATLAB
+from main.exceptions.semantic_exceptions import *
 
 
 class Interpreter:
@@ -40,6 +41,12 @@ class Interpreter:
         if identifier in self.builtins:
             return self.builtins[identifier]
         # todo: Unrecognized function or variable {identifier}.
+        line = 0
+        filename = 'test'
+        error_statement = 'a="str"'
+        temp = UnrecognizedFunctionOrVar(line, filename, error_statement)
+        temp.modify_mess(identifier)
+        raise temp
 
     def interpret_statement_list(self, lst):
         for child in lst.get_children():

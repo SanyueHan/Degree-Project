@@ -15,7 +15,7 @@ class InterpretException(Exception):
 class InterpretException2(Exception):
     message = {}
 
-    def __init__(self, line=0, filename=None, error_statement=''):
+    def __init__(self, line=0, filename='', error_statement=''):
         self.line = line
         self.filename = filename
         self.error_statement = error_statement
