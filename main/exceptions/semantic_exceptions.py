@@ -24,30 +24,27 @@ class OperatorForStrError(InterpretException2):
         }
 
 
-class ComparWithStrError(InterpretException2):
+class CompareWithStrError(InterpretException2):
 
-    def modify_mess(self, operator='',operand0='',operand1=''):
-        ComparWithStrError.message = {
+    def modify_mess(self, operator='', operand0='', operand1=''):
+        CompareWithStrError.message = {
             'win32': f"Error using {operator}\nComparison between {operand0} and {operand1} is not supported."
         }
 
 
+class ErrorUsingDivision(InterpretException2):
+
+    def modify_mess(self, operator=''):
+        OperatorForStrError.message = {
+            'win32': f"Error using {operator}\nArguments must be numeric, char, or logical.\n"  # 左除注意\\
+        }
+
+
 # windows平台此处message过长，出现180列换行问题，需要修改
-class ErrorUsingMul(InterpretException2):
+class ErrorUsingMultiply(InterpretException2):
     message = {
         'win32': "Error using *\nIncorrect dimensions for matrix multiplication. Check that the number of columns in the first matrix matches the number of rows in the second matrix. To perform elementwise multiplication, use '.*'.\n"
     }
 
-
-class ErrorUsingRighDiv(InterpretException2):
-    message = {
-        'win32': "Error using /\nArguments must be numeric, char, or logical.\n"
-    }
-
-
-class ErrorUsingleftDiv(InterpretException2):
-    message = {
-        'win32': "Error using \\\nArguments must be numeric, char, or logical.\n"
-    }
 
 
