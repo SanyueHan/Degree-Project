@@ -33,7 +33,7 @@ def script_execute(path, print_tokens=False, print_ast=False, print_var=False):
         interpreter.interpret_statement_list(ast_root)
         if print_var:
             print(interpreter.get_variables())
-    except (InterpretException,InterpretException2) as e:
+    except (InterpretException, InterpretException2) as e:
         if sys.platform == 'darwin':
             print(os.getcwd() + '/' + path)
         else:
@@ -42,4 +42,4 @@ def script_execute(path, print_tokens=False, print_ast=False, print_var=False):
 
 
 if __name__ == "__main__":
-    script_execute("../test_interpreter/test_cases/error_handling/iii_semantic_error/unary_operator/test_1_unary_operator_minus.m")
+    script_execute("../test_interpreter/test_cases/error_handling/iii_semantic_error/test_10_vertcat_matrix.m")

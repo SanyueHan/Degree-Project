@@ -35,7 +35,7 @@ class CompareWithStrError(InterpretException2):
 class ErrorUsingDivision(InterpretException2):
 
     def modify_mess(self, operator=''):
-        OperatorForStrError.message = {
+        ErrorUsingDivision.message = {
             'win32': f"Error using {operator}\nArguments must be numeric, char, or logical.\n"  # 左除注意\\
         }
 

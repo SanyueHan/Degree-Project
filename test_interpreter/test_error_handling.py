@@ -18,15 +18,15 @@ class TestInvalidExpressionError(unittest.TestCase):
     directory = "test_cases/error_handling/ii_syntactic_error/invalid_expression_error/"
 
 
-class TestUnaryOperatorError(unittest.TestCase):
-    directory = "test_cases/error_handling/iii_semantic_error/unary_operator/"
+class TestUnarySemanticError(unittest.TestCase):
+    directory = "test_cases/error_handling/iii_semantic_error/"
 
 
 # package_test_class(TestLexicalError, error=True)
 # package_test_class(TestEndMissingError, error=True)
 # package_test_class(TestIncompleteStatementError, error=True)
 # package_test_class(TestInvalidExpressionError, error=True)
-package_test_class(TestUnaryOperatorError, error=True)
+package_test_class(TestUnarySemanticError, error=True)
 
 
 if __name__ == "__main__":
