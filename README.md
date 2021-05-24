@@ -10,7 +10,7 @@ supporting a subset of the functionalities of the MATLAB language:
 - Data Types
 
 To get the full explanation of all the features realized,
-please look at the [user's manual](user_manual.md). 
+please look at the [user's manual](user_manual.md).  
 To understand the background as well as the aims and expectations of the project, 
 the implementation details including data structures, algorithms and tools applied 
 how unittest are carried out on the project,
