@@ -6,7 +6,7 @@ class InvalidCharacterError(InterpretException):
         'darwin': "Invalid text character. Check for unsupported symbol, invisible character, or\n"
                   "pasting of non-ASCII characters.",
         'win32': "Invalid text character. Check for unsupported symbol, invisible character, or pasting of non-ASCII "
-                 "characters. "
+                 "characters."
     }
 
 
