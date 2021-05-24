@@ -9,17 +9,19 @@ supporting a subset of the functionalities of the MATLAB language:
 - Matrices and Arrays
 - Data Types
 
-Like most interpreted language, two types of running methods namely interactive execute and script execute are supported.  
 To get the full explanation of all the features realized,
 please look at the [user's manual](user_manual.md). 
-To understand the implementation details of this project, 
-please read the [technical documentation](technical_doc.md).  
+To understand the background as well as the aims and expectations of the project, 
+the implementation details including data structures, algorithms and tools applied 
+how unittest are carried out on the project,
+or some possibles future work such as unsolved bugs, planed upgrade features, optimization direction, or research areas, 
+please read the [final thesis](final_thesis.md) for this project.  
 
 ## Run
 #### Environment
 - Python
   - with version no lower than 3.7
-  - no third party packages depends on
+  - numpy (futures)
 - MATLAB (only for comparing outputs in the unittest module)
   - make sure that the root directory of MATLAB is added to system PATH
     - like "/Applications/MATLAB_R2021a.app/bin" in macOS
@@ -35,6 +37,7 @@ python MiniMATLAB.py [-h] [-t T] [-a A] [-v V] [file]
 ```
 
 ## Examples
+Like most interpreted language, two types of running methods namely interactive execute and script execute are supported.  
 #### Show Help Information
 ```shell
  % python3 MiniMATLAB.py -h
@@ -50,8 +53,8 @@ optional arguments:
   -v V, --v V  print variables
 ```
 #### Interactive Execute (REPL Execute)
-If the filename after MiniMATLAB.py is not specified, the interpreter will read commands from standard input, 
-just like most interpreted programming language. 
+If the filename after MiniMATLAB.py is not specified, 
+the interpreter will execute commands from standard input. 
 ```
 % python3 MiniMATLAB.py
 >> 1 & 0 | 1 == 2 < 5 + 5
@@ -168,6 +171,7 @@ c =
 ```
 
 #### Script Execute
+If the filename after MiniMATLAB.py is specified, the interpreter run the script. 
 In this example the tokens and abstract syntax tree are printed
 ```
 % python3 MiniMATLAB.py test_interpreter/test_cases/example.m -a=True -t=True
