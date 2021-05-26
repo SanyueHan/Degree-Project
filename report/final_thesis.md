@@ -28,7 +28,6 @@ in order to demonstrate the correctness of the results produced by our product, 
 
 
 ## 1 Introduction
-### (what is an interpreter and what is a compiler)
 Programming languages are notations for describing a flow of computational actions to people and to machines. 
 However, according to their corresponding instructions sets, the CPUs only know how to execute machine code that is only consisted of 0s and 1s, 
 not those higher level programming languages that we are familiar with, such as C, Java, or Python. 
@@ -48,10 +47,8 @@ Figure 2 shows the principle of an interpreter.
 
 ![interpreter](images/introduction_2.png)
 
-- （解释器与编译器的优势与缺点）
-The machine-language target program produced by a compiler is usually much faster than an interpreter at mapping inputs into outputs. 
-An interpreter, however, can usually give better error diagnostics than a compiler, because it executes the program statement by statement. [Compiler P2]
-
+The advantage of a target program produced by a compiler over an interpreter at mapping inputs into outputs is its speed, 
+while an interpreter can usually give better error diagnostics than a compiler, because it executes the program statement by statement.
 
 To design an interpreter or a compiler, 
 you can not only provide another version of software implementation for an existing programming language, 
@@ -60,7 +57,7 @@ The reason why we choose to develop a MATLAB implementation and mimic all of its
 for an existing programming languages you can find its [grammar rules file](https://github.com/antlr/grammars-v4/blob/master/matlab/matlab.g4) written in normal form, 
 which could be very helpful for novices like us who has no experience in developing interpreters or compilers. 
 This will be explained in detail by Han Sanyue. 
-More over, for an existing programming language, it is convenient for us to carry out tests, 
+Moreover, for an existing programming language, it is convenient for us to carry out tests, 
 since we could execute the test scripts using the existing interpreter or compiler, and compare the results produced by it with that of ours, 
 which involves with Hao Tingting's job. 
 Additionally, MATLAB is an interpreted languages that is easy to realize comparing to those compiled languages such as C/C++, 
