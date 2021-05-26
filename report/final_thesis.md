@@ -33,15 +33,19 @@ Programming languages are notations for describing a flow of computational actio
 However, according to their corresponding instructions sets, the CPUs only know how to execute machine code that is only consisted of 0s and 1s, 
 not those higher level programming languages that we are familiar with, such as C, Java, or Python. 
 Therefore, before a high level program can be run, it must be translated into a form in which it can be executed by a computer. 
+
 There are two different ways to realize this. The first one is to use a compiler, 
 that can read a program in one language and then translate it into an equivalent program in another language. 
 If the target program is an executable machine-code program, it can then be called by the user to process inputs and produce outputs. 
 Figure 1 shows how compilers work. 
+
 ![compiler](images/introduction_1.png)
+
 The other kind of language processor is called interpreter. 
 Instead of producing an executable target program as a translation, 
 an interpreter directly execute the operations specified by the source program. 
 Figure 2 shows the principle of an interpreter. 
+
 ![interpreter](images/introduction_2.png)
 
 - （解释器与编译器的优势与缺点）
