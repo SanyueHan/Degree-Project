@@ -25,8 +25,6 @@ using manually designed test cases as well as auto-generated scripts,
 in order to demonstrate the correctness of the results produced by our product, or review bugs to repair. 
 
 
-
-
 ## 1 Introduction
 Programming languages are notations for describing a flow of computational actions to people and to machines. 
 However, according to their corresponding instructions sets, the CPUs only know how to execute machine code that is only consisted of 0s and 1s, 
@@ -76,17 +74,51 @@ Last but not least, we have summary some possible work direction on our project 
 - How modern interpreter/Compiler are designed
 
 ## 3 Work Division
-### 3.1 Structure of the Project
+### 3.1 The Structure of Interpreter/Compiler
+If we look into the working process of interpreters or compilers in detail, 
+we could find that they operate as a sequence of stages, 
+each of which transform one representation of the original program into another. 
+A typical decomposition is shown in Figure 3. 
+
+![stages of compiler](images/work_division_1.png)
+
+In this flow chart here are seven steps in total. 
+The three steps above, namely lexical analysis, syntax analysis, and semantic analysis, 
+are usually regarded as the front end, which is responsible for analyse the source program by breaking it up into constituent pieces, 
+create an **abstract syntax tree** to represent it, and report the problem properly when bugs are detected. 
+To develop an interpreter we only need to implement these three parts. 
+The four steps below, namely intermediate code generation, intermediate code generation, machine code generation, and machine code optimization, 
+are usually regarded as the back end, which is responsible for synthesis the target program, using the information provided by the front end. 
+To develop a compiler, the back end is also necessary. 
 
 ### 3.2 Work Division
-- HSY：词法分析，语法分析，解释执行
-- ZY：编译执行，错误处理，内置函数
-- HTT：单元测试，数据类型，矩阵运算
+Since there are three members in our group, we firstly divided the work as following: 
+Han Sanyue is responsible for the three stages in the front end, so that an interpreter could work properly. 
+Zou Yang is responsible for the four stages in the back, combining the achievements of front end to form a compiler. 
+Hao Tingting undertakes the work of testing, including both testing on individual modules and testing the total product,
+to ensure that the interpreter or compiler will not only produce right results for correct code, but also report proper error for buggy codes. 
+
+However, with the progression of the project, we reached an agreement that the back end is more difficult than the front end. 
+One reason is that the person responsible for the back end need to understand the results provided by the front end, 
+before starting his own part, and if the front end go through a refactor that change something, 
+such as the structure of the abstract syntax tree, the back end also need to be adjusted accordingly. 
+Another reason is that using interpreter the script code could run on any platform 
+as long as the language in which the interpreter is written could run on that platform, 
+for example python has different release versions on Windows, macOS, and Linux, 
+but for compiler the target program is directly executed by the CPU, 
+so the back end involves dealing with different instruction set on different platform. 
+Since it's seem to be difficult for Zou Yang to finish the back end perfectly, 
+our group decided to reassign the job involving with reporting error in the interpreter part to Zou Yang. 
+
+### 3.3 Structure of the project
+The structure of our final project is shown in Figure 4, in which the responsibility of different members are labeled accordingly. 
+
+![structure of project](images/work_division_2.png)
 
 ## 4 Individual Job Description
-### HSY
-### ZY
-### HTT
+### 4.1 Han Sanyue's Individual Part
+### 4.2 Zou Yang's Individual Part
+### 4.3 Hao Tingting's Individual Part
 
 ## 5 Overall Discussion and Conclusions. 
 和官方matlab软件相比：
