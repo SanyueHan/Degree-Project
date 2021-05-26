@@ -21,31 +21,63 @@ as well as some matrix operations and built-in functions which are considered as
 As an important functionality for interpreters/compilers, 
 our interpreter also implemented error handling to report different kinds of errors detected, when the input code have bugs. 
 Additionally, we have an elaborate designed test module that is capable of testing all the features mentioned above, 
-using manually designed test cases as well as auto-generated scripts. 
+using manually designed test cases as well as auto-generated scripts, 
+in order to demonstrate the correctness of the results produced by our product, or review bugs to repair. 
 
 
 
 
 ## 1 Introduction
 ### (what is an interpreter and what is a compiler)
-- （从原理和工作方式上介绍一下解释器与编译器的的异同）
+Programming languages are notations for describing a flow of computational actions to people and to machines. 
+However, according to their corresponding instructions sets, the CPUs only know how to execute machine code that is only consisted of 0s and 1s, 
+not those higher level programming languages that we are familiar with, such as C, Java, or Python. 
+Therefore, before a high level program can be run, it must be translated into a form in which it can be executed by a computer. 
+There are two different ways to realize this. The first one is to use a compiler, 
+that can read a program in one language and then translate it into an equivalent program in another language. 
+If the target program is an executable machine-code program, it can then be called by the user to process inputs and produce outputs. 
+Figure 1 shows how compilers work. 
+![compiler](images/introduction_1.png)
+The other kind of language processor is called interpreter. 
+Instead of producing an executable target program as a translation, 
+an interpreter directly execute the operations specified by the source program. 
+Figure 2 shows the principle of an interpreter. 
+![interpreter](images/introduction_2.png)
+
 - （解释器与编译器的优势与缺点）
 The machine-language target program produced by a compiler is usually much faster than an interpreter at mapping inputs into outputs. 
 An interpreter, however, can usually give better error diagnostics than a compiler, because it executes the program statement by statement. [Compiler P2]
 
-### why choose matlab as the language
-- interpreted language, easy to implement
-- convenient to do auto random input test
 
-### the structure of this project
+To design an interpreter or a compiler, 
+you can not only provide another version of software implementation for an existing programming language, 
+but also create a new programming language whose syntax is defined by yourself. 
+The reason why we choose to develop a MATLAB implementation and mimic all of its functionalities and features is that 
+for an existing programming languages you can find its [grammar rules file](https://github.com/antlr/grammars-v4/blob/master/matlab/matlab.g4) written in normal form, 
+which could be very helpful for novices like us who has no experience in developing interpreters or compilers. 
+This will be explained in detail by Han Sanyue. 
+More over, for an existing programming language, it is convenient for us to carry out tests, 
+since we could execute the test scripts using the existing interpreter or compiler, and compare the results produced by it with that of ours, 
+which involves with Hao Tingting's job. 
+Additionally, MATLAB is an interpreted languages that is easy to realize comparing to those compiled languages such as C/C++, 
+the reason will be explained in Zou Yang's individual part. 
 
-### the structure of this thesis
+In this thesis, we will firstly review the development history of interpreters and compilers, 
+and also introduce the interpreter or compilers of some famous modern programming languages like C/C++, Java, Python in Section 2. 
+Then we will explain the structure of our project and the work division between group members in sections 3. 
+After that in section 4, there are our individual works. 
+Section 5 contains overall discussion and conclusion, in which we will compare our product with the official MATLAB software, 
+and discuss the advantages and disadvantages. 
+Last but not least, we have summary some possible work direction on our project that is not yet finished due to the limitation of time. 
 
 
 ## 2 Literature Review
 - How modern interpreter/Compiler are designed
 
-## 3 Work Division between Group Members
+## 3 Work Division
+### 3.1 Structure of the Project
+
+### 3.2 Work Division
 - HSY：词法分析，语法分析，解释执行
 - ZY：编译执行，错误处理，内置函数
 - HTT：单元测试，数据类型，矩阵运算
