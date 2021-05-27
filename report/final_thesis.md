@@ -228,7 +228,7 @@ Unfortunately, after initially writing this part of the code, which only support
 ![Figure 0 link file using gcc raised error in windows](individual_zy/f0.png)
 
 In the process of looking for a solution, I found the back-end platform compatibility problem difficult to solve. 
-One reason is that the person responsible for the back end need to understand the results provided by the front end, 
+One reason is that the person responsible for the back end needs to understand the results provided by the front end, 
 before starting his own part, and if the front end go through a refactor that change something, 
 such as the structure of the abstract syntax tree, the back end also need to be adjusted accordingly. 
 Another reason is that using interpreter the script code could run on any platform 
@@ -236,7 +236,7 @@ as long as the language in which the interpreter is written could run on that pl
 for example python has different release versions on Windows, macOS, and Linux, 
 but for compiler the target program is directly executed by the CPU, 
 so the back end involves dealing with different instruction set on different processor. 
-What more, to link assembly code, I need to call the libraries underlying various operating systems. 
+What's more, to link assembly code, I need to call the libraries underlying various operating systems. 
 With less than a month to submit, there was not enough time to solve this problem. 
 Therefore, after discussing with my group members and mentor, my focus shifted from the back-end to the front-end. 
 The final output of our project also changed from a compiler to an interpreter.
