@@ -16,7 +16,6 @@ class Interpreter:
             ASTNodeType.EXP_STMT: self.interpret_expression_statement,
             ASTNodeType.SEL_STMT: self.interpret_selection_statement,
             ASTNodeType.ITR_STMT: self.interpret_iteration_statement,
-            ASTNodeType.JMP_STMT: self.interpret_jump_statement,
         }
         self.evaluate = {
             ASTNodeType.CLN_EXP: self.evaluate_colon_expression,
@@ -116,9 +115,6 @@ class Interpreter:
             for col in data.cols():
                 self.variables[name] = data.get_class()(col, size=(len(col), 1))
                 self.interpret_statement_list(statement_list)
-
-    def interpret_jump_statement(self, stmt):
-        pass
 
     def evaluate_expression(self, exp):
         return self.evaluate[exp.get_type()](exp)
