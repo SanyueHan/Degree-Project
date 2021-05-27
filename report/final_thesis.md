@@ -103,7 +103,7 @@ A compiled language means that after we write a program, we translate the code i
 Here are principle of how modern programming language processors are realized. 
 Some of them belongs to interpreter, like Python, 
 Some of them belongs to compiler, like C/C++, 
-while there is also some kinds of language that is go through both a stage of compile and interpret to run, like Java. 
+while there is also some kinds of language whose execution go through both a stage of compile and a stage of interpret, like Java. 
 
 #### 2.3.1 Python interpreters
 There are some popular python interpreters: CPython, Jython, IronPython, and Pypy. 
