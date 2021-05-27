@@ -26,28 +26,6 @@ in order to demonstrate the correctness of the results produced by our product, 
 
 
 ## 1 Introduction
-Programming languages are notations for describing a flow of computational actions to people and to machines. 
-However, according to their corresponding instructions sets, the CPUs only know how to execute machine code that is only consisted of 0s and 1s, 
-not those higher level programming languages that we are familiar with, such as C, Java, or Python. 
-Therefore, before a high level program can be run, it must be translated into a form in which it can be executed by a computer. 
-
-There are two different ways to realize this. The first one is to use a compiler, 
-that can read a program in one language and then translate it into an equivalent program in another language. 
-If the target program is an executable machine-code program, it can then be called by the user to process inputs and produce outputs. 
-Figure 1 shows how compilers work. 
-
-![compiler](images/introduction_1.png)
-
-The other kind of language processor is called interpreter. 
-Instead of producing an executable target program as a translation, 
-an interpreter directly execute the operations specified by the source program. 
-Figure 2 shows the principle of an interpreter. 
-
-![interpreter](images/introduction_2.png)
-
-The advantage of a target program produced by a compiler over an interpreter at mapping inputs into outputs is its speed, 
-while an interpreter can usually give better error diagnostics than a compiler, because it executes the program statement by statement.
-
 To design an interpreter or a compiler, 
 you can not only provide another version of software implementation for an existing programming language, 
 but also create a new programming language whose syntax is defined by yourself. 
@@ -71,7 +49,30 @@ Last but not least, we have summary some possible work direction on our project 
 
 
 ## 2 Literature Review
-### 2.1 The development of compilers
+### 2.1 The principle of interpreters and compilers
+Programming languages are notations for describing a flow of computational actions to people and to machines. 
+However, according to their corresponding instructions sets, the CPUs only know how to execute machine code that is only consisted of 0s and 1s, 
+not those higher level programming languages that we are familiar with, such as C, Java, or Python. 
+Therefore, before a high level program can be run, it must be translated into a form in which it can be executed by a computer. 
+
+There are two different ways to realize this. The first one is to use a compiler, 
+that can read a program in one language and then translate it into an equivalent program in another language. 
+If the target program is an executable machine-code program, it can then be called by the user to process inputs and produce outputs. 
+Figure 1 shows how compilers work. 
+
+![compiler](images/literature_review_1.png)
+
+The other kind of language processor is called interpreter. 
+Instead of producing an executable target program as a translation, 
+an interpreter directly execute the operations specified by the source program. 
+Figure 2 shows the principle of an interpreter. 
+
+![interpreter](images/literature_review_2.png)
+
+The advantage of a target program produced by a compiler over an interpreter at mapping inputs into outputs is its speed, 
+while an interpreter can usually give better error diagnostics than a compiler, because it executes the program statement by statement.
+
+### 2.2 The development of compilers
 Complex and ubiquitous software architectures underpin the global economy [13]. Compilers and high-level languages are the cornerstones of such software. In addition, powerful and elegant compilation technology also has an extremely important value in hardware synthesis and other fields. Compilers and high-level languages are central to the information age as semiconductor technology [24].
 
 By far, the most striking achievement in the compiler field is the widespread use of high-level languages [16]. From banking and enterprise management software to high-performance computing and various World Wide Web (Web) applications, the vast majority of today's software is written in high-level languages and compiled statically or dynamically [17].
@@ -94,38 +95,37 @@ Compared to earlier compiler implementations, today's compilation algorithms are
 
 Despite all the advances in compiler technology, some people still see compilers as more of a problem than a solution. They want the predictability that comes from the compiler, rather than the advanced analysis and code transcoding that optimizes the compiler in the background.
 
-### 2.2 The development of Interpreters
+### 2.3 The development of Interpreters
 A compiled language means that after we write a program, we translate the code into a binary file and execute the program by executing the binary file. Interpreted languages, on the other hand, do not convert binaries but compile them when needed. The interpreter includes a compilation process, but this compilation process does not generate object code. A Python interpreter consists of a compiler that converts source code into bytecode, which is then executed line by line through the Python virtual machine and a virtual organization. When we write Python code, we get a text file with an a.py extension that contains Python code. To run the code, a Python interpreter is required to implement Python files. In 1989, Guido began writing a compiler for the Python language; In 1991, the first Python compiler was created. It is implemented in C and can call C library files. Python already had classes, functions, exception handling, core data types including tables and dictionaries, and a module-based extension system. Since then, Python has been updated, with the current version being Python 3.8 (Figure 3). In summary, Python 2.x is legacy; Python 3.x is the present and future of the language.
 
-![Python Interpreter Development](images/literature_review_1.png)
+![Python Interpreter Development](images/literature_review_3.png)
 
-### 2.3 Interpreters & compilers for popular modern programming language
+### 2.4 Interpreters & compilers for popular modern programming language
 Here are principle of how modern programming language processors are realized. 
 Some of them belongs to interpreter, like Python, 
 Some of them belongs to compiler, like C/C++, 
 while there is also some kinds of language whose execution go through both a stage of compile and a stage of interpret, like Java. 
 
-#### 2.3.1 Python interpreters
+#### 2.4.1 Python interpreters
 There are some popular python interpreters: CPython, Jython, IronPython, and Pypy. 
 1. CPython is a reference implementation written in C and is the most widely used Python interpreter. 
 2. IPython is an interactive interpreter based on CPython. In other words, IPython is only enhanced in terms of interaction, but executing Python code is the same as that of CPython. 
 3. Jython and IronPython are alternative implementations of Python interpreters targeting the Java virtual machine and The.net frameworks, but they typically do not improve performance [16].
 4. Pypy is another Python interpreter, and Pypy is the most outstanding effort to develop an alternative interpreter to improve Python's execution speed. Its goal is the speed of execution. Pypy uses JIT technology to dynamically compile Python code (note that it is not interpreted), so it can significantly improve the execution speed of Python code [10].
 
-#### 2.3.2 C/C++ compilers
+#### 2.4.2 C/C++ compilers
 Visual C++ is the most popular compiler on the Windows platform which integrates well with VS and has good compilation efficiency and compiled code efficiency. GCC/G+ is the preferred option on Linux/ UNIX platforms and supports N component platforms.
 
-#### 2.3.3 Java Virtual Machine
+#### 2.4.3 Java Virtual Machine
 For Java, the compiler compiles the Java source files (.java files) into bytecode files (.class files), which are binary. This bytecode is the "machine language" of the JVM (a virtual machine capable of running Java bytecode). Javac.exe can be thought of simply as a Java compiler. The Java interpreter is part of the JVM. The Java interpreter is used to interpret programs that have been compiled by executing the Java compiler. Java.exe can be thought of simply as a Java interpreter. The JVM interprets the execution of a bytecode file as the JVM manipulates the Java interpreter to interpret the execution of a bytecode file. The JVM masks information specific to a specific operating system, allowing Java programs to run unchanged on multiple platforms by generating only the object code (bytecode) that runs on the Java Virtual Machine.
 
-## 3 Work Division
-### 3.1 The Structure of Interpreter/Compiler
+## 3 Project Description
 If we look into the working process of interpreters or compilers in detail, 
 we could find that they operate as a sequence of stages, 
 each of which transform one representation of the original program into another. 
 A typical decomposition is shown in Figure 4. 
 
-![stages of compiler](images/work_division_1.png)
+![stages of compiler](images/project_description_1.png)
 
 In this flow chart here are seven steps in total. 
 The three steps above, namely lexical analysis, syntax analysis, and semantic analysis, 
@@ -136,17 +136,39 @@ The four steps below, namely intermediate code generation, intermediate code gen
 are usually regarded as the back end, which is responsible for synthesis the target program, using the information provided by the front end. 
 To develop a compiler, the back end is also necessary. 
 
-### 3.2 Work Division
-Since there are three members in our group, we firstly divided the work as following: 
-Han Sanyue is responsible for the three stages in the front end, so that an interpreter could work properly. 
-Zou Yang is responsible for the four stages in the back, combining the achievements of front end to form a compiler. 
-Hao Tingting undertakes the work of testing, including both testing on individual modules and testing the total product,
-to ensure that the interpreter or compiler will not only produce right results for correct code, but also report proper error for buggy codes.
-
-### 3.3 Structure of the project
 The structure of our final project is shown in Figure 5, in which the responsibility of different members are labeled accordingly. 
 
-![structure of project](images/work_division_2.png)
+![structure of project](images/project_description_2.png)
+
+## 4 Work Division
+Since there are three members in our group, we firstly divided the work as following: 
+
+### 4.1 Han Sanyue's work
+Han Sanyue developed the lexical analyzer, syntax analyzer, semantic analyzer in the front end. 
+He integrated these part so that the interpreter could work in two different modes. 
+The feature realized including arithmetic operators, logical operators, relational operators for evaluation of expressions, 
+selection statements and iteration statements for control the flow of execution, 
+four basic data types for representation of different kinds of data, 
+and a few built-in functions that provide scientific calculation functionality just like MATLAB. 
+
+### 4.2 Zou Yang's work
+The four stages in the back end is assigned to Zou Yang at first. 
+In our early plan the back end combined with the achievements from front end could form a compiler. 
+Zou Yang realized some very basic function for the back end, namely some arithmetic operation. 
+However, with the progress of the project, it seems that this part is too complicated to continue, 
+the reason will be explained in Zou Yang's individual part. 
+So, after a discussion our group reassigned some work involves the error reporting in front end to Zou Yang, 
+He finished the part perfectly, so the interpreter could report different kinds of error in the three stages, 
+print not only the type of error but also the position of the code that cause the error. 
+
+### 4.3 Hao Tingting's work
+Hao Tingting undertakes the work of testing, including both testing on individual modules and testing the total product,
+to ensure that the interpreter or compiler will not only produce right results for correct code, but also report proper error for buggy codes.
+She implemented a framework called unittest in order to realize auto-test function. 
+And she also developed some scripts that can produced some random scripts to test the features that the other group members realized. 
+When she finds that the behavior of our software is not the same as what was defined in the documentation, 
+she will report the problem to the member who develop that part. 
+What's more, sometime she will come up with some ideas and implement them to help other group members fixing the bugs. 
 
 ## 4 Individual Job Description
 ### 4.1 Han Sanyue's Individual Part
