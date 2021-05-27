@@ -95,7 +95,7 @@ Compared to earlier compiler implementations, today's compilation algorithms are
 Despite all the advances in compiler technology, some people still see compilers as more of a problem than a solution. They want the predictability that comes from the compiler, rather than the advanced analysis and code transcoding that optimizes the compiler in the background.
 
 ### 2.2 The development of Interpreters
-A compiled language means that after we write a program, we translate the code into a binary file and execute the program by executing the binary file. Interpreted languages, on the other hand, do not convert binaries but compile them when needed. The interpreter includes a compilation process, but this compilation process does not generate object code. A Python interpreter consists of a compiler that converts source code into bytecode, which is then executed line by line through the Python virtual machine and a virtual organization. When we write Python code, we get a text file with an a.py extension that contains Python code. To run the code, a Python interpreter is required to implement Python files. In 1989, Guido began writing a compiler for the Python language; In 1991, the first Python compiler was created. It is implemented in C and can call C library files. Python already had classes, functions, exception handling, core data types including tables and dictionaries, and a module-based extension system. Since then, Python has been updated, with the current version being Python 3.8 (Figure 1). In summary, Python 2.x is legacy; Python 3.x is the present and future of the language.
+A compiled language means that after we write a program, we translate the code into a binary file and execute the program by executing the binary file. Interpreted languages, on the other hand, do not convert binaries but compile them when needed. The interpreter includes a compilation process, but this compilation process does not generate object code. A Python interpreter consists of a compiler that converts source code into bytecode, which is then executed line by line through the Python virtual machine and a virtual organization. When we write Python code, we get a text file with an a.py extension that contains Python code. To run the code, a Python interpreter is required to implement Python files. In 1989, Guido began writing a compiler for the Python language; In 1991, the first Python compiler was created. It is implemented in C and can call C library files. Python already had classes, functions, exception handling, core data types including tables and dictionaries, and a module-based extension system. Since then, Python has been updated, with the current version being Python 3.8 (Figure 3). In summary, Python 2.x is legacy; Python 3.x is the present and future of the language.
 
 ![Python Interpreter Development](images/literature_review_1.png)
 
@@ -123,14 +123,14 @@ For Java, the compiler compiles the Java source files (.java files) into bytecod
 If we look into the working process of interpreters or compilers in detail, 
 we could find that they operate as a sequence of stages, 
 each of which transform one representation of the original program into another. 
-A typical decomposition is shown in Figure 3. 
+A typical decomposition is shown in Figure 4. 
 
 ![stages of compiler](images/work_division_1.png)
 
 In this flow chart here are seven steps in total. 
 The three steps above, namely lexical analysis, syntax analysis, and semantic analysis, 
 are usually regarded as the front end, which is responsible for analyse the source program by breaking it up into constituent pieces, 
-create an **abstract syntax tree** to represent it, and report the problem properly when bugs are detected. 
+create an abstract syntax tree to represent it, and report the problem properly when bugs are detected. 
 To develop an interpreter we only need to implement these three parts. 
 The four steps below, namely intermediate code generation, intermediate code generation, machine code generation, and machine code optimization, 
 are usually regarded as the back end, which is responsible for synthesis the target program, using the information provided by the front end. 
@@ -141,22 +141,10 @@ Since there are three members in our group, we firstly divided the work as follo
 Han Sanyue is responsible for the three stages in the front end, so that an interpreter could work properly. 
 Zou Yang is responsible for the four stages in the back, combining the achievements of front end to form a compiler. 
 Hao Tingting undertakes the work of testing, including both testing on individual modules and testing the total product,
-to ensure that the interpreter or compiler will not only produce right results for correct code, but also report proper error for buggy codes. 
-
-However, with the progression of the project, we reached an agreement that the back end is more difficult than the front end. 
-One reason is that the person responsible for the back end need to understand the results provided by the front end, 
-before starting his own part, and if the front end go through a refactor that change something, 
-such as the structure of the abstract syntax tree, the back end also need to be adjusted accordingly. 
-Another reason is that using interpreter the script code could run on any platform 
-as long as the language in which the interpreter is written could run on that platform, 
-for example python has different release versions on Windows, macOS, and Linux, 
-but for compiler the target program is directly executed by the CPU, 
-so the back end involves dealing with different instruction set on different platform. 
-Since it's seem to be difficult for Zou Yang to finish the back end perfectly, 
-our group decided to reassign the job involving with reporting error in the interpreter part to Zou Yang. 
+to ensure that the interpreter or compiler will not only produce right results for correct code, but also report proper error for buggy codes.
 
 ### 3.3 Structure of the project
-The structure of our final project is shown in Figure 4, in which the responsibility of different members are labeled accordingly. 
+The structure of our final project is shown in Figure 5, in which the responsibility of different members are labeled accordingly. 
 
 ![structure of project](images/work_division_2.png)
 
@@ -165,8 +153,53 @@ The structure of our final project is shown in Figure 4, in which the responsibi
 #### 4.1.1 Introduction
 As mentioned earlier, my main work involves with realize the three phrases in front end, 
 namely lexical analysis, syntax analysis, and semantic analysis, in other words the modules an interpreter needed. 
-when a source program is passed into the interpreter, it w
+I will explain the input, the output, the functionality, algorithms and data structures applied, 
+as well as the code design of these modules in details firstly, and then summary the achievements. 
+
 #### 4.1.2 Lexical Analysis
+#### 4.1.2.1 Description
+The lexical analyzer is responsible for the conversion from a sequence of character to a list of tokens. 
+The source code written in the script, is essentially some text that is made up of a sequence of characters. 
+The character could be encoded using ASCII, or some other encoding method such as unicode. 
+In order to simplify complexity, let's firstly assume that the input code are always encoded using ASCII, 
+so there are no more than 128 kinds of different characters that may exist in our input text stream. 
+Just like reading a book, although the content are printed character by character, 
+people read them by recognize the characters as groups called word. 
+For a programming language processor, 
+the first thing it does on the input character sequence is to split the characters into similar groups that is called tokens. 
+The tokens have different types, some tokens belong to the keyword type, such as "if", "else", "while", "for" which are very common to see in lots of languages, 
+some tokens belong to identifier type, that is the case when you declare to define a variable whose name is up to you, 
+some tokens belong to literal types, it occurs when you write some constant numbers or strings in the code, 
+and some tokens belong to operator types, such as the plus symbol "+", assignment symbol "=", etc. 
+Let's see an example of analyze a code fragment, the expression "age >= 35", in figure 6. 
+
+![token analysis example](individual_hsy/hsy_1.png)
+
+#### 4.1.2.2 Method
+To recognize the symbol, there are two different methods. 
+One is to implement the finite state machine, the algorithm is to transform between states depend on every input characters, 
+and the finial stopping state indicate the token types. Another method is to use regular repression which is adopted in this part. 
+There are two advantages of regular expression over finite state machine on this task. 
+The first reason is that finite state machine is difficult to implement, 
+because the data structure of the finite state machine and the transformation condition between different stages need to be coded in detail very carefully. 
+however, if regular expression is applied, for Python in which we develop our project, 
+it has a very power built-in module called re that is capable of compiler a pattern you designed and automatically test if a pattern matches with a string. 
+The second reason is that regular expression is the basis of Extended Backus-Naur Form, 
+which will be explained in the syntax analysis part. 
+
+In the following some examples of the patterns used for recognize tokens are introduced. 
+The pattern for recognizing the keyword type looks like this:
+```markdown
+"break|case|catch|continue|elseif|else|end|for|function|"
+```
+It means that if the words split by a "|" is match with the character stream, a keyword is recognized. 
+The regular expression for identifier looks like this:
+```markdown
+"[a-zA-Z]+[a-zA-Z0-9_]*"
+```
+This means that a valid identifier in MATLAB should start with a letter, and could be followed by a number of letter, digit, or underline. 
+The regular 
+
 #### 4.1.3 Syntax Analysis
 #### 4.1.4 Semantic Analysis
 #### 4.1.5 Conclusion
@@ -194,7 +227,19 @@ Unfortunately, after initially writing this part of the code, which only support
 
 ![Figure 0 link file using gcc raised error in windows](individual_zy/f0.png "Figure 0 link file using gcc raised error in windows")
 
-In the process of looking for a solution, I found the back-end platform compatibility problem difficult to solve. For the Windows platform, to link assembly code, I need to call the libraries underlying various operating systems. But with less than a month to submit, there was not enough time to solve this problem, so after discussing with my group members and mentor, my focus shifted from the back-end to the front-end. The final output of our project also changed from a compiler to an interpreter. For the interpreter, the platform compatibility issue is easy to solve, as there is no need to deal with the operating system underlay.
+In the process of looking for a solution, I found the back-end platform compatibility problem difficult to solve. 
+One reason is that the person responsible for the back end need to understand the results provided by the front end, 
+before starting his own part, and if the front end go through a refactor that change something, 
+such as the structure of the abstract syntax tree, the back end also need to be adjusted accordingly. 
+Another reason is that using interpreter the script code could run on any platform 
+as long as the language in which the interpreter is written could run on that platform, 
+for example python has different release versions on Windows, macOS, and Linux, 
+but for compiler the target program is directly executed by the CPU, 
+so the back end involves dealing with different instruction set on different processor. 
+What more, to link assembly code, I need to call the libraries underlying various operating systems. 
+With less than a month to submit, there was not enough time to solve this problem. 
+Therefore, after discussing with my group members and mentor, my focus shifted from the back-end to the front-end. 
+The final output of our project also changed from a compiler to an interpreter.
 
 #### 4.2.3 Error handling in the front-end
 
