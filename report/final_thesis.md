@@ -254,6 +254,41 @@ the analyzer will raise error. The flow chart representing this algorithm is sho
 
 ![lexer](individual_hsy/hsy_2.png)
 
+##### 4.1.2.5 Example
+Let's see an example of the lexical analysis. Here is a very simple script. 
+```markdown
+a = 0;
+while a < 10
+    a
+    a = a + 1;
+end
+```
+We can print its lexical analysis result, which is a list of tokens. 
+```markdown
+row =   1        col =   0        type = IDENTIFIER        text = 'a'
+row =   1        col =   2        type = ASS               text = '='
+row =   1        col =   4        type = NUMBER_LIT        text = '0'
+row =   1        col =   5        type = EO_STMT           text = ';'
+row =   1        col =   6        type = EO_STMT           text = '\n'
+row =   2        col =   0        type = KEYWORD           text = 'while'
+row =   2        col =   6        type = IDENTIFIER        text = 'a'
+row =   2        col =   8        type = REL               text = '<'
+row =   2        col =  10        type = NUMBER_LIT        text = '10'
+row =   2        col =  12        type = EO_STMT           text = '\n'
+row =   3        col =   4        type = IDENTIFIER        text = 'a'
+row =   3        col =   5        type = EO_STMT           text = '\n'
+row =   4        col =   4        type = IDENTIFIER        text = 'a'
+row =   4        col =   6        type = ASS               text = '='
+row =   4        col =   8        type = IDENTIFIER        text = 'a'
+row =   4        col =  10        type = ADD               text = '+'
+row =   4        col =  12        type = NUMBER_LIT        text = '1'
+row =   4        col =  13        type = EO_STMT           text = ';'
+row =   4        col =  14        type = EO_STMT           text = '\n'
+row =   5        col =   0        type = KEYWORD           text = 'end'
+row =   5        col =   3        type = EO_STMT           text = '\n'
+```
+It is shown that for every token, the text, the type, the col number, and the row number and all recorded.
+
 #### 4.1.3 Syntax Analysis
 #### 4.1.4 Semantic Analysis
 #### 4.1.5 Conclusion
