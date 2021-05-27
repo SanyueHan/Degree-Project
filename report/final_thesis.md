@@ -71,7 +71,52 @@ Last but not least, we have summary some possible work direction on our project 
 
 
 ## 2 Literature Review
-- How modern interpreter/Compiler are designed
+### 2.1 The development of compilers
+Complex and ubiquitous software architectures underpin the global economy [13]. Compilers and high-level languages are the cornerstones of such software. In addition, powerful and elegant compilation technology also has an extremely important value in hardware synthesis and other fields. Compilers and high-level languages are central to the information age as semiconductor technology [24].
+
+By far, the most striking achievement in the compiler field is the widespread use of high-level languages [16]. From banking and enterprise management software to high-performance computing and various World Wide Web (Web) applications, the vast majority of today's software is written in high-level languages and compiled statically or dynamically [17].
+
+The first practical computer compiler, written for the A-0 system in 1952 by American female computer scientist Grace Murray Hopper on UNIVAC I, compiled programs into machine code [38]. However, its function was much closer to what we now know as a linker or loader. The compiler loads punched cards that carry programs written in human languages into the computer. The computer spits out another set of cards containing machine code. The second set of cards is loaded into the computer, and the computer can execute the new program. In response to the shortcomings of assembly language, Fortran, led in 1957 by John Warner Backus, an American computer scientist working for IBM, was the first fully functional high-level language compiler implemented [33].
+
+In the 1950s, the field of the compiler was beginning, and scientists' research focus was limited to the conversion from high-level languages to machine code and the time and space requirements of optimizing programs [51]. Since then, much new knowledge has emerged in program analysis and transformation, code automation, and runtime services. At the same time, compilation algorithms are also used to facilitate software and hardware development, improve application performance, detect or avoid software defects and malware. At the same time, the field of compilation is increasingly intersecting with other areas such as computer architecture.
+
+Object-oriented and data abstraction languages were first introduced in the late 1960s and early 1970s, and it was realized that these concepts could greatly improve programmer productivity. Computer architects and compiler writers first began to consider the static and dynamic optimizations invented in the field of parallelism compilers, seeing parallelism as a promising solution to the problem of computers not being fast enough. Instruct level parallelism was introduced in Seymour Cray's CDC 6600 and CDC 7600 and IBM System/360 Model 91. The compiler front end greatly benefited from developing systematic theories based on the automata theory of lexical, syntactic analysis techniques [60].
+
+In the 1970s, CRAY-1 became the world's first commercially successful supercomputer [39], and the success of the CRAY machine was largely due to the introduction of the vector register. Like scalar registers, vector registers allow programs to perform many small data vectors [69]. Cray Research has also developed a very aggressive vectorization compiler. It is similar in many ways to the earlier TI compilers, but the Cray compiler has some features that make it very interesting. One of the most important features is that the ability to provide compiler feedback to the programmer. Many projects have focused on the automatic generation of other parts of the compiler, including code generation. In short, the Cray programmers finally achieved the three goals of performance, productivity, and portability.
+
+In the early stage of developing a high-level language compiler, the technology is not mature enough, and the generated target code is large, the execution efficiency is low. These problems affect the promotion and application of high-level language. Cocke(1976) made an in-depth study of compiler code generation technology and put forward a series of optimization methods[40]. For example, the program integration, loop conversion, the elimination of common subexpressions, code movement, register positioning, storage unit reuse, so that the quality of the compiler has been greatly improved. The development of compilation technology reached a new stage [62].
+
+In the 1990s, the messaging library was replaced by the Messaging Interface (MPI), and all those vendor-specific parallelization instructions were replaced by OpenMP. More scalable parallel systems emerged, such as Thinking Machines CM-5 and others with thousands of commercial microprocessors. SIMD instruction sets for single-chip microprocessors are on the market, and there is growing interest in redirectable compilers with SIMD support [13], such as SSE and SSE2 from Intel. 
+
+Shortly after 2000, multi-core microprocessors began to be widely offered by many vendors. Compilers include applications for more complex algorithms that are used to infer or simplify information in programs. Compilers are increasingly a part of window-based interactive development environments. They include editors, linkers, debuggers, and project managers.
+
+Compared to earlier compiler implementations, today's compilation algorithms are significantly more complex. While early compilers used simple and intuitive techniques for lexing programs, today's lexing techniques are based on formal languages and automata theory, making the compiler front end more systematic [19]. Similarly, the reconfigurable compiler work that used simple and intuitive techniques for dependency analysis and loop transformation today uses powerful algorithms based on integer linear programming.
+
+Despite all the advances in compiler technology, some people still see compilers as more of a problem than a solution. They want the predictability that comes from the compiler, rather than the advanced analysis and code transcoding that optimizes the compiler in the background.
+
+### 2.2 The development of Interpreters
+A compiled language means that after we write a program, we translate the code into a binary file and execute the program by executing the binary file. Interpreted languages, on the other hand, do not convert binaries but compile them when needed. The interpreter includes a compilation process, but this compilation process does not generate object code. A Python interpreter consists of a compiler that converts source code into bytecode, which is then executed line by line through the Python virtual machine and a virtual organization. When we write Python code, we get a text file with an a.py extension that contains Python code. To run the code, a Python interpreter is required to implement Python files. In 1989, Guido began writing a compiler for the Python language; In 1991, the first Python compiler was created. It is implemented in C and can call C library files. Python already had classes, functions, exception handling, core data types including tables and dictionaries, and a module-based extension system. Since then, Python has been updated, with the current version being Python 3.8 (Figure 1). In summary, Python 2.x is legacy; Python 3.x is the present and future of the language.
+
+![Python Interpreter Development](images/literature_review_1.png)
+
+### 2.3 Interpreters & compilers for popular modern programming language
+Here are principle of how modern programming language processors are realized. 
+Some of them belongs to interpreter, like Python, 
+Some of them belongs to compiler, like C/C++, 
+while there is also some kinds of language that is go through both a stage of compile and interpret to run, like Java. 
+
+#### 2.3.1 Python interpreters
+There are some popular python interpreters: CPython, Jython, IronPython, and Pypy. 
+1. CPython is a reference implementation written in C and is the most widely used Python interpreter. 
+2. IPython is an interactive interpreter based on CPython. In other words, IPython is only enhanced in terms of interaction, but executing Python code is the same as that of CPython. 
+3. Jython and IronPython are alternative implementations of Python interpreters targeting the Java virtual machine and The.net frameworks, but they typically do not improve performance [16].
+4. Pypy is another Python interpreter, and Pypy is the most outstanding effort to develop an alternative interpreter to improve Python's execution speed. Its goal is the speed of execution. Pypy uses JIT technology to dynamically compile Python code (note that it is not interpreted), so it can significantly improve the execution speed of Python code [10].
+
+#### 2.3.2 C/C++ compilers
+Visual C++ is the most popular compiler on the Windows platform which integrates well with VS and has good compilation efficiency and compiled code efficiency. GCC/G+ is the preferred option on Linux/ UNIX platforms and supports N component platforms.
+
+#### 2.3.3 Java Virtual Machine
+For Java, the compiler compiles the Java source files (.java files) into bytecode files (.class files), which are binary. This bytecode is the "machine language" of the JVM (a virtual machine capable of running Java bytecode). Javac.exe can be thought of simply as a Java compiler. The Java interpreter is part of the JVM. The Java interpreter is used to interpret programs that have been compiled by executing the Java compiler. Java.exe can be thought of simply as a Java interpreter. The JVM interprets the execution of a bytecode file as the JVM manipulates the Java interpreter to interpret the execution of a bytecode file. The JVM masks information specific to a specific operating system, allowing Java programs to run unchanged on multiple platforms by generating only the object code (bytecode) that runs on the Java Virtual Machine.
 
 ## 3 Work Division
 ### 3.1 The Structure of Interpreter/Compiler
@@ -117,6 +162,14 @@ The structure of our final project is shown in Figure 4, in which the responsibi
 
 ## 4 Individual Job Description
 ### 4.1 Han Sanyue's Individual Part
+#### 4.1.1 Introduction
+As mentioned earlier, my main work involves with realize the three phrases in front end, 
+namely lexical analysis, syntax analysis, and semantic analysis, in other words the modules an interpreter needed. 
+when a source program is passed into the interpreter, it w
+#### 4.1.2 Lexical Analysis
+#### 4.1.3 Syntax Analysis
+#### 4.1.4 Semantic Analysis
+#### 4.1.5 Conclusion
 ### 4.2 Zou Yang's Individual Part
 ### 4.3 Hao Tingting's Individual Part
 
