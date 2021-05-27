@@ -121,31 +121,29 @@ The structure of our final project is shown in Figure 4, in which the responsibi
 ### 4.3 Hao Tingting's Individual Part
 
 ## 5 Overall Discussion and Conclusions. 
-和官方matlab软件相比：
-- 功能实现的局限性
-  - 只有四种基本数据类型
-  - 只有一点内置函数
-  - 没有高维数组
-- 错误处理的局限性
-  - 鲁棒性有限
-- 软件性能的局限性
-  - 性能比较图来两张
-总结：最然如此但总体来说已经相当不错了，毕竟matlab是商业软件这是一个毕设项目  
+Comparing to official matlab software
+- limitation on functionalities
+  - only have four most basic data types
+  - only a few built-in functions
+  - only support two-dimensional array, not higher
+- limitation on error handling
+  - not robust enough
+- limitation on performance
+  - use figure to demonstrate
     
-Since MATLAB is a business software whose source code is not open to the public, 
-it is impossible to 
-know all the details of the technical realization of the official software/
-
-Therefore, 
+Since MATLAB is a business software which is developed by professional engineers for years,
+it is impossible to produce a comparable product in a Degree Project. 
+However, ...
+Therefore, ...
 
 ## 6 Suggestions for possible future work.
 - unsolved bugs
-  - 0 有符号问题
+  - signed zero problem
 - planed upgrade features
-  - 复数
-  - 自定义函数
-  - 面向对象及其他语法
-  - 其他语法和命令
+  - complex number
+  - function definition syntax
+  - object-oriented programming
+  - other syntax and command
 - optimization direction
   - speed
   - robustness
