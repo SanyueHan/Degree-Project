@@ -1,26 +1,55 @@
 # Technical Documentation
 
-## 0 Abstract
-This project provides an open-source implementation of a subset of the MATLAB programming language who's officially defined by the [MathWorks Corporation](https://www.mathworks.com/). 
-Since MATLAB is a business software whose source code is not open to the public, it is impossible to know all the details of the technical realization of the official software. 
-Therefore, the aim of this project is to provide an implementation 
-that is as similar as possible as the official software, specially MATLAB_R2021a, 
-in terms of text outputs, from a normal user perspective. 
-
-There are two main approaches used when developing this project. 
-The first one is to read the explanation in the [official documentation](https://ww2.mathworks.cn/help/matlab/), 
-and the second one is to run some experimental code on the official MATLAB and then watch the results. 
-In other words, like reverse engineering, this project implements similar features by inferring the internal realization of the official software, 
-or finding some equivalent ways, within a limit range defined in the [user's manual](user_manual.md). 
-If the input code exceeds the designed working range of this project, the behavior of the program is undefined, 
-which means that any result could be possible: the interpreter may react correctly, or produce a wrong result, or stuck in infinite loop, or even crash. 
-Therefore, to test the software, it is necessary to know exactly the designed working range illustrated in the manual. 
-
 ## 1 Project Structure Overview
 ### 1.1 Interpreter
 #### 1.1.0 [Program Entrance](MiniMATLAB.py)
 #### 1.1.1 [Lexical Analysis](main/I_lexical)
 #### 1.1.2 [Syntactic Analysis](main/II_syntactic)
+Operator Precedence
+01. Parentheses ()
+02. Transpose (.'), power (.^), complex conjugate transpose ('), matrix power (^)
+03. Power with unary minus (.^-), unary plus (.^+), or logical negation (.^~) as well as matrix power with unary minus (^-), unary plus (^+), or logical negation (^~).
+04. Unary plus (+), unary minus (-), logical negation (~)
+05. Multiplication (.*), right division (./), left division (.\), matrix multiplication (*), matrix right division (/), matrix left division (\)
+06. Addition (+), subtraction (-)
+07. Colon operator (:)
+08. Less than (<), less than or equal to (<=), greater than (>), greater than or equal to (>=), equal to (==), not equal to (~=)
+09. **Element-wise AND (&)**
+10. **Element-wise OR (|)**
+11. Short-circuit AND (&&)
+12. Short-circuit OR (||)
+
+```markdown
+    stmt_list ::= stmt*
+
+    stmt ::= ass_stmt | exp_stmt | clr_stmt | sel_stmt | itr_stmt | jmp_stmt | eo_stmt
+
+    ass_stmt ::= ass_exp eo_stmt
+    exp_stmt ::= cln_exp eo_stmt
+    clr_stmt ::= 'clear' id_list eo_stmt
+    sel_stmt ::= 'if' cln_exp stmt_list ('elseif' cln_exp stmt_list)* ('else' stmt_list)? 'end' eo_stmt
+    itr_stmt ::= 'while' cln_exp stmt_list
+    jmp_stmt ::=
+
+    id_list ::= identifier*
+
+    ass_exp ::= id '=' cln_exp
+    cln_exp ::= lor_exp (':' lor_exp)*
+    lor_exp ::= lan_exp (('||'|'|') lan_exp)*
+    lan_exp ::= eql_exp (('&&'|'&') eql_exp)*
+    eql_exp ::= rel_exp (('~='|'==') rel_exp)*
+    rel_exp ::= add_exp (('<='|'<'|'>='|'>') add_exp)*
+    add_exp ::= mul_exp (('+'|'-') mul_exp)*
+    mul_exp ::= uny_exp (('*'|'/') uny_exp)*
+    uny_exp ::= ('+'|'-'|'~')* pri_exp
+    pri_exp ::= identifier | number_lit | string_lit | '('cln_exp')' | '[' array_list ']'
+
+    identifier ::=
+    number_lit ::=
+    string_lit ::=
+    array_list ::= (cln_exp exp_stmt*)*
+```
+
 #### 1.1.3 [Semantic Analysis](main/III_semantic)
 ##### 1.1.3.1 Type System
 ###### 1.1.3.1.1 Type Inference

@@ -15,7 +15,7 @@ To understand the background as well as the aims and expectations of the project
 the implementation details including data structures, algorithms and tools applied, 
 how unittest are carried out on the project,
 or some possibles future work such as unsolved bugs, planed upgrade features, optimization direction, or research areas, 
-please read the [final thesis](final_thesis.md) for this project.  
+please read the [final thesis](report/final_thesis.md) for this project.  
 
 ## Run
 #### Environment
