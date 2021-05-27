@@ -177,11 +177,15 @@ What's more, sometime she will come up with some ideas and implement them to hel
 #### 4.1.1 Introduction
 As mentioned earlier, my main work involves with realize the three phrases in front end, 
 namely lexical analysis, syntax analysis, and semantic analysis, in other words the modules an interpreter needed. 
-I will explain the input, the output, the functionality, algorithms and data structures applied, 
+To interpret a program, the lexical analyzer firstly convert the input code from a string to a list of tokens. 
+Then the syntax analyzer will build an abstract syntax tree to represent the structure of the program. 
+Finally, the semantic analyzer will visit the syntax tree recursively to performing the corresponding operations. 
+Integrating these modules we will get an interpreter. 
+In the following subsections, I will explain the input, the output, the functionality, algorithms and data structures applied, 
 as well as the code design of these modules in details firstly, and then summary the achievements. 
 
 #### 4.1.2 Lexical Analysis
-#### 4.1.2.1 Description
+##### 4.1.2.1 Description
 The lexical analyzer is responsible for the conversion from a sequence of character to a list of tokens. 
 The source code written in the script, is essentially some text that is made up of a sequence of characters. 
 The character could be encoded using ASCII, or some other encoding method such as unicode. 
@@ -195,20 +199,20 @@ The tokens have different types, some tokens belong to the keyword type, such as
 some tokens belong to identifier type, that is the case when you declare to define a variable whose name is up to you, 
 some tokens belong to literal types, it occurs when you write some constant numbers or strings in the code, 
 and some tokens belong to operator types, such as the plus symbol "+", assignment symbol "=", etc. 
-Let's see an example of analyze a code fragment, the expression "age >= 35", in figure 6. 
+Let's see an example of analyze a code fragment, the expression "age >= 35", in figure x. 
 
 ![token analysis example](individual_hsy/hsy_1.png)
 
-#### 4.1.2.2 Method
+##### 4.1.2.2 Method
 To recognize the symbol, there are two different methods. 
 One is to implement the finite state machine, the algorithm is to transform between states depend on every input characters, 
 and the finial stopping state indicate the token types. Another method is to use regular repression which is adopted in this part. 
 There are two advantages of regular expression over finite state machine on this task. 
-The first reason is that finite state machine is difficult to implement, 
+The first one is that finite state machine is difficult to implement, 
 because the data structure of the finite state machine and the transformation condition between different stages need to be coded in detail very carefully. 
 however, if regular expression is applied, for Python in which we develop our project, 
 it has a very power built-in module called re that is capable of compiler a pattern you designed and automatically test if a pattern matches with a string. 
-The second reason is that regular expression is the basis of Extended Backus-Naur Form, 
+The second one is that regular expression is the basis of Extended Backus-Naur Form, 
 which will be explained in the syntax analysis part. 
 
 In the following some examples of the patterns used for recognize tokens are introduced. 
@@ -222,7 +226,33 @@ The regular expression for identifier looks like this:
 "[a-zA-Z]+[a-zA-Z0-9_]*"
 ```
 This means that a valid identifier in MATLAB should start with a letter, and could be followed by a number of letter, digit, or underline. 
-The regular 
+You may wonder there is a problem: all the keywords could be matched by the pattern of identifier, 
+so why won't the lexical analyzer be confused about whether a token should belong to identifier type or keyword type? 
+The answer is easy: when recognizing the next token in the input string, we use all the pattern defined in a specific order, 
+if any one of them matches the string, then the token is recognized. Therefore, to make the lexical analyzer work correctly, 
+it is necessary to not only write the correct regular expressions, but also make sure the order of the patterns are correct. 
+For every situation when one kind of token is the prefix of another token, 
+the shorter token should appear later that the longer token in order to avoid mistakes. 
+For example, the operator ">" should appear later than ">=", and "=" should appear later than "==", etc. 
+
+##### 4.1.2.3 Token Class
+A class is defined for the tokens. There are four attributes in this class:
+- type  
+  indicating what kind of token it is, that is distinguished by different regular expressions.
+- text
+  text is the string matched in the input stream. this information will always be needed in the following stages
+- col
+  the column number where this token appears in the source code, which is useful in error reporting
+- row
+  the row number where this token appears in the source code, which is useful in error reporting
+
+##### 4.1.2.4 Algorithm
+The core of the lexical analyzer is a function that read from the input string, 
+recognize tokens and remove used characters until nothing left in the input sequence. 
+If at any time the beginning of the input sequence could not be matched by any pattern, 
+the analyzer will raise error. The flow chart representing this algorithm is shown in Figure x. 
+
+![lexer](individual_hsy/hsy_2.png)
 
 #### 4.1.3 Syntax Analysis
 #### 4.1.4 Semantic Analysis
