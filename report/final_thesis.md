@@ -39,13 +39,15 @@ which involves with Hao Tingting's job.
 Additionally, MATLAB is an interpreted languages that is easy to realize comparing to those compiled languages such as C/C++, 
 the reason will be explained in Zou Yang's individual part. 
 
-In this thesis, we will firstly review the development history of interpreters and compilers, 
-and also introduce the interpreter or compilers of some famous modern programming languages like C/C++, Java, Python in Section 2. 
-Then we will explain the structure of our project and the work division between group members in sections 3. 
-After that in section 4, there are our individual works. 
-Section 5 contains overall discussion and conclusion, in which we will compare our product with the official MATLAB software, 
+In this thesis, we will firstly introduce how compilers and interpreters work, 
+review the development history of interpreters and compilers, 
+and also research the principle of interpreter or compilers of some famous modern programming languages like C/C++, Java, Python in Section 2. 
+Then we will explain the structure of our project in Section 3. 
+The work division between group members are explained in sections 4. 
+After that in section 5, there are our individual works. 
+Section 6 contains overall discussion and conclusion, in which we will compare our product with the official MATLAB software, 
 and discuss the advantages and disadvantages. 
-Last but not least, we have summary some possible work direction on our project that is not yet finished due to the limitation of time. 
+Last but not least, we will summarize some possible work direction on our project that is not yet finished due to the limitation of time in Section 7. 
 
 
 ## 2 Literature Review
@@ -158,7 +160,7 @@ Zou Yang realized some very basic function for the back end, namely some arithme
 However, with the progress of the project, it seems that this part is too complicated to continue, 
 the reason will be explained in Zou Yang's individual part. 
 So, after a discussion our group reassigned some work involves the error reporting in front end to Zou Yang, 
-He finished the part perfectly, so the interpreter could report different kinds of error in the three stages, 
+He finished this part perfectly, so the interpreter could report different kinds of error in the three stages, 
 print not only the type of error but also the position of the code that cause the error. 
 
 ### 4.3 Hao Tingting's work
