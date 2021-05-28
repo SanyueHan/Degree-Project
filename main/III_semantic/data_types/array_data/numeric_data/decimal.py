@@ -1,4 +1,4 @@
-from main.data_types.array_data.numeric import Numeric
+from main.III_semantic.data_types.array_data.numeric import Numeric
 
 
 class Decimal(Numeric):

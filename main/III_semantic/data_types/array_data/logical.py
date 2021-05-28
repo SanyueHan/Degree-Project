@@ -1,5 +1,5 @@
-from main.data_types.array import Array
-from main.data_types.array_data.numeric_data.decimal_data.double import Double
+from main.III_semantic.data_types.array import Array
+from main.III_semantic.data_types.array_data.numeric_data.decimal_data.double import Double
 import math
 
 

@@ -1,4 +1,4 @@
-from main.data_types.array_data.string import String
+from main.III_semantic.data_types.array_data.string import String
 from main.exceptions.semantic_exceptions import *
 
 

@@ -1,6 +1,6 @@
-from main.data_types.array_data.char import Char
-from main.data_types.array_data.string import String
-from main.data_types.array_data.numeric_data.decimal_data.double import Double
+from main.III_semantic.data_types.array_data.char import Char
+from main.III_semantic.data_types.array_data.string import String
+from main.III_semantic.data_types.array_data.numeric_data.decimal_data.double import Double
 
 
 def evaluate_number_literal_expression(node):

@@ -1,4 +1,4 @@
-from main.data_types.data import Data
+from main.III_semantic.data_types.data import Data
 
 
 class Array(Data):

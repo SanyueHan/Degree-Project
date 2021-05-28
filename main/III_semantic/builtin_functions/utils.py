@@ -1,5 +1,4 @@
-from main.data_types.array_data.numeric_data.decimal_data.double import Double
-from main.data_types.array_data.logical import Logical
+from main.III_semantic.data_types.array_data.numeric_data.decimal_data.double import Double
 
 
 def creator_function_generator(value):

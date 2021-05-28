@@ -2,7 +2,7 @@ from main.II_syntactic.node_types import ASTNodeType
 from main.III_semantic.utils import concatenate
 from main.III_semantic.operations import *
 from main.III_semantic.literals import *
-from main.builtin_functions.catalog import MATLAB
+from main.III_semantic.builtin_functions.catalog import MATLAB
 from main.exceptions.semantic_exceptions import *
 
 

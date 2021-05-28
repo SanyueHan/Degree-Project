@@ -1,8 +1,8 @@
 from main.III_semantic.utils import compat
-from main.data_types.array_data.char import Char
-from main.data_types.array_data.string import String
-from main.data_types.array_data.logical import Logical
-from main.data_types.array_data.numeric_data.decimal_data.double import Double
+from main.III_semantic.data_types.array_data.char import Char
+from main.III_semantic.data_types.array_data.string import String
+from main.III_semantic.data_types.array_data.logical import Logical
+from main.III_semantic.data_types.array_data.numeric_data.decimal_data.double import Double
 from main.exceptions.semantic_exceptions import *
 
 

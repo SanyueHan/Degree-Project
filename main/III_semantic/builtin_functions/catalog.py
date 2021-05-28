@@ -1,4 +1,4 @@
-from main.builtin_functions.elmat.special_variables_and_constants import *
+from main.III_semantic.builtin_functions.elmat.special_variables_and_constants import *
 
 
 ELEMENTARY_MATRICES = {

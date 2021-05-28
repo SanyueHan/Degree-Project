@@ -1,4 +1,4 @@
-from main.builtin_functions.utils import *
+from main.III_semantic.builtin_functions.utils import *
 
 
 def eps(argv):
