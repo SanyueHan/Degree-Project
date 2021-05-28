@@ -6,12 +6,7 @@ def concatenate(data_list, direction):
     if direction == "horz":
         if len(set([data.m for data in data_list])) > 1:
             # todo: "Error using vertcat\nDimensions of arrays being concatenated are not consistent."
-            line = 0
-            filename = 'test'
-            error_statement = 'a="str"'
-            temp = DimensionNotConsistentError(line, filename, error_statement)
-            temp.modify_mess('horzcat')
-            raise temp
+            return None
         data = sum((sum(list(tup), []) for tup in zip(*[data.rows() for data in data_list])), [])
         size = (data_list[0].m, sum(data.n for data in data_list))
         cls = find_nearest_common_ancestor(set(data.get_class() for data in data_list))
@@ -19,12 +14,7 @@ def concatenate(data_list, direction):
     if direction == "vert":
         if len(set([data.n for data in data_list])) > 1:
             # todo: "Error using horzcat\nDimensions of arrays being concatenated are not consistent."
-            line = 0
-            filename = 'test'
-            error_statement = 'a="str"'
-            temp = DimensionNotConsistentError(line, filename, error_statement)
-            temp.modify_mess('vertcat')
-            raise temp
+            return None
         data = sum(sum((data.rows() for data in data_list), []), [])
         size = (sum(data.m for data in data_list), data_list[0].n)
         cls = find_nearest_common_ancestor(set(data.get_class() for data in data_list))

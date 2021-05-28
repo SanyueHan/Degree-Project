@@ -14,12 +14,7 @@ def evaluate_transpose_operation(operand):
 def evaluate_array_sign_operation(operand, operator):
     if isinstance(operand, String):
         # todo: Unary operator '+' is not supported for operand of type 'string'.
-        line = 0
-        filename = 'test'
-        error_statement = 'a="str"'
-        temp = UnaryOperatorForStrError(line, filename, error_statement)
-        temp.modify_mess(operator)
-        raise temp
+        return None
 
     if operand.get_class() in (Char, Logical, Double):
         fun = {
@@ -32,12 +27,7 @@ def evaluate_array_sign_operation(operand, operator):
 def evaluate_logic_not_operator(operand):
     if isinstance(operand, String):
         # todo: Unary operator '~' is not supported for operand of type 'string'.
-        line = 0
-        filename = 'test'
-        error_statement = 'a="str"'
-        temp = UnaryOperatorForStrError(line, filename, error_statement)
-        temp.modify_mess('~')
-        raise temp
+        return None
     operand = Logical([i for i in operand], size=operand.size)
     return Logical([not i for i in operand], size=operand.size)
 
@@ -46,12 +36,7 @@ def evaluate_logic_not_operator(operand):
 def evaluate_matrix_multiplication_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
         # todo: Operator '*' is not supported for operands of type 'string'.
-        line = 0
-        filename = 'test'
-        error_statement = 'a="str"'
-        temp = OperatorForStrError(line, filename, error_statement)
-        temp.modify_mess('*')
-        raise temp
+        return None
 
     if operand_0.size == (1, 1) or operand_1.size == (1, 1):
         compat(operand_0, operand_1)
@@ -70,10 +55,7 @@ def evaluate_matrix_multiplication_operation(operand_0, operand_1):
         return Double(result, size=(m, n))
     else:
         # todo: Error using  *
-        line = 0
-        filename = 'test'
-        error_statement = 'a="str"'
-        raise ErrorUsingMultiply(line, filename, error_statement)
+        return None
 
 
 
@@ -88,12 +70,7 @@ def inv_matrix(operand_0):
 def evaluate_matrix_right_division_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
         # todo: Error using  /  \nArguments must be numeric, char, or logical.
-        line = 0
-        filename = 'test'
-        error_statement = 'a="str"'
-        temp = ErrorUsingDivision(line, filename, error_statement)
-        temp.modify_mess('/')
-        raise temp
+        return None
     if operand_0.size == (1, 1) and operand_1.size == (1, 1):
         return evaluate_array_right_division_operation(operand_0, operand_1)
     # return evaluate_matrix_multiplication_operation(operand_0, inv_matrix(operand_1))
@@ -102,12 +79,7 @@ def evaluate_matrix_right_division_operation(operand_0, operand_1):
 def evaluate_matrix_left_division_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
         # todo: Error using  \  \nArguments must be numeric, char, or logical.
-        line = 0
-        filename = 'test'
-        error_statement = 'a="str"'
-        temp = ErrorUsingDivision(line, filename, error_statement)
-        temp.modify_mess('\\')
-        raise temp
+        return None
     if operand_0.size == (1, 1) and operand_1.size == (1, 1):
         return evaluate_array_left_division_operation(operand_0, operand_1)
 
@@ -133,12 +105,7 @@ def evaluate_addition_operation(operand_0, operand_1):
 def evaluate_subtraction_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
         # todo: Operator '-' is not supported for operands of type 'string'.
-        line = 0
-        filename = 'test'
-        error_statement = 'a="str"'
-        temp = OperatorForStrError(line, filename, error_statement)
-        temp.modify_mess('-')
-        raise temp
+        return None
     else:
         def fun(a, b):
             return a - b
@@ -149,12 +116,7 @@ def evaluate_subtraction_operation(operand_0, operand_1):
 def evaluate_array_multiplication_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
         # todo: Operator '.*' is not supported for operands of type 'string'.
-        line = 0
-        filename = 'test'
-        error_statement = 'a="str"'
-        temp = OperatorForStrError(line, filename, error_statement)
-        temp.modify_mess('.*')
-        raise temp
+        return None
     else:
         def fun(a, b):
             return a * b
@@ -165,12 +127,7 @@ def evaluate_array_multiplication_operation(operand_0, operand_1):
 def evaluate_array_right_division_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
         # todo: Operator './' is not supported for operands of type 'string'.
-        line = 0
-        filename = 'test'
-        error_statement = 'a="str"'
-        temp = OperatorForStrError(line, filename, error_statement)
-        temp.modify_mess('./')
-        raise temp
+        return None
     else:
         return Double([division(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
@@ -178,12 +135,7 @@ def evaluate_array_right_division_operation(operand_0, operand_1):
 def evaluate_array_left_division_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
         # todo: Operator '.\' is not supported for operands of type 'string'.
-        line = 0
-        filename = 'test'
-        error_statement = 'a="str"'
-        temp = OperatorForStrError(line, filename, error_statement)
-        temp.modify_mess('.\\')
-        raise temp
+        raise None
     else:
         def fun(a, b):
             return division(b, a)
@@ -194,12 +146,7 @@ def evaluate_array_left_division_operation(operand_0, operand_1):
 def evaluate_array_power_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
         # todo: Operator '.^' is not supported for operands of type 'string'.
-        line = 0
-        filename = 'test'
-        error_statement = 'a="str"'
-        temp = OperatorForStrError(line, filename, error_statement)
-        temp.modify_mess('.^')
-        raise temp
+        return None
     else:
         def fun(a, b):
             try:
@@ -214,12 +161,7 @@ def evaluate_relational_operations(operand_0, operand_1, operator):
     if isinstance(operand_0, String) != isinstance(operand_1, String):
         # one is String while one is not String
         # todo: f"Comparison between {a.get_class_name().lower()} and {b.get_class_name().lower()} is not supported."
-        line = 0
-        filename = 'test'
-        error_statement = 'a="str"'
-        temp = CompareWithStrError(line, filename, error_statement)
-        temp.modify_mess(operator, operand_0, operand_1)
-        raise temp
+        return None
     fun = {
         '==': lambda x, y: x == y,
         '>=': lambda x, y: x >= y,
