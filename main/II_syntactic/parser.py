@@ -1,7 +1,7 @@
 from main.I_lexical.token_types import TokenType
 from main.II_syntactic.node import ASTNode
 from main.II_syntactic.node_types import ASTNodeType
-from main.exceptions.syntactic_exceptions import *
+from main.exceptions.ii_syntactic_exceptions import *
 
 
 SEL_CLAUSES_MAP = {

@@ -18,7 +18,7 @@ class TestInvalidExpressionError(unittest.TestCase):
     directory = "test_cases/error_handling/ii_syntactic_error/invalid_expression_error/"
 
 
-class TestUnarySemanticError(unittest.TestCase):
+class TestSemanticError(unittest.TestCase):
     directory = "test_cases/error_handling/iii_semantic_error/"
 
 
@@ -26,7 +26,7 @@ package_test_class(TestLexicalError, error=True)
 package_test_class(TestEndMissingError, error=True)
 package_test_class(TestIncompleteStatementError, error=True)
 package_test_class(TestInvalidExpressionError, error=True)
-# package_test_class(TestUnarySemanticError, error=True)
+package_test_class(TestSemanticError, error=True)
 
 
 if __name__ == "__main__":

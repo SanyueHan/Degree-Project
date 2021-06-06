@@ -1,6 +1,6 @@
 from main.I_lexical.token_types import TokenType
 from main.I_lexical.token import Token
-from main.exceptions.lexical_exception import *
+from main.exceptions.i_lexical_exception import *
 
 
 def lexer(program):

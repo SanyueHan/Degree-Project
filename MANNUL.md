@@ -79,7 +79,7 @@
   
 
 ### 2 Error Handling
-- [Lexical Error](main/exceptions/lexical_exception.py)
+- [Lexical Error](main/exceptions/i_lexical_exception.py)
   - InvalidCharacterError
     - [Case 1](test_interpreter/test_cases/error_handling/i_lexical_error/test_1_invalid_character_error.m)
     - [Case 2](test_interpreter/test_cases/error_handling/i_lexical_error/test_2_invalid_character_error.m)
@@ -88,6 +88,6 @@
     - [Case 1](test_interpreter/test_cases/error_handling/i_lexical_error/test_4_string_termination_error.m)
   - CharacterVectorTerminationError
     - [Case 1](test_interpreter/test_cases/error_handling/i_lexical_error/test_5_character_vector_termination_error.m)
-- [Syntax Error](main/exceptions/syntactic_exceptions.py)
+- [Syntax Error](main/exceptions/ii_syntactic_exceptions.py)
 
-- [Semantic Error](main/exceptions/semantic_exceptions.py)
+- [Semantic Error](main/exceptions/iii_semantic_exceptions.py)

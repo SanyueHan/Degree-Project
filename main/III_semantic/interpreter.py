@@ -3,7 +3,7 @@ from main.III_semantic.utils import concatenate
 from main.III_semantic.operations import *
 from main.III_semantic.literals import *
 from main.III_semantic.builtin_functions.catalog import MATLAB
-from main.exceptions.semantic_exceptions import *
+from main.exceptions.iii_semantic_exceptions import *
 
 
 class Interpreter:
@@ -39,8 +39,7 @@ class Interpreter:
             return self.variables[identifier]
         if identifier in self.builtins:
             return self.builtins[identifier]
-        # todo: Unrecognized function or variable {identifier}.
-        return None
+        raise RecognitionError(placeholder=repr(identifier))
 
     def interpret_statement_list(self, lst):
         for child in lst.get_children():
@@ -137,7 +136,7 @@ class Interpreter:
         if operator in MATRIX_OPERATORS:
             return MATRIX_OPERATORS[operator](operand_0, operand_1)
 
-        # binary scalar operators left
+        # now only binary scalar operators left
         compat(operand_0, operand_1)
 
         if operator in ARITHMETIC_OPERATORS:
@@ -214,7 +213,8 @@ class Interpreter:
         """
         operand_0 = self.evaluate_expression(child_0)
         if len(operand_0) > 1:
-            "Operands to the logical and (&&) and or (||) operators must be convertible to logical scalar\nvalues."
+            # todo: "Operands to the logical and (&&) and or (||) operators must be convertible to logical scalar\nvalues."
+            pass
         operand_0 = Logical([operand_0[0]])
 
         if operator == '||' and operand_0[0]:
@@ -224,6 +224,7 @@ class Interpreter:
 
         operand_1 = self.evaluate_expression(child_1)
         if len(operand_1) > 1:
-            "Operands to the logical and (&&) and or (||) operators must be convertible to logical scalar\nvalues."
+            # todo: "Operands to the logical and (&&) and or (||) operators must be convertible to logical scalar\nvalues."
+            pass
         operand_1 = Logical([operand_1[0]])
         return Logical([True]) if operand_1[0] else Logical([False])

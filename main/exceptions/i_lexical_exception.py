@@ -1,7 +1,7 @@
-from main.exceptions.interpret_exception import InterpretException
+from main.exceptions.interpret_exception import LexicalException
 
 
-class InvalidCharacterError(InterpretException):
+class InvalidCharacterError(LexicalException):
     message = {
         'darwin': "Invalid text character. Check for unsupported symbol, invisible character, or\n"
                   "pasting of non-ASCII characters.",
@@ -10,14 +10,14 @@ class InvalidCharacterError(InterpretException):
     }
 
 
-class StringTerminationError(InterpretException):
+class StringTerminationError(LexicalException):
     message = {
         'darwin': "String is not terminated properly.",
         'win32': "String is not terminated properly."
     }
 
 
-class CharacterVectorTerminationError(InterpretException):
+class CharacterVectorTerminationError(LexicalException):
     message = {
         'darwin': "Character vector is not terminated properly.",
         'win32': "Character vector is not terminated properly."

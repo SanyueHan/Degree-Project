@@ -45,6 +45,9 @@ class Array(Data):
     def get_class(self):
         return self.__class__
 
+    def get_class_name(self):
+        return self.__class__.__name__
+
     @staticmethod
     def convert(obj):
         return obj

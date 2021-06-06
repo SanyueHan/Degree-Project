@@ -1,9 +1,14 @@
+"""
+https://ww2.mathworks.cn/help/matlab/matlab_prog/array-vs-matrix-operations.html
+"""
+
+
 from main.III_semantic.utils import compat
 from main.III_semantic.data_types.array_data.char import Char
 from main.III_semantic.data_types.array_data.string import String
 from main.III_semantic.data_types.array_data.logical import Logical
 from main.III_semantic.data_types.array_data.numeric_data.decimal_data.double import Double
-from main.exceptions.semantic_exceptions import *
+from main.exceptions.iii_semantic_exceptions import *
 
 
 # unary
@@ -13,8 +18,7 @@ def evaluate_transpose_operation(operand):
 
 def evaluate_array_sign_operation(operand, operator):
     if isinstance(operand, String):
-        # todo: Unary operator '+' is not supported for operand of type 'string'.
-        return None
+        raise UnaryOperatorError(placeholder=repr(operator))
 
     if operand.get_class() in (Char, Logical, Double):
         fun = {
@@ -26,8 +30,7 @@ def evaluate_array_sign_operation(operand, operator):
 
 def evaluate_logic_not_operator(operand):
     if isinstance(operand, String):
-        # todo: Unary operator '~' is not supported for operand of type 'string'.
-        return None
+        raise UnaryOperatorError(placeholder=repr('~'))
     operand = Logical([i for i in operand], size=operand.size)
     return Logical([not i for i in operand], size=operand.size)
 
@@ -35,8 +38,7 @@ def evaluate_logic_not_operator(operand):
 # binary
 def evaluate_matrix_multiplication_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        # todo: Operator '*' is not supported for operands of type 'string'.
-        return None
+        raise OperatorError(placeholder=repr('*'))
 
     if operand_0.size == (1, 1) or operand_1.size == (1, 1):
         compat(operand_0, operand_1)
@@ -58,7 +60,6 @@ def evaluate_matrix_multiplication_operation(operand_0, operand_1):
         return None
 
 
-
 """
 def inv_matrix(operand_0):
     if operand_0.size[1] == operand_0.size[0]:
@@ -69,8 +70,7 @@ def inv_matrix(operand_0):
 
 def evaluate_matrix_right_division_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        # todo: Error using  /  \nArguments must be numeric, char, or logical.
-        return None
+        raise DivisionError(placeholder='/')
     if operand_0.size == (1, 1) and operand_1.size == (1, 1):
         return evaluate_array_right_division_operation(operand_0, operand_1)
     # return evaluate_matrix_multiplication_operation(operand_0, inv_matrix(operand_1))
@@ -78,8 +78,7 @@ def evaluate_matrix_right_division_operation(operand_0, operand_1):
 
 def evaluate_matrix_left_division_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        # todo: Error using  \  \nArguments must be numeric, char, or logical.
-        return None
+        raise DivisionError(placeholder='\\')
     if operand_0.size == (1, 1) and operand_1.size == (1, 1):
         return evaluate_array_left_division_operation(operand_0, operand_1)
 
@@ -104,8 +103,7 @@ def evaluate_addition_operation(operand_0, operand_1):
 
 def evaluate_subtraction_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        # todo: Operator '-' is not supported for operands of type 'string'.
-        return None
+        raise OperatorError(placeholder=repr('-'))
     else:
         def fun(a, b):
             return a - b
@@ -115,8 +113,7 @@ def evaluate_subtraction_operation(operand_0, operand_1):
 
 def evaluate_array_multiplication_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        # todo: Operator '.*' is not supported for operands of type 'string'.
-        return None
+        raise OperatorError(placeholder=repr('.*'))
     else:
         def fun(a, b):
             return a * b
@@ -126,16 +123,14 @@ def evaluate_array_multiplication_operation(operand_0, operand_1):
 
 def evaluate_array_right_division_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        # todo: Operator './' is not supported for operands of type 'string'.
-        return None
+        raise OperatorError(placeholder=repr('./'))
     else:
         return Double([division(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 
 def evaluate_array_left_division_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        # todo: Operator '.\' is not supported for operands of type 'string'.
-        raise None
+        raise OperatorError(placeholder=repr('.\\'))
     else:
         def fun(a, b):
             return division(b, a)
@@ -145,8 +140,7 @@ def evaluate_array_left_division_operation(operand_0, operand_1):
 
 def evaluate_array_power_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        # todo: Operator '.^' is not supported for operands of type 'string'.
-        return None
+        raise OperatorError(placeholder=repr('.^'))
     else:
         def fun(a, b):
             try:
@@ -160,8 +154,9 @@ def evaluate_array_power_operation(operand_0, operand_1):
 def evaluate_relational_operations(operand_0, operand_1, operator):
     if isinstance(operand_0, String) != isinstance(operand_1, String):
         # one is String while one is not String
-        # todo: f"Comparison between {a.get_class_name().lower()} and {b.get_class_name().lower()} is not supported."
-        return None
+        raise ComparisonError(placeholder1=operator,
+                              placeholder2=operand_0.get_class_name().lower(),
+                              placeholder3=operand_1.get_class_name().lower())
     fun = {
         '==': lambda x, y: x == y,
         '>=': lambda x, y: x >= y,

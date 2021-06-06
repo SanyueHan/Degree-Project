@@ -1,10 +1,10 @@
-import os, sys
+import os
 from main.I_lexical.lexer import lexer
 from main.I_lexical.token import TokenListPrinter
 from main.II_syntactic.parser import Parser
 from main.II_syntactic.node import ASTTreePrinter
 from main.III_semantic.interpreter import Interpreter
-from main.exceptions.interpret_exception import InterpretException,InterpretException2
+from main.exceptions.interpret_exception import *
 
 
 def script_execute(path, print_tokens=False, print_ast=False, print_var=False):
@@ -33,11 +33,14 @@ def script_execute(path, print_tokens=False, print_ast=False, print_var=False):
         interpreter.interpret_statement_list(ast_root)
         if print_var:
             print(interpreter.get_variables())
-    except (InterpretException, InterpretException2) as e:
-        if sys.platform == 'darwin':
-            print(os.getcwd() + '/' + path)
-        else:
-            print(os.getcwd() + '\\' + path.replace('/', '\\'), end=' ')
+    except SemanticException as e:
+        print(e)
+        print(f"Error in {path[:-2].split('/')[-1]} (line {e.line})")
+    except (LexicalException, SyntacticException) as e:
+        {
+            'darwin': lambda p: print(os.getcwd() + '/' + p),
+            'win32': lambda p: print(os.getcwd() + '\\' + p.replace('/', '\\'), end=' ')
+        }[sys.platform](path)
         print(e, end='')
 
 

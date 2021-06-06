@@ -1,20 +1,18 @@
 from main.III_semantic.data_types.array_data.string import String
-from main.exceptions.semantic_exceptions import *
+from main.exceptions.iii_semantic_exceptions import *
 
 
 def concatenate(data_list, direction):
     if direction == "horz":
         if len(set([data.m for data in data_list])) > 1:
-            # todo: "Error using vertcat\nDimensions of arrays being concatenated are not consistent."
-            return None
+            raise ConcatenationError(placeholder='horzcat')
         data = sum((sum(list(tup), []) for tup in zip(*[data.rows() for data in data_list])), [])
         size = (data_list[0].m, sum(data.n for data in data_list))
         cls = find_nearest_common_ancestor(set(data.get_class() for data in data_list))
         return cls(data, size)
     if direction == "vert":
         if len(set([data.n for data in data_list])) > 1:
-            # todo: "Error using horzcat\nDimensions of arrays being concatenated are not consistent."
-            return None
+            raise ConcatenationError(placeholder='vertcat')
         data = sum(sum((data.rows() for data in data_list), []), [])
         size = (sum(data.m for data in data_list), data_list[0].n)
         cls = find_nearest_common_ancestor(set(data.get_class() for data in data_list))
@@ -62,7 +60,7 @@ def compat(a, b):
         elif b.size[0] == 1:
             b.expand_row(a.size[0])
         else:
-            # error
+            # todo: error
             pass
     if a.size[1] != b.size[1]:
         if a.size[1] == 1:
@@ -70,6 +68,6 @@ def compat(a, b):
         elif b.size[1] == 1:
             b.expand_col(a.size[1])
         else:
-            # error
+            # todo: error
             pass
     return

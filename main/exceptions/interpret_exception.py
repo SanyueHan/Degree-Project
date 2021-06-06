@@ -12,14 +12,18 @@ class InterpretException(Exception):
         return f"Line: {self.line} Column: {self.column}\n" + self.message[sys.platform]
 
 
-class InterpretException2(Exception):
-    message = {}
+class LexicalException(InterpretException):
+    pass
 
-    def __init__(self, line=0, filename='', error_statement=''):
+
+class SyntacticException(InterpretException):
+    pass
+
+
+class SemanticException(InterpretException):
+    def __init__(self, placeholder="", line=0):
+        self.placeholder = placeholder
         self.line = line
-        self.filename = filename
-        self.error_statement = error_statement
 
     def __str__(self):
-        return self.message[
-                   sys.platform] + f"Error in {self.filename} (line {self.line})\n" + self.error_statement + "\n"
+        return self.message[sys.platform].replace("placeholder", self.placeholder)
