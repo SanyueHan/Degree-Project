@@ -7,28 +7,12 @@ class UnaryOperatorError(SemanticException):
         'darwin': f"Unary operator placeholder is not supported for operand of type 'string'.\n"
     }
 
-    def __init__(self, placeholder="", line=0):
-        self.placeholder = placeholder
-        self.line = line
-
-    def __str__(self):
-        return self.message[sys.platform] \
-            .replace("placeholder", self.placeholder)
-
 
 class OperatorError(SemanticException):
     message = {
         'win32': f"Operator placeholder is not supported for operands of type 'string'.",
         'darwin': f"Operator placeholder is not supported for operands of type 'string'.\n"
     }
-
-    def __init__(self, placeholder="", line=0):
-        self.placeholder = placeholder
-        self.line = line
-
-    def __str__(self):
-        return self.message[sys.platform] \
-            .replace("placeholder", self.placeholder)
 
 
 class ComparisonError(SemanticException):
@@ -56,14 +40,6 @@ class DivisionError(SemanticException):
         'darwin': f"Error using placeholder\nArguments must be numeric, char, or logical.\n"
     }
 
-    def __init__(self, placeholder="", line=0):
-        self.placeholder = placeholder
-        self.line = line
-
-    def __str__(self):
-        return self.message[sys.platform] \
-            .replace("placeholder", self.placeholder)
-
 
 class RecognitionError(SemanticException):
     message = {
@@ -71,28 +47,12 @@ class RecognitionError(SemanticException):
         'darwin': f"Unrecognized function or variable placeholder.\n"
     }
 
-    def __init__(self, placeholder="", line=0):
-        self.placeholder = placeholder
-        self.line = line
-
-    def __str__(self):
-        return self.message[sys.platform] \
-            .replace("placeholder", self.placeholder)
-
 
 class ConcatenationError(SemanticException):
     message = {
         'win32': f"Error using placeholder\nDimensions of arrays being concatenated are not consistent.",
         'darwin': f"Error using placeholder\nDimensions of arrays being concatenated are not consistent.\n"
     }
-
-    def __init__(self, placeholder="", line=0):
-        self.placeholder = placeholder
-        self.line = line
-
-    def __str__(self):
-        return self.message[sys.platform] \
-            .replace("placeholder", self.placeholder)
 
 
 # windows平台此处message过长，出现180列换行问题，需要修改
