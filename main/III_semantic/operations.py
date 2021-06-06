@@ -56,8 +56,8 @@ def evaluate_matrix_multiplication_operation(operand_0, operand_1):
                 result.append(num)
         return Double(result, size=(m, n))
     else:
-        # todo: Error using  *
-        return None
+        raise IncorrectMatrixMultiplicationDimensionError()
+
 
 
 """

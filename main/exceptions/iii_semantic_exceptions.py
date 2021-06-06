@@ -3,21 +3,37 @@ from main.exceptions.interpret_exception import *
 
 class UnaryOperatorError(SemanticException):
     message = {
-        'win32': f"Unary operator placeholder is not supported for operand of type 'string'.\n",
+        'win32': f"Unary operator placeholder is not supported for operand of type 'string'.",
         'darwin': f"Unary operator placeholder is not supported for operand of type 'string'.\n"
     }
+
+    def __init__(self, placeholder="", line=0):
+        self.placeholder = placeholder
+        self.line = line
+
+    def __str__(self):
+        return self.message[sys.platform] \
+            .replace("placeholder", self.placeholder)
 
 
 class OperatorError(SemanticException):
     message = {
-        'win32': f"Operator placeholder is not supported for operands of type 'string'.\n",
+        'win32': f"Operator placeholder is not supported for operands of type 'string'.",
         'darwin': f"Operator placeholder is not supported for operands of type 'string'.\n"
     }
+
+    def __init__(self, placeholder="", line=0):
+        self.placeholder = placeholder
+        self.line = line
+
+    def __str__(self):
+        return self.message[sys.platform] \
+            .replace("placeholder", self.placeholder)
 
 
 class ComparisonError(SemanticException):
     message = {
-        'win32': f"Error using placeholder1\nComparison between placeholder2 and placeholder3 is not supported.\n",
+        'win32': f"Error using placeholder1\nComparison between placeholder2 and placeholder3 is not supported.",
         'darwin': f"Error using placeholder1\nComparison between placeholder2 and placeholder3 is not supported.\n"
     }
 
@@ -36,31 +52,55 @@ class ComparisonError(SemanticException):
 
 class DivisionError(SemanticException):
     message = {
-        'win32': f"Error using placeholder\nArguments must be numeric, char, or logical.\n",
+        'win32': f"Error using placeholder\nArguments must be numeric, char, or logical.",
         'darwin': f"Error using placeholder\nArguments must be numeric, char, or logical.\n"
     }
+
+    def __init__(self, placeholder="", line=0):
+        self.placeholder = placeholder
+        self.line = line
+
+    def __str__(self):
+        return self.message[sys.platform] \
+            .replace("placeholder", self.placeholder)
 
 
 class RecognitionError(SemanticException):
     message = {
-        'win32': f"Unrecognized function or variable placeholder.\n",
+        'win32': f"Unrecognized function or variable placeholder.",
         'darwin': f"Unrecognized function or variable placeholder.\n"
     }
+
+    def __init__(self, placeholder="", line=0):
+        self.placeholder = placeholder
+        self.line = line
+
+    def __str__(self):
+        return self.message[sys.platform] \
+            .replace("placeholder", self.placeholder)
 
 
 class ConcatenationError(SemanticException):
     message = {
-        'win32': f"Error using placeholder\nDimensions of arrays being concatenated are not consistent.\n",
+        'win32': f"Error using placeholder\nDimensions of arrays being concatenated are not consistent.",
         'darwin': f"Error using placeholder\nDimensions of arrays being concatenated are not consistent.\n"
     }
+
+    def __init__(self, placeholder="", line=0):
+        self.placeholder = placeholder
+        self.line = line
+
+    def __str__(self):
+        return self.message[sys.platform] \
+            .replace("placeholder", self.placeholder)
 
 
 # windows平台此处message过长，出现180列换行问题，需要修改
 class IncorrectMatrixMultiplicationDimensionError(SemanticException):
     message = {
-        'win32': "Error using *\nIncorrect dimensions for matrix multiplication. Check that the number of\n"
-                 "columns in the first matrix matches the number of rows in the second matrix. To\n"
-                 "perform elementwise multiplication, use '.*'.\n ",
+        'win32': "Error using *\nIncorrect dimensions for matrix multiplication. Check that the number of "
+                 "columns in the first matrix matches the number of rows in the second matrix. To "
+                 "perform elementwise\nmultiplication, use '.*'.",
         'darwin': "Error using *\nIncorrect dimensions for matrix multiplication. Check that the number of\n"
                   "columns in the first matrix matches the number of rows in the second matrix. To\n"
                   "perform elementwise multiplication, use '.*'.\n ",
