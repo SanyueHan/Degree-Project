@@ -45,4 +45,4 @@ def script_execute(path, print_tokens=False, print_ast=False, print_var=False):
 
 
 if __name__ == "__main__":
-    script_execute("../test_interpreter/test_cases/error_handling/iii_semantic_error/test_10_vertcat_matrix.m")
+    script_execute("../test_interpreter/test_cases/example.m")

@@ -56,7 +56,7 @@ def evaluate_matrix_multiplication_operation(operand_0, operand_1):
                 result.append(num)
         return Double(result, size=(m, n))
     else:
-        raise IncorrectMatrixMultiplicationDimensionError()
+        raise IncorrectDimensionError()
 
 
 
@@ -92,12 +92,10 @@ def evaluate_addition_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
         def fun(a, b):
             return str(a) + str(b)
-
         return String([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
     else:
         def fun(a, b):
             return a + b
-
         return Double([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 
@@ -107,7 +105,6 @@ def evaluate_subtraction_operation(operand_0, operand_1):
     else:
         def fun(a, b):
             return a - b
-
         return Double([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 
@@ -117,7 +114,6 @@ def evaluate_array_multiplication_operation(operand_0, operand_1):
     else:
         def fun(a, b):
             return a * b
-
         return Double([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 
