@@ -21,9 +21,12 @@ class SyntacticException(InterpretException):
 
 
 class SemanticException(InterpretException):
-    def __init__(self, placeholder="", line=0):
-        self.placeholder = placeholder
+    def __init__(self, *placeholders, line=0):
+        self.placeholders = placeholders
         self.line = line
 
     def __str__(self):
-        return self.message[sys.platform].replace("placeholder", self.placeholder)
+        message = self.message[sys.platform]
+        for ph in self.placeholders:
+            message = message.replace("placeholder", ph, 1)
+        return message

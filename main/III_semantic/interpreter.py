@@ -39,7 +39,7 @@ class Interpreter:
             return self.variables[identifier]
         if identifier in self.builtins:
             return self.builtins[identifier]
-        raise RecognitionError(placeholder=repr(identifier))
+        raise RecognitionError(repr(identifier))
 
     def interpret_statement_list(self, lst):
         for child in lst.get_children():
@@ -213,8 +213,7 @@ class Interpreter:
         """
         operand_0 = self.evaluate_expression(child_0)
         if len(operand_0) > 1:
-            # todo: "Operands to the logical and (&&) and or (||) operators must be convertible to logical scalar\nvalues."
-            pass
+            raise ConversionError1()
         operand_0 = Logical([operand_0[0]])
 
         if operator == '||' and operand_0[0]:
@@ -224,7 +223,6 @@ class Interpreter:
 
         operand_1 = self.evaluate_expression(child_1)
         if len(operand_1) > 1:
-            # todo: "Operands to the logical and (&&) and or (||) operators must be convertible to logical scalar\nvalues."
-            pass
+            raise ConversionError1()
         operand_1 = Logical([operand_1[0]])
         return Logical([True]) if operand_1[0] else Logical([False])

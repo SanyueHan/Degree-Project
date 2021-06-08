@@ -18,7 +18,7 @@ def evaluate_transpose_operation(operand):
 
 def evaluate_array_sign_operation(operand, operator):
     if isinstance(operand, String):
-        raise UnaryOperatorError(placeholder=repr(operator))
+        raise UnaryOperatorError(repr(operator))
 
     if operand.get_class() in (Char, Logical, Double):
         fun = {
@@ -30,7 +30,7 @@ def evaluate_array_sign_operation(operand, operator):
 
 def evaluate_logic_not_operator(operand):
     if isinstance(operand, String):
-        raise UnaryOperatorError(placeholder=repr('~'))
+        raise UnaryOperatorError(repr('~'))
     operand = Logical([i for i in operand], size=operand.size)
     return Logical([not i for i in operand], size=operand.size)
 
@@ -38,7 +38,7 @@ def evaluate_logic_not_operator(operand):
 # binary
 def evaluate_matrix_multiplication_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        raise OperatorError(placeholder=repr('*'))
+        raise OperatorError(repr('*'))
 
     if operand_0.size == (1, 1) or operand_1.size == (1, 1):
         compat(operand_0, operand_1)
@@ -70,7 +70,7 @@ def inv_matrix(operand_0):
 
 def evaluate_matrix_right_division_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        raise DivisionError(placeholder='/')
+        raise DivisionError('/')
     if operand_0.size == (1, 1) and operand_1.size == (1, 1):
         return evaluate_array_right_division_operation(operand_0, operand_1)
     # return evaluate_matrix_multiplication_operation(operand_0, inv_matrix(operand_1))
@@ -78,7 +78,7 @@ def evaluate_matrix_right_division_operation(operand_0, operand_1):
 
 def evaluate_matrix_left_division_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        raise DivisionError(placeholder='\\')
+        raise DivisionError('\\')
     if operand_0.size == (1, 1) and operand_1.size == (1, 1):
         return evaluate_array_left_division_operation(operand_0, operand_1)
 
@@ -101,7 +101,7 @@ def evaluate_addition_operation(operand_0, operand_1):
 
 def evaluate_subtraction_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        raise OperatorError(placeholder=repr('-'))
+        raise OperatorError(repr('-'))
     else:
         def fun(a, b):
             return a - b
@@ -110,7 +110,7 @@ def evaluate_subtraction_operation(operand_0, operand_1):
 
 def evaluate_array_multiplication_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        raise OperatorError(placeholder=repr('.*'))
+        raise OperatorError(repr('.*'))
     else:
         def fun(a, b):
             return a * b
@@ -119,14 +119,14 @@ def evaluate_array_multiplication_operation(operand_0, operand_1):
 
 def evaluate_array_right_division_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        raise OperatorError(placeholder=repr('./'))
+        raise OperatorError(repr('./'))
     else:
         return Double([division(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
 
 
 def evaluate_array_left_division_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        raise OperatorError(placeholder=repr('.\\'))
+        raise OperatorError(repr('.\\'))
     else:
         def fun(a, b):
             return division(b, a)
@@ -136,7 +136,7 @@ def evaluate_array_left_division_operation(operand_0, operand_1):
 
 def evaluate_array_power_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
-        raise OperatorError(placeholder=repr('.^'))
+        raise OperatorError(repr('.^'))
     else:
         def fun(a, b):
             try:
@@ -150,9 +150,9 @@ def evaluate_array_power_operation(operand_0, operand_1):
 def evaluate_relational_operations(operand_0, operand_1, operator):
     if isinstance(operand_0, String) != isinstance(operand_1, String):
         # one is String while one is not String
-        raise ComparisonError(placeholder1=operator,
-                              placeholder2=operand_0.get_class_name().lower(),
-                              placeholder3=operand_1.get_class_name().lower())
+        raise ComparisonError(operator,
+                              operand_0.get_class_name().lower(),
+                              operand_1.get_class_name().lower())
     fun = {
         '==': lambda x, y: x == y,
         '>=': lambda x, y: x >= y,

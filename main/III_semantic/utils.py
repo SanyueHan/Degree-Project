@@ -5,14 +5,14 @@ from main.exceptions.iii_semantic_exceptions import *
 def concatenate(data_list, direction):
     if direction == "horz":
         if len(set([data.m for data in data_list])) > 1:
-            raise ConcatenationError(placeholder='horzcat')
+            raise ConcatenationError('horzcat')
         data = sum((sum(list(tup), []) for tup in zip(*[data.rows() for data in data_list])), [])
         size = (data_list[0].m, sum(data.n for data in data_list))
         cls = find_nearest_common_ancestor(set(data.get_class() for data in data_list))
         return cls(data, size)
     if direction == "vert":
         if len(set([data.n for data in data_list])) > 1:
-            raise ConcatenationError(placeholder='vertcat')
+            raise ConcatenationError('vertcat')
         data = sum(sum((data.rows() for data in data_list), []), [])
         size = (sum(data.m for data in data_list), data_list[0].n)
         cls = find_nearest_common_ancestor(set(data.get_class() for data in data_list))
