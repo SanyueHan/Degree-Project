@@ -26,7 +26,7 @@ class ConversionError1(SemanticException):
     message = {
         'darwin': "Operands to the logical and (&&) and or (||) operators must be convertible to\n"
                   "logical scalar values.\n",
-        'win32': "Operands to the logical and (&&) and or (||) operators must be convertible to\n"
+        'win32': "Operands to the logical and (&&) and or (||) operators must be convertible to "
                  "logical scalar values.",
     }
 

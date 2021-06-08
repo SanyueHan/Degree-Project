@@ -14,7 +14,7 @@ class InvalidExpressionError1(SyntacticException):
                   "unbalanced delimiters, or other syntax error. To construct matrices, use\n"
                   "brackets instead of parentheses.",
         'win32': "Invalid expression. Check for missing multiplication operator, missing or unbalanced delimiters, "
-                 "or other syntax error. To construct matrices, use brackets instead of parentheses. "
+                 "or other syntax error. To construct matrices, use brackets instead of parentheses."
     }
 
 
