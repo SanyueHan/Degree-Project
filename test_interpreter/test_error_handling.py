@@ -18,6 +18,10 @@ class TestInvalidExpressionError(unittest.TestCase):
     directory = "test_cases/error_handling/ii_syntactic_error/invalid_expression_error/"
 
 
+class ArrayIndexError(unittest.TestCase):
+    directory = "test_cases/error_handling/iii_semantic_error/array_index_error/"
+
+
 class ComparisonError(unittest.TestCase):
     directory = "test_cases/error_handling/iii_semantic_error/comparison_error/"
 
@@ -66,20 +70,19 @@ package_test_class(TestLexicalError, error=True)
 package_test_class(TestEndMissingError, error=True)
 package_test_class(TestIncompleteStatementError, error=True)
 package_test_class(TestInvalidExpressionError, error=True)
+"""
+package_test_class(ArrayIndexError, error=True)
 package_test_class(ComparisonError, error=True)
 package_test_class(ConcatenationError, error=True)
-"""
 package_test_class(ConversionError1, error=True)
 package_test_class(ConversionError2, error=True)
 package_test_class(ConversionError3, error=True)
-"""
 package_test_class(DivisionError, error=True)
 package_test_class(IncorrectDimensionError, error=True)
 package_test_class(IncompatibleSizeError, error=True)
 package_test_class(OperatorError, error=True)
 package_test_class(RecognitionError, error=True)
 package_test_class(UnaryOperatorError, error=True)
-"""
 
 
 if __name__ == "__main__":

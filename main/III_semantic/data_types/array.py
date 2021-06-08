@@ -1,4 +1,5 @@
 from main.III_semantic.data_types.data import Data
+from main.exceptions.iii_semantic_exceptions import *
 
 
 class Array(Data):
@@ -87,8 +88,7 @@ class Array(Data):
 
     @staticmethod
     def get_int_index(number):
-        if int(number) == number:
+        if int(number) == number and number > 0:
             return int(number)
         else:
-            # todo: Array indices must be positive integers or logical values.
-            return None
+            raise ArrayIndexError()
