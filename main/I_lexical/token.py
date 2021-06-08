@@ -22,6 +22,9 @@ class Token:
     def get_text(self):
         return self.text
 
+    def get_line(self):
+        return self.row
+
 
 class TokenListPrinter:
     @staticmethod

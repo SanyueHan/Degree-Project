@@ -2,19 +2,19 @@ import unittest
 from utils import package_test_class
 
 
-class TestLexicalError(unittest.TestCase):
+class LexicalError(unittest.TestCase):
     directory = "test_cases/error_handling/i_lexical_error/"
 
 
-class TestEndMissingError(unittest.TestCase):
+class EndMissingError(unittest.TestCase):
     directory = "test_cases/error_handling/ii_syntactic_error/end_missing_error/"
 
 
-class TestIncompleteStatementError(unittest.TestCase):
+class IncompleteStatementError(unittest.TestCase):
     directory = "test_cases/error_handling/ii_syntactic_error/incomplete_statement_error/"
 
 
-class TestInvalidExpressionError(unittest.TestCase):
+class InvalidExpressionError(unittest.TestCase):
     directory = "test_cases/error_handling/ii_syntactic_error/invalid_expression_error/"
 
 
@@ -65,24 +65,12 @@ class RecognitionError(unittest.TestCase):
 class UnaryOperatorError(unittest.TestCase):
     directory = "test_cases/error_handling/iii_semantic_error/unary_operator_error/"
 
-"""
-package_test_class(TestLexicalError, error=True)
-package_test_class(TestEndMissingError, error=True)
-package_test_class(TestIncompleteStatementError, error=True)
-package_test_class(TestInvalidExpressionError, error=True)
-"""
-package_test_class(ArrayIndexError, error=True)
-package_test_class(ComparisonError, error=True)
-package_test_class(ConcatenationError, error=True)
-package_test_class(ConversionError1, error=True)
-package_test_class(ConversionError2, error=True)
-package_test_class(ConversionError3, error=True)
-package_test_class(DivisionError, error=True)
-package_test_class(IncorrectDimensionError, error=True)
-package_test_class(IncompatibleSizeError, error=True)
-package_test_class(OperatorError, error=True)
-package_test_class(RecognitionError, error=True)
-package_test_class(UnaryOperatorError, error=True)
+
+global_dict = globals().copy()
+for obj in global_dict.values():
+    if type(obj).__name__ == 'type':  # obj is a class
+        if issubclass(obj, unittest.TestCase):
+            package_test_class(obj, error=True)
 
 
 if __name__ == "__main__":

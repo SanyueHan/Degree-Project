@@ -33,15 +33,16 @@ def script_execute(path, print_tokens=False, print_ast=False, print_var=False):
         interpreter.interpret_statement_list(ast_root)
         if print_var:
             print(interpreter.get_variables())
-    except SemanticException as e:
-        print(e)
-        print(f"Error in {path[:-2].split('/')[-1]} (line {e.line})")
     except (LexicalException, SyntacticException) as e:
         {
             'darwin': lambda p: print(os.getcwd() + '/' + p),
             'win32': lambda p: print(os.getcwd() + '\\' + p.replace('/', '\\'), end=' ')
         }[sys.platform](path)
         print(e, end='')
+    except SemanticException as e:
+        print(e)
+        print(f"Error in {path[:-2].split('/')[-1]} (line {e.line})")
+        print(program.split('\n')[e.line-1], end='')
 
 
 if __name__ == "__main__":

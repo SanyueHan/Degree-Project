@@ -114,34 +114,46 @@ class Interpreter:
         return self.evaluate[exp.get_type()](exp)
 
     def evaluate_unary_operation_expression(self, exp):
+        line = exp.get_line()
         operator = exp.get_text()
         operand = self.evaluate_expression(exp.get_child(0))
-        if operator in ('.\'', '\''):
-            return evaluate_transpose_operation(operand)
-        if operator in ('+', '-'):
-            return evaluate_array_sign_operation(operand, operator)
-        if operator == '~':
-            return evaluate_logic_not_operator(operand)
+        try:
+            if operator in ('.\'', '\''):
+                return evaluate_transpose_operation(operand)
+            if operator in ('+', '-'):
+                return evaluate_array_sign_operation(operand, operator)
+            if operator == '~':
+                return evaluate_logic_not_operator(operand)
+        except SemanticException as e:
+            if e.line == 0:
+                e.line = line
+            raise e
 
     def evaluate_binary_operation_expression(self, exp):
+        line = exp.get_line()
         operator = exp.get_text()
         child_0 = exp.get_child(0)
         child_1 = exp.get_child(1)
-        if operator in ('&&', '||'):
-            return self.evaluate_logical_operations(child_0, child_1, operator)
+        try:
+            if operator in ('&&', '||'):
+                return self.evaluate_logical_operations(child_0, child_1, operator)
 
-        operand_0 = self.evaluate_expression(child_0)
-        operand_1 = self.evaluate_expression(child_1)
+            operand_0 = self.evaluate_expression(child_0)
+            operand_1 = self.evaluate_expression(child_1)
 
-        if operator in MATRIX_OPERATORS:
-            return MATRIX_OPERATORS[operator](operand_0, operand_1)
+            if operator in MATRIX_OPERATORS:
+                return MATRIX_OPERATORS[operator](operand_0, operand_1)
 
-        # now only binary scalar operators left
-        compat(operand_0, operand_1)
+            # now only binary scalar operators left
+            compat(operand_0, operand_1)
 
-        if operator in ARITHMETIC_OPERATORS:
-            return ARITHMETIC_OPERATORS[operator](operand_0, operand_1)
-        return evaluate_relational_operations(operand_0, operand_1, operator)
+            if operator in ARITHMETIC_OPERATORS:
+                return ARITHMETIC_OPERATORS[operator](operand_0, operand_1)
+            return evaluate_relational_operations(operand_0, operand_1, operator)
+        except SemanticException as e:
+            if e.line == 0:
+                e.line = line
+            raise e
 
     def evaluate_colon_expression(self, exp):
         if exp.num_children() == 0:
@@ -166,25 +178,31 @@ class Interpreter:
         return Double(values)
 
     def evaluate_array_list_expression(self, exp):
-        array_list = []
-        array = []
-        for child in exp.get_children():
-            if child.get_type() == ASTNodeType.EO_STMT:
-                if child.get_text() == ';' or child.get_text() == '\n':
-                    if array:
-                        array_list.append(array)
-                        array = []
-            else:
-                data = self.evaluate_expression(child)
-                if data.data:
-                    array.append(data)
-        if array:
-            array_list.append(array)
+        line = exp.get_line()
+        try:
+            array_list = []
+            array = []
+            for child in exp.get_children():
+                if child.get_type() == ASTNodeType.EO_STMT:
+                    if child.get_text() == ';' or child.get_text() == '\n':
+                        if array:
+                            array_list.append(array)
+                            array = []
+                else:
+                    data = self.evaluate_expression(child)
+                    if data.data:
+                        array.append(data)
+            if array:
+                array_list.append(array)
 
-        if array_list:
-            return concatenate([concatenate(array, "horz") for array in array_list], "vert")
-        else:
-            return Double([], size=(0, 0))
+            if array_list:
+                return concatenate([concatenate(array, "horz") for array in array_list], "vert")
+            else:
+                return Double([], size=(0, 0))
+        except SemanticException as e:
+            if e.line == 0:
+                e.line = line
+            raise e
 
     def evaluate_index_list_expression(self, exp):
         return [self.evaluate_expression(child) for child in exp.get_children()]
@@ -195,17 +213,21 @@ class Interpreter:
 
     def evaluate_identifier_expression(self, exp):
         ref = exp.get_text()
-        obj = self.retrieve(ref)
-
-        arguments = []
-        if exp.get_children():
-            child = exp.get_child(0)
-            if child.get_type() == ASTNodeType.INDEX_LIST_EXP:
-                arguments = self.evaluate_index_list_expression(child)
-            else:
-                arguments = self.evaluate_ident_list_expression(child)
-
-        return obj(arguments)
+        line = exp.get_line()
+        try:
+            obj = self.retrieve(ref)
+            arguments = []
+            if exp.get_children():
+                child = exp.get_child(0)
+                if child.get_type() == ASTNodeType.INDEX_LIST_EXP:
+                    arguments = self.evaluate_index_list_expression(child)
+                else:
+                    arguments = self.evaluate_ident_list_expression(child)
+            return obj(arguments)
+        except SemanticException as e:
+            if e.line == 0:
+                e.line = line
+            raise e
 
     def evaluate_logical_operations(self, child_0, child_1, operator):
         """
