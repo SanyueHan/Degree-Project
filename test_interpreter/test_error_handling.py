@@ -38,7 +38,11 @@ class IncorrectDimensionError(unittest.TestCase):
     directory = "test_cases/error_handling/iii_semantic_error/incorrect_dimension_error/"
 
 
-class OperatorError1(unittest.TestCase):
+class IncompatibleSizeError(unittest.TestCase):
+    directory = "test_cases/error_handling/iii_semantic_error/incompatible_size_error/"
+
+
+class OperatorError(unittest.TestCase):
     directory = "test_cases/error_handling/iii_semantic_error/operator_error/"
 
 
@@ -56,11 +60,12 @@ package_test_class(TestIncompleteStatementError, error=True)
 package_test_class(TestInvalidExpressionError, error=True)
 package_test_class(ComparisonError, error=True)
 package_test_class(ConcatenationError, error=True)
-"""
 package_test_class(ConversionError1, error=True)
 package_test_class(DivisionError, error=True)
-"""
 package_test_class(IncorrectDimensionError, error=True)
+"""
+package_test_class(IncompatibleSizeError, error=True)
+"""
 package_test_class(OperatorError, error=True)
 package_test_class(RecognitionError, error=True)
 package_test_class(UnaryOperatorError, error=True)

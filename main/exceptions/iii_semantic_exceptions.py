@@ -55,6 +55,13 @@ class IncorrectDimensionError(SemanticException):
     }
 
 
+class IncompatibleSizeError(SemanticException):
+    message = {
+        'darwin': "Arrays have incompatible sizes for this operation.\n",
+        'win32': "Arrays have incompatible sizes for this operation."
+    }
+
+
 class ConversionError1(SemanticException):
     message = {
         'darwin': "Operands to the logical and (&&) and or (||) operators must be convertible to\n"

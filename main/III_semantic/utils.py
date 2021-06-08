@@ -60,14 +60,12 @@ def compat(a, b):
         elif b.size[0] == 1:
             b.expand_row(a.size[0])
         else:
-            # todo: error
-            pass
+            raise IncompatibleSizeError()
     if a.size[1] != b.size[1]:
         if a.size[1] == 1:
             a.expand_col(b.size[1])
         elif b.size[1] == 1:
             b.expand_col(a.size[1])
         else:
-            # todo: error
-            pass
+            raise IncompatibleSizeError()
     return
