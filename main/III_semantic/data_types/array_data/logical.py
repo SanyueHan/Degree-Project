@@ -1,5 +1,6 @@
 from main.III_semantic.data_types.array import Array
 from main.III_semantic.data_types.array_data.numeric_data.decimal_data.double import Double
+from main.exceptions.iii_semantic_exceptions import *
 import math
 
 
@@ -23,9 +24,7 @@ class Logical(Array):
     @staticmethod
     def convert(obj):
         if isinstance(obj, str):
-            # todo: "Conversion to logical from string is not possible."
-            return None
-        if math.isnan(obj):
-            # todo: "NaN values cannot be converted to logicals."
-            return None
+            raise ConversionError2()
+        if isinstance(obj, float) and math.isnan(obj):
+            raise ConversionError3()
         return bool(obj)

@@ -69,3 +69,17 @@ class ConversionError1(SemanticException):
         'win32': "Operands to the logical and (&&) and or (||) operators must be convertible to\n"
                  "logical scalar values.",
     }
+
+
+class ConversionError2(SemanticException):
+    message = {
+        'darwin': "Conversion to logical from string is not possible.\n",
+        'win32': "Conversion to logical from string is not possible."
+    }
+
+
+class ConversionError3(SemanticException):
+    message = {
+        'darwin': "NaN values cannot be converted to logicals.\n",
+        'win32': "NaN values cannot be converted to logicals."
+    }

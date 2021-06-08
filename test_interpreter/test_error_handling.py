@@ -30,6 +30,14 @@ class ConversionError1(unittest.TestCase):
     directory = "test_cases/error_handling/iii_semantic_error/conversion_error_1/"
 
 
+class ConversionError2(unittest.TestCase):
+    directory = "test_cases/error_handling/iii_semantic_error/conversion_error_2/"
+
+
+class ConversionError3(unittest.TestCase):
+    directory = "test_cases/error_handling/iii_semantic_error/conversion_error_3/"
+
+
 class DivisionError(unittest.TestCase):
     directory = "test_cases/error_handling/iii_semantic_error/division_error/"
 
@@ -60,12 +68,14 @@ package_test_class(TestIncompleteStatementError, error=True)
 package_test_class(TestInvalidExpressionError, error=True)
 package_test_class(ComparisonError, error=True)
 package_test_class(ConcatenationError, error=True)
+"""
 package_test_class(ConversionError1, error=True)
+package_test_class(ConversionError2, error=True)
+package_test_class(ConversionError3, error=True)
+"""
 package_test_class(DivisionError, error=True)
 package_test_class(IncorrectDimensionError, error=True)
-"""
 package_test_class(IncompatibleSizeError, error=True)
-"""
 package_test_class(OperatorError, error=True)
 package_test_class(RecognitionError, error=True)
 package_test_class(UnaryOperatorError, error=True)
