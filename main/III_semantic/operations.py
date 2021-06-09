@@ -91,7 +91,7 @@ def evaluate_matrix_power_operation(operand_0, operand_1):
 def evaluate_addition_operation(operand_0, operand_1):
     if isinstance(operand_0, String) or isinstance(operand_1, String):
         def fun(a, b):
-            return str(a) + str(b)
+            return String.convert(a) + String.convert(b)
         return String([fun(*tup) for tup in zip(operand_0, operand_1)], size=operand_0.size)
     else:
         def fun(a, b):
