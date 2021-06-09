@@ -47,7 +47,7 @@ class TokenType(Enum):
     ANNOTATION = re.compile(r"%{[\s\S]*%}|%.*")  # in '.', '\r' or '\n' is automatically excluded
     EXCLAMATION = re.compile(r"!")
     QUESTION = re.compile(r"\?")
-    WHITESPACE = re.compile(r"\s+")
+    WHITESPACE = re.compile(r"[ \f\r\t\v]+")  # \s excluding \n
     ASS = re.compile(r"=")
 
 

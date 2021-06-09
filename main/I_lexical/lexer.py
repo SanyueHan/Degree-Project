@@ -35,8 +35,7 @@ def lexer(program):
 
                     token_text = match.group()
                     token_type = TYPE
-                    if TYPE != TokenType.WHITESPACE and TYPE != TokenType.ANNOTATION:
-                        result_token_list.append(Token(t_type=TYPE, t_text=token_text, row=row, col=col))
+                    result_token_list.append(Token(t_type=TYPE, t_text=token_text, row=row, col=col))
                     line = line[len(token_text):]
                     col += len(token_text)
                     break
