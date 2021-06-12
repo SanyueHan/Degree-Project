@@ -81,13 +81,13 @@
 ### 2 Error Handling
 - [Lexical Error](main/exceptions/i_lexical_exception.py)
   - InvalidCharacterError
-    - [Case 1](test_interpreter/test_cases/error_handling/i_lexical_error/test_1_invalid_character_error.m)
-    - [Case 2](test_interpreter/test_cases/error_handling/i_lexical_error/test_2_invalid_character_error.m)
-    - [Case 3](test_interpreter/test_cases/error_handling/i_lexical_error/test_3_invalid_character_error.m)
+    - [Case 1](test_interpreter/test_cases/error_handling/i_lexical_error/invalid_character_error/test_1.m)
+    - [Case 2](test_interpreter/test_cases/error_handling/i_lexical_error/invalid_character_error/test_2.m)
+    - [Case 3](test_interpreter/test_cases/error_handling/i_lexical_error/invalid_character_error/test_3.m)
   - StringTerminationError
-    - [Case 1](test_interpreter/test_cases/error_handling/i_lexical_error/test_4_string_termination_error.m)
+    - [Case 1](test_interpreter/test_cases/error_handling/i_lexical_error/string_termination_error/test_1.m)
   - CharacterVectorTerminationError
-    - [Case 1](test_interpreter/test_cases/error_handling/i_lexical_error/test_5_character_vector_termination_error.m)
+    - [Case 1](test_interpreter/test_cases/error_handling/i_lexical_error/character_vector_termination_error/test_1.m)
 - [Syntax Error](main/exceptions/ii_syntactic_exceptions.py)
 
 - [Semantic Error](main/exceptions/iii_semantic_exceptions.py)

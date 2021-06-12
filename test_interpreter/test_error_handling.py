@@ -2,8 +2,16 @@ import unittest
 from utils import package_test_class
 
 
-class LexicalError(unittest.TestCase):
-    directory = "test_cases/error_handling/i_lexical_error/"
+class CharacterVectorTerminationError(unittest.TestCase):
+    directory = "test_cases/error_handling/i_lexical_error/character_vector_termination_error/"
+
+
+class InvalidCharacterError(unittest.TestCase):
+    directory = "test_cases/error_handling/i_lexical_error/invalid_character_error/"
+
+
+class StringTerminationError(unittest.TestCase):
+    directory = "test_cases/error_handling/i_lexical_error/string_termination_error/"
 
 
 class EndMissingError(unittest.TestCase):
