@@ -9,9 +9,6 @@ def lexer(program):
     lines = [line + '\n' for line in program.split('\n')]
     for line in lines:
         col = 1
-        token_text = ''
-        token_type = None
-        brackets_depth = 0
         while line:
             for TYPE in TokenType:
                 match = TYPE.value.match(line)
@@ -20,21 +17,10 @@ def lexer(program):
                     # it is a CharacterVectorTerminationError,
                     # otherwise it would be considered as a normal transpose character at the lexical analysis stage.
                     if TYPE == TokenType.TRA:
-                        if TokenType.WHITESPACE.value.sub('', token_text) == '':
+                        if not result_token_list or result_token_list[-1].get_type() == TokenType.WHITESPACE:
                             raise CharacterVectorTerminationError(row, col)
-                    # preprocess: replace comma for space in some array construction cases
-                    if brackets_depth > 0 and TYPE == TokenType.ADD and token_type == TokenType.WHITESPACE:
-                        result_token_list.append(Token(t_type=TokenType.EO_STMT, t_text=',', row=row, col=col - 1))
-                    if brackets_depth > 0 and TYPE == TokenType.WHITESPACE and token_type == TokenType.ADD \
-                            and result_token_list[-2].get_type() == TokenType.EO_STMT:  # space - space就要删掉减号前的逗号
-                        result_token_list.pop(-2)
-                    if TYPE == TokenType.L_BRACKET:
-                        brackets_depth += 1
-                    if TYPE == TokenType.R_BRACKET:
-                        brackets_depth -= 1
 
                     token_text = match.group()
-                    token_type = TYPE
                     result_token_list.append(Token(t_type=TYPE, t_text=token_text, row=row, col=col))
                     line = line[len(token_text):]
                     col += len(token_text)

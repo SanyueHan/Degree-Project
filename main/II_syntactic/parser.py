@@ -34,13 +34,34 @@ NON_PREFIX_OPERATOR_TOKENS = {
 }
 
 
+def space_comma_convertor(token_list):
+    """
+    replace comma for space in some bracket expression cases
+    """
+    brackets_depth = 0
+    for i in range(len(token_list)):
+        this_type = token_list[i].get_type()
+        last_type = token_list[i-1].get_type() if i else None
+        next_type = token_list[i+1].get_type() if i+1 < len(token_list) else None
+
+        if brackets_depth > 0:
+            if this_type == TokenType.ADD and last_type == TokenType.WHITESPACE and next_type != TokenType.WHITESPACE:
+                token_list[i-1].text = ','
+                token_list[i-1].type = TokenType.EO_STMT
+        if this_type == TokenType.L_BRACKET:
+            brackets_depth += 1
+        if this_type == TokenType.R_BRACKET:
+            brackets_depth -= 1
+    return token_list
+
+
 class Parser:
     """
     https://ww2.mathworks.cn/help/matlab/matlab_prog/operator-precedence.html
     """
 
     def __init__(self, token_list):
-        self.tokens = token_list
+        self.tokens = space_comma_convertor(token_list)
         self.last_token = None
         self.statement_cases = [
             self.parse_expression_statement,
