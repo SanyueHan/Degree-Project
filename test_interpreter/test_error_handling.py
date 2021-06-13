@@ -2,6 +2,10 @@ import unittest
 from utils import package_test_class
 
 
+class AnnotationBlockTerminationError(unittest.TestCase):
+    directory = "test_cases/error_handling/i_lexical_error/annotation_block_termination_error/"
+
+
 class CharacterVectorTerminationError(unittest.TestCase):
     directory = "test_cases/error_handling/i_lexical_error/character_vector_termination_error/"
 

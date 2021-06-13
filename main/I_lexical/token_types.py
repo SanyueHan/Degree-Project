@@ -9,46 +9,47 @@ class TokenType(Enum):
     https://ww2.mathworks.cn/help/matlab/matlab_prog/matlab-operators-and-special-characters.html
     """
 
-    KEYWORD = re.compile("break|case|catch|classdef|continue|elseif|else|end|for|function|"
-                         "global|if|otherwise|parfor|persistent|return|spmd|switch|try|while")
-    NUMBER_LIT = re.compile(rf"({NUMBER})[eE][+-]?[0-9]+|{NUMBER}")
-    STRING_LIT = re.compile(r"\"[^\"]*\"")
-    VECTOR_LIT = re.compile(r"\'[^\']*\'")
-    IDENTIFIER = re.compile(r"[a-zA-Z]+[a-zA-Z0-9_]*")
+    KEYWORD = "break|case|catch|classdef|continue|elseif|else|end|for|function|global|if|otherwise|parfor|persistent" \
+              "|return|spmd|switch|try|while"
+    NUMBER_LIT = rf"({NUMBER})[eE][+-]?[0-9]+|{NUMBER}"
+    STRING_LIT = r"\"[^\"\n]*\""
+    VECTOR_LIT = r"\'[^\'\n]*\'"
+    IDENTIFIER = r"[a-zA-Z]+[a-zA-Z0-9_]*"
 
     # Arithmetic Operators
-    ADD = re.compile("[+]|-")
-    MUL = re.compile(r"[*]|/|\\|\.\*|\./|\.\\")
-    POW = re.compile(r"\.\^|\^")
-    TRA = re.compile(r"\.'|'")
+    ADD = "[+]|-"
+    MUL = r"[*]|/|\\|\.\*|\./|\.\\"
+    POW = r"\.\^|\^"
+    TRA = r"\.'|'"
 
     # Relational Operators
-    REL = re.compile(">=|>|<=|<|==|~=")
+    REL = ">=|>|<=|<|==|~="
 
     # Logical Operators
-    SCA = re.compile(r"&&")    # short-circuiting and
-    SCO = re.compile(r"\|\|")  # short-circuiting or
-    EWA = re.compile(r"&")     # element-wise and
-    EWO = re.compile(r"\|")    # element-wise or
-    EWN = re.compile(r"~")     # element-wise not
+    SCA = r"&&"    # short-circuiting and
+    SCO = r"\|\|"  # short-circuiting or
+    EWA = r"&"     # element-wise and
+    EWO = r"\|"    # element-wise or
+    EWN = r"~"     # element-wise not
 
     # Special Characters
-    AT = re.compile(r"@")
-    ELLIPSIS = re.compile(r"\.\.\.")
-    DOT = re.compile(r"\.")
-    EO_STMT = re.compile("[;,\n]")
-    COLON = re.compile(":")
-    L_PAREN = re.compile(r"\(")
-    R_PAREN = re.compile(r"\)")
-    L_BRACKET = re.compile(r"\[")
-    R_BRACKET = re.compile(r"]")
-    L_BRACE = re.compile(r"{")
-    R_BRACE = re.compile(r"}")
-    ANNOTATION = re.compile(r"%{[\s\S]*%}|%.*")  # in '.', '\r' or '\n' is automatically excluded
-    EXCLAMATION = re.compile(r"!")
-    QUESTION = re.compile(r"\?")
-    WHITESPACE = re.compile(r"[ \f\r\t\v]+")  # \s excluding \n
-    ASS = re.compile(r"=")
+    AT = r"@"
+    ELLIPSIS = r"\.\.\."
+    DOT = r"\."
+    EO_STMT = "[;,\n]"
+    COLON = ":"
+    L_PAREN = r"\("
+    R_PAREN = r"\)"
+    L_BRACKET = r"\["
+    R_BRACKET = r"]"
+    L_BRACE = r"{"
+    R_BRACE = r"}"
+    ANNOTATION = r"(?<![^\n])%{(?![^\n])[\s\S]*((?<![^\n])%}(?![^\n]))?|%.*"
+    EXCLAMATION = r"!"
+    QUESTION = r"\?"
+    WHITESPACE = r"[ \f\r\t\v]+"  # \s excluding \n
+    ASS = r"="
+    MISS = r"."
 
 
 if __name__ == "__main__":

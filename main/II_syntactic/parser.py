@@ -1,3 +1,4 @@
+from main.I_lexical.token import Token
 from main.I_lexical.token_types import TokenType
 from main.II_syntactic.node import ASTNode
 from main.II_syntactic.node_types import ASTNodeType
@@ -62,6 +63,14 @@ class Parser:
 
     def __init__(self, token_list):
         self.tokens = space_comma_convertor(token_list)
+        if self.tokens:
+            last = self.tokens[-1]
+            self.tokens.append(Token(
+                t_type=TokenType.EO_STMT,
+                t_text='\n',
+                row=last.row,
+                col=last.col + len(last.text)
+            ))
         self.last_token = None
         self.statement_cases = [
             self.parse_expression_statement,
@@ -94,16 +103,16 @@ class Parser:
         if token:
             return token.get_type()
 
-    def pop_token(self):
+    def pop(self):
         if self.tokens:
             self.last_token = self.tokens.pop(0)
         else:
             return None
+
+    def pop_token(self):
+        self.pop()
         while self.last_token.get_type() in (TokenType.WHITESPACE, TokenType.ANNOTATION):
-            if self.tokens:
-                self.last_token = self.tokens.pop(0)
-            else:
-                return None
+            self.pop()
         return self.last_token
 
     def complete_statement(self, node):
@@ -436,8 +445,7 @@ class Parser:
                 self.pop_token()  # remove unnecessary delimiters
 
             if self.get_token_type() is None:
-                while self.tokens:
-                    self.pop_token()
+                self.pop_token()
                 raise IncompleteStatementError(self.last_token.row, self.last_token.col)
 
             child = self.parse_logic_or_expression()

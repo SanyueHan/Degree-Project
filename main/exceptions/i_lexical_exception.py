@@ -1,6 +1,20 @@
 from main.exceptions.interpret_exception import LexicalException
 
 
+class AnnotationBlockTerminationError(LexicalException):
+    message = {
+        'darwin': "Unterminated %{ block. Use %} to terminate.",
+        'win32': "Unterminated %{ block. Use %} to terminate."
+    }
+
+
+class CharacterVectorTerminationError(LexicalException):
+    message = {
+        'darwin': "Character vector is not terminated properly.",
+        'win32': "Character vector is not terminated properly."
+    }
+
+
 class InvalidCharacterError(LexicalException):
     message = {
         'darwin': "Invalid text character. Check for unsupported symbol, invisible character, or\n"
@@ -17,8 +31,4 @@ class StringTerminationError(LexicalException):
     }
 
 
-class CharacterVectorTerminationError(LexicalException):
-    message = {
-        'darwin': "Character vector is not terminated properly.",
-        'win32': "Character vector is not terminated properly."
-    }
+
