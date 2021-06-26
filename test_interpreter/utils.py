@@ -20,7 +20,7 @@ def read_from(path):
 def python_execute(path):
     temp = path[:-2] + "_python.txt"
     # working directory is Degree-Project/test_interpreter, so relative path is ../miniMATLAB.py
-    command = f"python3 ../miniMATLAB.py {path} > {temp}"
+    command = f"python3 miniMATLAB.py {path} > {temp}"
     print(command)
     os.system(command)
     result = read_from(f"{temp}")

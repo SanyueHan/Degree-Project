@@ -1,25 +1,28 @@
 import unittest
-from utils import package_test_class
+from test_interpreter.utils import package_test_class
+
+
+PATH = "test_interpreter/test_cases/language_fundamentals/"
 
 
 class TestEnteringCommands(unittest.TestCase):
-    directory = "test_cases/language_fundamentals/i_entering_commands/"
+    directory = PATH + "i_entering_commands/"
 
 
 class TestMatricesAndArrays(unittest.TestCase):
-    directory = "test_cases/language_fundamentals/ii_matrices_and_arrays/"
+    directory = PATH + "ii_matrices_and_arrays/"
 
 
 class TestDataTypes(unittest.TestCase):
-    directory = "test_cases/language_fundamentals/iii_data_types/"
+    directory = PATH + "iii_data_types/"
 
 
 class TestOperatorAndElementaryOperations(unittest.TestCase):
-    directory = "test_cases/language_fundamentals/iv_operators_and_elementary_operations/"
+    directory = PATH + "iv_operators_and_elementary_operations/"
 
 
 class TestLoopsAndConditionalStatements(unittest.TestCase):
-    directory = "test_cases/language_fundamentals/v_loops_and_conditional_statements/"
+    directory = PATH + "v_loops_and_conditional_statements/"
 
 
 package_test_class(TestMatricesAndArrays)
