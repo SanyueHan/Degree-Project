@@ -58,12 +58,12 @@ class DivisionError(unittest.TestCase):
     directory = "test_cases/error_handling/iii_semantic_error/division_error/"
 
 
-class IncorrectDimensionError(unittest.TestCase):
-    directory = "test_cases/error_handling/iii_semantic_error/incorrect_dimension_error/"
-
-
 class IncompatibleSizeError(unittest.TestCase):
     directory = "test_cases/error_handling/iii_semantic_error/incompatible_size_error/"
+
+
+class IncorrectDimensionError(unittest.TestCase):
+    directory = "test_cases/error_handling/iii_semantic_error/incorrect_dimension_error/"
 
 
 class OperatorError(unittest.TestCase):
