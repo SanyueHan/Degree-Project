@@ -440,22 +440,24 @@ class Parser:
         token = self.pop_token()  # remove left bracket
         node = ASTNode(n_type=ASTNodeType.ARRAY_LIST_EXP,
                        n_line=token.get_line())
-        while self.get_token_type() != TokenType.R_BRACKET:
-            if self.get_token_type() == TokenType.EO_STMT:
-                self.pop_token()  # remove unnecessary delimiters
+        while True:
+            while self.get_token_type() == TokenType.EO_STMT:
+                token = self.pop_token()  # EO_STMT
+                if str(token) == "," and node.children and node.children[-1].get_text() == ',':
+                    raise InvalidExpressionError3(token.row, token.col)
+                node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT,
+                                       n_text=token.get_text(),
+                                       n_line=token.get_line()))
 
             if self.get_token_type() is None:
                 self.pop_token()
                 raise IncompleteStatementError(self.last_token.row, self.last_token.col)
 
-            child = self.parse_logic_or_expression()
-            node.add_child(child)
+            node.add_child(self.parse_logic_or_expression())
 
-            while self.get_token_type() == TokenType.EO_STMT:
-                token = self.pop_token()  # EO_STMT
-                node.add_child(ASTNode(n_type=ASTNodeType.EO_STMT,
-                                       n_text=token.get_text(),
-                                       n_line=token.get_line()))
+            token = self.get_token()
+            if token.get_type() == TokenType.R_BRACKET:
+                break
         self.pop_token()  # remove right bracket
         return node
 
@@ -473,7 +475,7 @@ class Parser:
 
     def parse_index_list(self):
         root = ASTNode(n_type=ASTNodeType.INDEX_LIST_EXP)
-        while self.get_token_type() != TokenType.R_PAREN:
+        while True:
             if self.get_token_type() == TokenType.COLON:
                 token = self.pop_token()  # COLON
                 root.add_child(ASTNode(n_type=ASTNodeType.CLN_EXP,
@@ -483,11 +485,13 @@ class Parser:
                 child = self.parse_logic_or_expression()
                 root.add_child(child)
 
-            if str(self.get_token()) == ",":
+            token = self.get_token()
+            if str(token) == ",":
                 # one argument finished, continue to parse another argument
                 self.pop_token()
+                continue
+            elif token.get_type() == TokenType.R_PAREN:
+                break
             else:
-                if self.get_token_type() != TokenType.R_PAREN:
-                    token = self.get_token()
-                    raise InvalidExpressionError3(token.row, token.col)
+                raise InvalidExpressionError3(token.row, token.col)
         return root
