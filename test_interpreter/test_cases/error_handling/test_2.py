@@ -17,6 +17,10 @@ class InvalidExpressionError(unittest.TestCase):
     directory = PATH2 + "invalid_expression_error/"
 
 
+class InvalidOperatorError(unittest.TestCase):
+    directory = PATH2 + "invalid_operator_error/"
+
+
 global_dict = globals().copy()
 for obj in global_dict.values():
     if type(obj).__name__ == 'type':  # obj is a class

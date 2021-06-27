@@ -59,7 +59,6 @@ def evaluate_matrix_multiplication_operation(operand_0, operand_1):
         raise IncorrectDimensionError()
 
 
-
 """
 def inv_matrix(operand_0):
     if operand_0.size[1] == operand_0.size[0]:

@@ -8,6 +8,13 @@ class EndMissingError(SyntacticException):
     }
 
 
+class IncompleteStatementError(SyntacticException):
+    message = {
+        'darwin': "This statement is incomplete.",
+        'win32': "This statement is incomplete."
+    }
+
+
 class InvalidExpressionError1(SyntacticException):
     message = {
         'darwin': "Invalid expression. Check for missing multiplication operator, missing or\n"
@@ -38,11 +45,4 @@ class InvalidOperatorError(SyntacticException):
     message = {
         'darwin': "Invalid use of operator.",
         'win32': "Invalid use of operator."
-    }
-
-
-class IncompleteStatementError(SyntacticException):
-    message = {
-        'darwin': "This statement is incomplete.",
-        'win32': "This statement is incomplete."
     }

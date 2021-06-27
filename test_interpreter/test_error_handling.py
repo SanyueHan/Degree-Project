@@ -35,6 +35,10 @@ class InvalidExpressionError(unittest.TestCase):
     directory = PATH2 + "invalid_expression_error/"
 
 
+class InvalidOperatorError(unittest.TestCase):
+    directory = PATH2 + "invalid_operator_error/"
+
+
 class ArrayIndexError(unittest.TestCase):
     directory = PATH3 + "array_index_error/"
 
