@@ -42,16 +42,16 @@ Like most interpreted language, two types of running methods namely interactive 
 #### Show Help Information
 ```shell
  % python3 MiniMATLAB.py -h
-usage: MiniMATLAB.py [-h] [-t T] [-a A] [-v V] [file]
+usage: MiniMATLAB.py [-h] [-t] [-a] [-v] [file]
 
 positional arguments:
   file         program read from script file
 
 optional arguments:
   -h, --help   show this help message and exit
-  -t T, --t T  print tokens
-  -a A, --a A  print abstract syntax tree
-  -v V, --v V  print variables
+  -t, --token  print tokens
+  -a, --ast    print abstract syntax tree
+  -v, --var    print variables
 ```
 #### Interactive Execute (REPL Execute)
 If the filename after MiniMATLAB.py is not specified, 
@@ -175,50 +175,61 @@ c =
 If the filename after MiniMATLAB.py is specified, the interpreter run the script. 
 In this example the tokens and abstract syntax tree are printed
 ```
-% python3 MiniMATLAB.py test_interpreter/test_cases/example.m -a=True -t=True
-row =   1        col =   0        type = IDENTIFIER        text = 'a'
-row =   1        col =   2        type = ASS               text = '='
-row =   1        col =   4        type = NUMBER_LIT        text = '0'
-row =   1        col =   5        type = EO_STMT           text = ';'
-row =   1        col =   6        type = EO_STMT           text = '\n'
-row =   2        col =   0        type = KEYWORD           text = 'while'
-row =   2        col =   6        type = IDENTIFIER        text = 'a'
-row =   2        col =   8        type = REL               text = '<'
-row =   2        col =  10        type = NUMBER_LIT        text = '10'
-row =   2        col =  12        type = EO_STMT           text = '\n'
-row =   3        col =   4        type = IDENTIFIER        text = 'a'
-row =   3        col =   5        type = EO_STMT           text = '\n'
-row =   4        col =   4        type = IDENTIFIER        text = 'a'
-row =   4        col =   6        type = ASS               text = '='
-row =   4        col =   8        type = IDENTIFIER        text = 'a'
-row =   4        col =  10        type = ADD               text = '+'
-row =   4        col =  12        type = NUMBER_LIT        text = '1'
-row =   4        col =  13        type = EO_STMT           text = ';'
-row =   4        col =  14        type = EO_STMT           text = '\n'
-row =   5        col =   0        type = KEYWORD           text = 'end'
-row =   5        col =   3        type = EO_STMT           text = '\n'
+% python3 MiniMATLAB.py test_interpreter/test_cases/example.m -a -t
+row =   1        col =   1        type = IDENTIFIER        text = 'a'
+row =   1        col =   2        type = WHITESPACE        text = ' '
+row =   1        col =   3        type = ASS               text = '='
+row =   1        col =   4        type = WHITESPACE        text = ' '
+row =   1        col =   5        type = NUMBER_LIT        text = '0'
+row =   1        col =   6        type = EO_STMT           text = ';'
+row =   1        col =   7        type = EO_STMT           text = '\n'
+row =   2        col =   1        type = KEYWORD           text = 'while'
+row =   2        col =   6        type = WHITESPACE        text = ' '
+row =   2        col =   7        type = IDENTIFIER        text = 'a'
+row =   2        col =   8        type = WHITESPACE        text = ' '
+row =   2        col =   9        type = REL               text = '<'
+row =   2        col =  10        type = WHITESPACE        text = ' '
+row =   2        col =  11        type = NUMBER_LIT        text = '10'
+row =   2        col =  13        type = EO_STMT           text = '\n'
+row =   3        col =   1        type = WHITESPACE        text = '    '
+row =   3        col =   5        type = IDENTIFIER        text = 'a'
+row =   3        col =   6        type = EO_STMT           text = '\n'
+row =   4        col =   1        type = WHITESPACE        text = '    '
+row =   4        col =   5        type = IDENTIFIER        text = 'a'
+row =   4        col =   6        type = WHITESPACE        text = ' '
+row =   4        col =   7        type = ASS               text = '='
+row =   4        col =   8        type = WHITESPACE        text = ' '
+row =   4        col =   9        type = IDENTIFIER        text = 'a'
+row =   4        col =  10        type = WHITESPACE        text = ' '
+row =   4        col =  11        type = ADD               text = '+'
+row =   4        col =  12        type = WHITESPACE        text = ' '
+row =   4        col =  13        type = NUMBER_LIT        text = '1'
+row =   4        col =  14        type = EO_STMT           text = ';'
+row =   4        col =  15        type = EO_STMT           text = '\n'
+row =   5        col =   1        type = KEYWORD           text = 'end'
+row =   5        col =   4        type = EO_STMT           text = '\n'
 
 STMT_LIST: None
-  ├── ASS_STMT: None
+  ├── EXP_STMT: None
   │     ├── ASS_EXP: '='
-  │     │     ├── IDENTIFIER: 'a'
-  │     │     └── NUMBER_LIT: '0'
+  │     │     ├── IDENTIFIER_EXP: 'a'
+  │     │     └── NUMBER_LIT_EXP: '0'
   │     └── EO_STMT: ';'
-  └── ITR_STMT: None
+  └── ITR_STMT: 'while'
         ├── ITR_CLS: 'while'
-        │     ├── BSO_EXP: '<'
-        │     │     ├── IDENTIFIER: 'a'
-        │     │     └── NUMBER_LIT: '10'
+        │     ├── BOP_EXP: '<'
+        │     │     ├── IDENTIFIER_EXP: 'a'
+        │     │     └── NUMBER_LIT_EXP: '10'
         │     └── STMT_LIST: None
         │           ├── EXP_STMT: None
-        │           │     ├── IDENTIFIER: 'a'
+        │           │     ├── IDENTIFIER_EXP: 'a'
         │           │     └── EO_STMT: '\n'
-        │           └── ASS_STMT: None
+        │           └── EXP_STMT: None
         │                 ├── ASS_EXP: '='
-        │                 │     ├── IDENTIFIER: 'a'
-        │                 │     └── BSO_EXP: '+'
-        │                 │           ├── IDENTIFIER: 'a'
-        │                 │           └── NUMBER_LIT: '1'
+        │                 │     ├── IDENTIFIER_EXP: 'a'
+        │                 │     └── BOP_EXP: '+'
+        │                 │           ├── IDENTIFIER_EXP: 'a'
+        │                 │           └── NUMBER_LIT_EXP: '1'
         │                 └── EO_STMT: ';'
         └── EO_STMT: '\n'
 
