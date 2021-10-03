@@ -30,11 +30,11 @@ please read the [report](REPORT.pdf) for this project.
 #### Command
 ###### Mac OS
 ```shell
-python3 MiniMATLAB.py [-h] [-t T] [-a A] [-v V] [file]
+python3 MiniMATLAB.py [-h] [-t] [-a] [-v] [file]
 ```
 ###### Windows
 ```shell
-python MiniMATLAB.py [-h] [-t T] [-a A] [-v V] [file]
+python MiniMATLAB.py [-h] [-t] [-a] [-v] [file]
 ```
 
 ## Examples
